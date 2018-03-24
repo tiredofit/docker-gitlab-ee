@@ -1,0 +1,232 @@
+version: '2'
+
+services:
+  git-example-com-app:
+    container_name: git-example-com-app
+    restart: always
+    image: tiredofit/gitlab-ee
+    depends_on:
+    - git-example-com-redis
+    - git-example-com-db
+    volumes:
+    - ./data:/home/git/data:Z
+    - ./logs:/var/log/gitlab
+    networks:
+      - proxy-tier
+    environment:
+    - VIRTUAL_HOST=git.example.com
+    - VIRTUAL_NETWORK=nginx-proxy
+    - VIRTUAL_PORT=80
+    - LETSENCRYPT_HOST=git.example.com
+    - LETSENCRYPT_EMAIL=techsupport@example.com
+
+    - ZABBIX_HOSTNAME=git-example-com-app
+
+    - DEBUG=false
+
+    - DB_ADAPTER=postgresql
+    - DB_HOST=git-example-com-db
+    - DB_PORT=5432
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlab
+
+    - REDIS_HOST=git-example-com-redis
+    - REDIS_PORT=6379
+    
+    - USERMAP_UID=60000
+    - USERMAP_GID=60000
+ 
+    - TZ=America/Vancouver
+    - GITLAB_TIMEZONE=America/Vancouver
+
+    - GITLAB_HTTPS=true
+    - SSL_SELF_SIGNED=false
+
+    - GITLAB_HOST=git.example.com
+    - GITLAB_PORT=443
+    - GITLAB_SSH_PORT=10022
+    - GITLAB_RELATIVE_URL_ROOT=
+    - GITLAB_SECRETS_DB_KEY_BASE=ZCW8kfj5stZXNZWcPm6qNXxm33rfJWzNdgCSrfBSqk9mdLx8W
+    - GITLAB_SECRETS_SECRET_KEY_BASE=4xHBM5rDrC2KL2WNlKWTNfrTBWDhcxvdsNM6dJSWwH3JC
+    - GITLAB_SECRETS_OTP_KEY_BASE=4cQWjfHnx95h8G68qVsmprsSts7wr5KnwG9TlwfKmSJxpXHt
+
+    - GITLAB_ROOT_PASSWORD=password
+    - GITLAB_ROOT_EMAIL=
+
+    - GITLAB_NOTIFY_ON_BROKEN_BUILDS=true
+    - GITLAB_NOTIFY_PUSHER=false
+
+    - GITLAB_EMAIL=git@example.com
+    - GITLAB_EMAIL_REPLY_TO=noreply@example.com
+    - GITLAB_INCOMING_EMAIL_ADDRESS=git@example.com
+    - GITLAB_EMAIL_DISPLAY_NAME=SD Git
+
+    - PIWIK_URL=analytics.example.com
+    - PIWIK_SITE_ID=1
+
+    - SMTP_ENABLED=true
+    - SMTP_DOMAIN=git.example.com
+    - SMTP_HOST=postfix-relay
+    - SMTP_PORT=25
+    #- SMTP_USER=mailer@example.com
+    #- SMTP_PASS=password
+    #- SMTP_STARTTLS=true
+    #- SMTP_AUTHENTICATION=login
+
+    - IMAP_ENABLED=false
+    - IMAP_HOST=imap.gmail.com
+    - IMAP_PORT=993
+    - IMAP_USER=mailer@example.com
+    - IMAP_PASS=password
+    - IMAP_SSL=true
+    - IMAP_STARTTLS=false
+
+    - LDAP_ENABLED=false
+    - LDAP_LABEL=LDAP
+    - LDAP_HOST=ldap-example-com-app
+    - LDAP_PORT=389
+    - LDAP_UID=uid
+    - LDAP_METHOD=plain
+    - LDAP_BIND_DN=cn=dsa-gitlab,ou=dsa,ou=Syustem,dc=example,dc=com
+    - LDAP_PASS=password
+    - LDAP_ACTIVE_DIRECTORY=false
+    - LDAP_BASE=dc=example,dc=com
+    - LDAP_USER_FILTER=(memberOf=cn=app-git,ou=groups,ou=Access,dc=example,dc=com)
+    - LDAP_ALLOW_USERNAME_OR_EMAIL_LOGIN=true
+    - LDAP_GROUP_BASE=ou=groups,dc=example,dc=com
+    - LDAP_ADMIN_GROUPS=git-admin, admin 
+    - LDAP_EXTERNAL_GROUPS=ext_group 
+    - LDAP_SYNC_SSH_KEYS=sshkey
+
+    - GITLAB_USERNAME_CHANGE=false
+    - GITLAB_CREATE_GROUPS=false
+    - OAUTH_ENABLED=false
+    - OAUTH_AUTO_SIGN_IN_WITH_PROVIDER=
+    - OAUTH_ALLOW_SSO=
+    - OAUTH_BLOCK_AUTO_CREATED_USERS=true
+    - OAUTH_AUTO_LINK_LDAP_USER=false
+    - OAUTH_AUTO_LINK_SAML_USER=false
+    - OAUTH_EXTERNAL_PROVIDERS=
+
+    - OAUTH_CAS3_LABEL=cas3
+    - OAUTH_CAS3_SERVER=
+    - OAUTH_CAS3_DISABLE_SSL_VERIFICATION=false
+    - OAUTH_CAS3_LOGIN_URL=/cas/login
+    - OAUTH_CAS3_VALIDATE_URL=/cas/p3/serviceValidate
+    - OAUTH_CAS3_LOGOUT_URL=/cas/logout
+
+    - OAUTH_SAML_ASSERTION_CONSUMER_SERVICE_URL=
+    - OAUTH_SAML_IDP_CERT_FINGERPRINT=
+    - OAUTH_SAML_IDP_SSO_TARGET_URL=
+    - OAUTH_SAML_ISSUER=
+    - OAUTH_SAML_LABEL="Our SAML Provider"
+    - OAUTH_SAML_NAME_IDENTIFIER_FORMAT=urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+    - OAUTH_SAML_GROUPS_ATTRIBUTE=
+    - OAUTH_SAML_EXTERNAL_GROUPS=
+    - OAUTH_SAML_ATTRIBUTE_STATEMENTS_EMAIL=
+    - OAUTH_SAML_ATTRIBUTE_STATEMENTS_NAME=
+    - OAUTH_SAML_ATTRIBUTE_STATEMENTS_FIRST_NAME=
+    - OAUTH_SAML_ATTRIBUTE_STATEMENTS_LAST_NAME=
+
+    - OAUTH_CROWD_SERVER_URL=
+    - OAUTH_CROWD_APP_NAME=
+    - OAUTH_CROWD_APP_PASSWORD=
+
+    - OAUTH_AUTH0_CLIENT_ID=
+    - OAUTH_AUTH0_CLIENT_SECRET=
+    - OAUTH_AUTH0_DOMAIN=
+
+    - GITLAB_REGISTRY_ENABLED=true
+    - GITLAB_REGISTRY_HOST=registry.example.com
+    - GITLAB_REGISTRY_PORT=443
+    - GITLAB_REGISTRY_API_URL=http://git-registry-example-com:5000
+    - GITLAB_REGISTRY_KEY_PATH=/home/git/data/certs/registry-auth.key
+    - SSL_REGISTRY_KEY_PATH=/home/git/data/certs/registry.example.com.key
+    - SSL_REGISTRY_CERT_PATH=/home/git/data/certs/registry.example.com.crt
+    - GITLAB_SECRETS_DB_KEY_BASE=superrandomsecret
+
+  git-example-com-redis:
+    container_name: git-example-com-redis
+    restart: always
+    image: tiredofit/redis:latest
+    networks:
+      - proxy-tier
+    volumes:
+      - ./redis:/var/lib/redis:Z
+    environment:
+      - ZABBIX_HOSTNAME=git-example-com-redis
+      - ZABBIX_SERVER=zabbix-proxy
+      - ZABBIX_SERVER_PORT=10051
+
+  git-example-com-db:
+    container_name: git-example-com-db
+    image: tiredofit/postgres:10.1-latest
+    restart: always
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=gitlab
+      - POSTGRES_USER=gitlab
+      - POSTGRES_PASSWORD=password
+      - ZABBIX_HOSTNAME=git-example-com-db
+    networks:
+      - proxy-tier
+
+  git-example-com-db-backup:
+    container_name: git-example-com-db-backup
+    image: tiredofit/db-backup
+    links:
+     - git-example-com-db
+    volumes:
+      - ./dbbackup:/backup
+    environment:
+      - ZABBIX_HOSTNAME=git-example-com-db-backup
+      - DB_HOST=git-example-com-db
+      - DB_TYPE=postgres
+      - DB_NAME=gitlab
+      - DB_USER=gitlab
+      - DB_PASS=password
+      - DB_DUMP_FREQ=1440
+      - DB_DUMP_BEGIN=0000
+      - DB_CLEANUP_TIME=8640
+      - COMPRESSION=BZ
+      - MD5=TRUE
+    networks:
+      - proxy-tier
+    restart: always
+
+
+
+  git-registry-example-com:
+    container_name: git-registry-example-com
+    restart: always
+    image: registry:latest
+    volumes:
+    - ./data/shared/registry:/registry
+    - ./data/certs:/certs
+    environment:
+    - VIRTUAL_HOST=registry.example.com
+    - VIRTUAL_NETWORK=nginx-proxy
+    - VIRTUAL_PORT=5000
+    - LETSENCRYPT_HOST=registry.example.com
+    - LETSENCRYPT_EMAIL=techsupport@example.com
+
+    - REGISTRY_LOG_LEVEL=info
+    - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/registry
+    - REGISTRY_AUTH_TOKEN_REALM=https://git.example.com/jwt/auth
+    - REGISTRY_AUTH_TOKEN_SERVICE=container_registry
+    - REGISTRY_AUTH_TOKEN_ISSUER=gitlab-issuer
+    - REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE=/certs/registry-auth.crt
+    - REGISTRY_STORAGE_DELETE_ENABLED=true
+
+    - ZABBIX_HOSTNAME=git-registry-example-com
+    networks:
+    - proxy-tier
+
+networks:
+  proxy-tier:
+    external:
+      name: nginx-proxy
+
+
