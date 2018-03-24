@@ -1,0 +1,65 @@
+#!/usr/bin/with-contenv bash
+
+## Set Debug Mode
+  if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ];  then
+    set -x
+  fi
+
+s6-svc -d /var/run/s6/services/11-unicorn
+s6-svc -d /var/run/s6/services/12-gitaly
+s6-svc -d /var/run/s6/services/13-sidekiq
+s6-svc -d /var/run/s6/services/14-workhorse
+s6-svc -d /var/run/s6/services/15-mailroom
+s6-svc -d /var/run/s6/services/16-pages
+s6-svc -d /var/run/s6/services/17-sshd
+
+source /assets/gitlab/functions
+
+case "$MODE" in
+  "START"|"INIT"|"SANITIZE"|"RAKE")
+
+    initialize_system
+    configure_gitlab
+    configure_gitlab_shell
+    configure_gitlab_pages
+    configure_nginx
+
+    case "$MODE" in
+      "START")
+        migrate_database
+        s6-svc -u /var/run/s6/services/11-unicorn
+        s6-svc -u /var/run/s6/services/12-gitaly
+        s6-svc -u /var/run/s6/services/13-sidekiq
+        s6-svc -u /var/run/s6/services/14-workhorse
+        ### Enable / Disable Services
+        if [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "true" ] || [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "TRUE" ];  then
+          echo "**** [mailroom] Enabling Mailroom"
+          s6-svc -u /var/run/s6/services/15-mailroom
+        fi
+        
+        if [ "$GITLAB_PAGES_ENABLED" = "true" ] || [ "$GITLAB_PAGES_ENABLED" = "TRUE" ];  then
+          echo "**** [pages] Enabling Gitlab Pages"
+          s6-svc -u /var/run/s6/services/16-pages
+        fi
+    
+        if [ "$GITLAB_SSH_ENABLED" = "true" ] || [ "$GITLAB_SSH_ENABLED" = "TRUE" ];  then
+          echo "**** [ssh] Enabling Gitlab SSH Server"
+          s6-svc -u /var/run/s6/services/17-sshd
+        fi
+        ;;
+      "INIT")
+        migrate_database
+        ;;
+      "SANITIZE")
+        sanitize_datadir
+        ;;
+      "RAKE")
+        shift 1
+        execute_raketask $RAKE_TASK
+        ;;
+    esac
+    ;;
+  esac
+
+mkdir -p /tmp/state
+touch /tmp/state/10-gitlab-init

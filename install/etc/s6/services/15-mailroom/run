@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+while [ ! -f /tmp/state/14-gitaly ]
+do
+  sleep 1
+done
+
+if [ ! -f /tmp/state/15-mailroom ]; then
+    
+    mkdir -p /tmp/state/
+	echo 'Initialization Complete' >/tmp/state/15-mailroom
+fi
+
+echo ''
+echo '** [mailroom] Starting Mailroom'
+HOME=${GITLAB_HOME}
+
+cd ${GITLAB_INSTALL_DIR}
+exec s6-setuidgid git bundle exec mail_room ${GITLAB_INSTALL_DIR}/config/mail_room.yml

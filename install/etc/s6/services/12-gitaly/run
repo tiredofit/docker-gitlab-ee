@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+
+while [ ! -f /tmp/state/11-unicorn ]
+do
+  sleep 1
+done
+
+if [ ! -f /tmp/state/12-gitaly ]; then
+    
+    mkdir -p /tmp/state/
+	echo 'Initialization Complete' >/tmp/state/12-gitaly
+fi
+
+echo ''
+echo '** [gitaly] Starting Gitaly'
+HOME=${GITLAB_HOME}
+set -e
+
+cd ${GITLAB_INSTALL_DIR}
+exec s6-setuidgid git ${GITLAB_GITALY_INSTALL_DIR}/gitaly ${GITLAB_GITALY_INSTALL_DIR}/config.toml

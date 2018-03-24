@@ -1,0 +1,18 @@
+#!/usr/bin/with-contenv bash
+
+while [ ! -f /tmp/state/12-gitaly ]
+do
+  sleep 1
+done
+
+if [ ! -f /tmp/state/13-sidekiq ]; then
+    mkdir -p /tmp/state/
+	echo 'Initialization Complete' >/tmp/state/13-sidekiq
+fi
+
+echo ''
+echo '** [sidekiq] Starting Sidekiq'
+HOME=${GITLAB_HOME}
+
+cd ${GITLAB_INSTALL_DIR}
+exec s6-setuidgid git bundle exec sidekiq -c {{SIDEKIQ_CONCURRENCY}} -C ${GITLAB_INSTALL_DIR}/config/sidekiq_queues.yml -e ${RAILS_ENV} -t {{SIDEKIQ_SHUTDOWN_TIMEOUT}} -P ${GITLAB_INSTALL_DIR}/tmp/pids/sidekiq.pid -L ${GITLAB_INSTALL_DIR}/log/sidekiq.log

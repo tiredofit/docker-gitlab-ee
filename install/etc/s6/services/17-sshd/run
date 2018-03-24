@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+
+while [ ! -f /tmp/state/14-workhorse ]
+do
+  sleep 1
+done
+
+
+if [ ! -f /tmp/state/17-sshd ]; then
+    mkdir -p /tmp/state/
+	echo 'Initialization Complete' >/tmp/state/17-sshd
+fi
+
+echo ''
+echo '** [ssh] Starting sshd'
+exec s6-setuidgid git /usr/sbin/sshd -d -D

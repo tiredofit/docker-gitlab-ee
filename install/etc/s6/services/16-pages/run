@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+while [ ! -f /tmp/state/14-workhorse ]
+do
+  sleep 1
+done
+
+
+if [ ! -f /tmp/state/16-pages ]; then
+    
+    mkdir -p /tmp/state/
+	echo 'Initialization Complete' >/tmp/state/16-pages
+fi
+
+echo ''
+echo '** [pages] Starting Pages'
+HOME=${GITLAB_HOME}
+
+cd ${GITLAB_INSTALL_DIR}
