@@ -233,7 +233,7 @@ RUN addgroup -g 1000 -S ${GITLAB_USER} && \
     rm -rf ${GITLAB_HOME}/.yarn && \
     rm -rf ${GITLAB_INSTALL_DIR}/.git && \
     rm -rf ${GITLAB_INSTALL_DIR}/doc && \
-    rm -rf ${GITLAB_INSTALL_DIR}/ *.md && \
+    rm -rf ${GITLAB_INSTALL_DIR}/*.md && \
     rm -rf ${GITLAB_INSTALL_DIR}/docker* && \
     rm -rf ${GITLAB_INSTALL_DIR}/qa && \
     rm -rf ${GITLAB_GITALY_INSTALL_DIR}/.git && \
