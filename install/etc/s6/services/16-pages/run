@@ -7,7 +7,6 @@ done
 
 
 if [ ! -f /tmp/state/16-pages ]; then
-    
     mkdir -p /tmp/state/
 	echo 'Initialization Complete' >/tmp/state/16-pages
 fi
@@ -15,5 +14,4 @@ fi
 echo ''
 echo '** [pages] Starting Pages'
 HOME=${GITLAB_HOME}
-
 cd ${GITLAB_INSTALL_DIR}

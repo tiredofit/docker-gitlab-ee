@@ -6,7 +6,6 @@ do
 done
 
 if [ ! -f /tmp/state/11-unicorn ]; then
-    
     mkdir -p /tmp/state/
 	echo 'Initialization Complete' >/tmp/state/11-unicorn
 fi

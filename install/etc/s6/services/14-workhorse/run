@@ -7,7 +7,6 @@ done
 
 
 if [ ! -f /tmp/state/14-workhorse ]; then
-  
     mkdir -p /tmp/state/
     echo 'Initialization Complete' >/tmp/state/14-workhorse
 fi
@@ -15,4 +14,4 @@ fi
 echo ''
 echo '** [workhorse] Starting Workhorse'
 HOME=${GITLAB_HOME}
-exec s6-setuidgid git /usr/local/bin/gitlab-workhorse -listenUmask 0 -listenNetwork tcp -listenAddr ":8181" -authBackend http://127.0.0.1:8080{{GITLAB_RELATIVE_URL_ROOT}} -authSocket ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab.socket -documentRoot ${GITLAB_INSTALL_DIR}/public -proxyHeadersTimeout {{GITLAB_WORKHORSE_TIMEOUT}}
+exec s6-setuidgid git /usr/local/bin/gitlab-workhorse -listenUmask 0 -listenNetwork tcp -listenAddr ":8181" -authBackend http://127.0.0.1:8080{{GITLAB_RELATIVE_URL_ROOT}} -authSocket ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab.socket -documentRoot ${GITLAB_INSTALL_DIR}/public -proxyHeadersTimeout {{GITLAB_WORKHORSE_TIMEOUT}} -secretPath "${GITLAB_INSTALL_DIR}/.gitlab_workhorse_secret"
