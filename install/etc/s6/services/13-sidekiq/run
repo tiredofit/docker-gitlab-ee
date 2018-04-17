@@ -5,6 +5,11 @@ do
   sleep 1
 done
 
+while [ ! -S ${GITLAB_INSTALL_DIR}/tmp/sockets/private/gitaly.socket ]
+do
+  sleep 3
+done
+
 if [ ! -f /tmp/state/13-sidekiq ]; then
     mkdir -p /tmp/state/
 	echo 'Initialization Complete' >/tmp/state/13-sidekiq

@@ -5,6 +5,11 @@ do
   sleep 1
 done
 
+while [ ! -S ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab.socket ]
+do
+  sleep 3
+done
+
 if [ ! -f /tmp/state/12-gitaly ]; then
     
     mkdir -p /tmp/state/

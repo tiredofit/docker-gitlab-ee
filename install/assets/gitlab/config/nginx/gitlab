@@ -49,8 +49,8 @@ server {
   add_header Strict-Transport-Security "max-age={{NGINX_HSTS_MAXAGE}};";
 
   ## Individual nginx logs for this GitLab vhost
-  access_log  {{GITLAB_LOG_DIR}}/nginx/gitlab_access.log;
-  error_log   {{GITLAB_LOG_DIR}}/nginx/gitlab_error.log;
+  access_log  {{GITLAB_INSTALL_DIR}}/log/nginx/gitlab_access.log;
+  error_log   {{GITLAB_INSTALL_DIR}}/log/nginx/gitlab_error.log;
 
   location / {
     client_max_body_size 0;

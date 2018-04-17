@@ -7,8 +7,8 @@ server {
   ## Replace this with something like pages.gitlab.com
   server_name ~^.*{{GITLAB_PAGES_DOMAIN}};
   ## Individual nginx logs for GitLab pages
-  access_log  {{GITLAB_LOG_DIR}}/nginx/gitlab_pages_access.log;
-  error_log   {{GITLAB_LOG_DIR}}/nginx/gitlab_pages_error.log;
+  access_log  {{GITLAB_INSTALL_DIR}}/log/nginx/gitlab_pages_access.log;
+  error_log   {{GITLAB_INSTALL_DIR}}/log/nginx/gitlab_pages_error.log;
   location / {
     proxy_set_header    Host                $http_host;
     proxy_set_header    X-Real-IP           $remote_addr;

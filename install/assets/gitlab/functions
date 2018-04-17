@@ -5,6 +5,8 @@ source /assets/gitlab/defaults
 SYSCONF_TEMPLATES_DIR="/assets/gitlab/config"
 USERCONF_TEMPLATES_DIR="${GITLAB_DATA_DIR}/config"
 
+GITLAB_INSTALL_DIR="${GITLAB_INSTALL_DIR}"
+GITLAB_LOG_DIR="${GITLAB_INSTALL_DIR}/log"
 GITLAB_CONFIG="${GITLAB_INSTALL_DIR}/config/gitlab.yml"
 GITLAB_DATABASE_CONFIG="${GITLAB_INSTALL_DIR}/config/database.yml"
 GITLAB_UNICORN_CONFIG="${GITLAB_INSTALL_DIR}/config/unicorn.rb"
@@ -282,7 +284,9 @@ gitlab_configure_gitaly() {
     GITALY_SOCKET_PATH \
     GITLAB_REPOS_DIR \
     GITLAB_HOME \
-    GITLAB_GITALY_INSTALL_DIR
+    GITLAB_GITALY_INSTALL_DIR \
+    GITLAB_INSTALL_DIR \
+    GITLAB_LOG_DIR
 
   update_template ${GITLAB_CONFIG} \
     GITALY_CLIENT_PATH \
@@ -320,6 +324,7 @@ gitlab_configure_unicorn() {
 
   update_template ${GITLAB_UNICORN_CONFIG} \
     GITLAB_INSTALL_DIR \
+    GITLAB_LOG_DIR \
     UNICORN_WORKERS \
     UNICORN_TIMEOUT
 }
@@ -1119,6 +1124,7 @@ nginx_configure_gitlab_ci() {
     echo "** [gitlab-ee] Configuring nginx::gitlab_ci"
     DNS_RESOLVERS=$(cat /etc/resolv.conf  | grep '^\s*nameserver' | awk '{print $2}' ORS=' ')
     update_template ${GITLAB_CI_NGINX_CONFIG} \
+      GITLAB_INSTALL_DIR \
       GITLAB_LOG_DIR \
       GITLAB_HOST \
       GITLAB_CI_HOST \
@@ -1130,6 +1136,7 @@ nginx_configure_gitlab_registry() {
   if [[ $GITLAB_REGISTRY_ENABLED == true && -f ${SSL_REGISTRY_CERT_PATH} && -f ${SSL_REGISTRY_KEY_PATH} ]]; then
     echo "** [gitlab-ee] Configuring nginx::gitlab-registry"
     update_template ${GITLAB_REGISTRY_NGINX_CONFIG} \
+      GITLAB_INSTALL_DIR \
       GITLAB_LOG_DIR \
       GITLAB_REGISTRY_PORT \
       GITLAB_REGISTRY_HOST \
@@ -1149,6 +1156,7 @@ nginx_configure_pages(){
         GITLAB_PAGES_DOMAIN \
         GITLAB_PAGES_PORT \
         GITLAB_LOG_DIR \
+        GITLAB_INSTALL_DIR \
         GITLAB_PAGES_DOMAIN \
         SSL_PAGES_CERT_PATH \
         SSL_PAGES_KEY_PATH \
@@ -1194,21 +1202,21 @@ update_ca_certificates() {
 
 initialize_logdir() {
   echo "** [gitlab-ee] Initializing logdir"
-  mkdir -p ${GITLAB_LOG_DIR}/supervisor
-  chmod -R 0755 ${GITLAB_LOG_DIR}/supervisor
-  chown -R root: ${GITLAB_LOG_DIR}/supervisor
-
+  
+  chmod -R 0755 /var/log/gitlab
+  chown -R ${GITLAB_USER}: /var/log/gitlab
+  
   mkdir -p ${GITLAB_LOG_DIR}/nginx
   chmod -R 0755 ${GITLAB_LOG_DIR}/nginx
   chown -R ${GITLAB_USER}: ${GITLAB_LOG_DIR}/nginx
 
-  mkdir -p ${GITLAB_LOG_DIR}/gitlab
-  chmod -R 0755 ${GITLAB_LOG_DIR}/gitlab
-  chown -R ${GITLAB_USER}: ${GITLAB_LOG_DIR}/gitlab
-
   mkdir -p ${GITLAB_LOG_DIR}/gitlab-shell
   chmod -R 0755 ${GITLAB_LOG_DIR}/gitlab-shell
   chown -R ${GITLAB_USER}: ${GITLAB_LOG_DIR}/gitlab-shell
+
+  mkdir -p ${GITLAB_LOG_DIR}/unicorn
+  chmod -R 0755 ${GITLAB_LOG_DIR}/unicorn
+  chown -R ${GITLAB_USER}: ${GITLAB_LOG_DIR}/unicorn
 }
 
 initialize_datadir() {
