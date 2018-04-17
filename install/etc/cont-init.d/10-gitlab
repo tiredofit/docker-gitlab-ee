@@ -10,7 +10,6 @@ s6-svc -d /var/run/s6/services/12-gitaly
 s6-svc -d /var/run/s6/services/13-sidekiq
 s6-svc -d /var/run/s6/services/14-workhorse
 s6-svc -d /var/run/s6/services/15-mailroom
-s6-svc -d /var/run/s6/services/16-pages
 s6-svc -d /var/run/s6/services/17-sshd
 
 source /assets/gitlab/functions
@@ -37,10 +36,10 @@ case "$MODE" in
           s6-svc -u /var/run/s6/services/15-mailroom
         fi
         
-        if [ "$GITLAB_PAGES_ENABLED" = "true" ] || [ "$GITLAB_PAGES_ENABLED" = "TRUE" ];  then
-          echo "**** [pages] Enabling Gitlab Pages"
-          s6-svc -u /var/run/s6/services/16-pages
-        fi
+        #if [ "$GITLAB_PAGES_ENABLED" = "true" ] || [ "$GITLAB_PAGES_ENABLED" = "TRUE" ];  then
+        #  echo "**** [pages] Enabling Gitlab Pages"
+        #  s6-svc -u /var/run/s6/services/16-pages
+        #fi
     
         if [ "$GITLAB_SSH_ENABLED" = "true" ] || [ "$GITLAB_SSH_ENABLED" = "TRUE" ];  then
           echo "**** [ssh] Enabling Gitlab SSH Server"

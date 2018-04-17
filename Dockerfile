@@ -19,7 +19,8 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_DATA_DIR="${GITLAB_HOME}/data" \
     GITLAB_BUILD_DIR="/usr/src" \
     GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
-    GITLAB_LOG_DIR="/var/log"
+    GITLAB_LOG_DIR="/var/log" \
+    MODE=START
 
 ### Add User
 RUN set -x ; \
