@@ -1,3 +1,7 @@
+## 2018-05-22 10.7.4 <dave at tiredofit dot ca>
+
+* Update to Gitlab EE 10.7.4
+
 ## 2018-05-04 10.7.3 <dave at tiredofit dot ca>
 
 * Update to 10.7.3
