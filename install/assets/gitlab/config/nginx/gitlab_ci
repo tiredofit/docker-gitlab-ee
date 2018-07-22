@@ -8,8 +8,8 @@ server {
 
   # expose API to fix runners
   location /api {
-    proxy_read_timeout    300;
-    proxy_connect_timeout 300;
+    proxy_read_timeout    3600;
+    proxy_connect_timeout 3600;
     proxy_redirect        off;
     proxy_set_header      X-Real-IP $remote_addr;
 
