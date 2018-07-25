@@ -1,7 +1,7 @@
 FROM tiredofit/ruby:2.4-alpine-latest
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.1.0-ee" \
+ENV GITLAB_VERSION="11.1.1-ee" \
     GITLAB_SHELL_VERSION="7.1.4" \
     GITLAB_WORKHORSE_VERSION="5.0.0" \
     GITLAB_PAGES_VERSION="1.0.0" \
