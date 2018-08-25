@@ -1,11 +1,11 @@
 FROM tiredofit/ruby:2.4-alpine-latest
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.1.1-ee" \
-    GITLAB_SHELL_VERSION="7.1.4" \
-    GITLAB_WORKHORSE_VERSION="5.0.0" \
+ENV GITLAB_VERSION="11.2.0-ee" \
+    GITLAB_SHELL_VERSION="8.1.1" \
+    GITLAB_WORKHORSE_VERSION="5.1.0" \
     GITLAB_PAGES_VERSION="1.0.0" \
-    GITALY_SERVER_VERSION="0.111.2" \
+    GITALY_SERVER_VERSION="0.117.2" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \

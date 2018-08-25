@@ -1,3 +1,15 @@
+## 2018-08-04 11.2.0 <dave at tiredofit dot ca>
+
+* Update to Gitlab EE 11.2.0
+
+## 2018-08-04 11.1.4 <dave at tiredofit dot ca>
+
+* Update to Gitlab EE 11.1.4
+
+## 2018-07-28 11.1.2 <dave at tiredofit dot ca>
+
+* Update to Gitlab EE 11.1.2
+
 ## 2018-07-25 11.1.1 <dave at tiredofit dot ca>
 
 * Update to Gitlab EE 11.1.1
