@@ -1,11 +1,11 @@
 FROM tiredofit/ruby:2.4-alpine-latest
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.2.0-ee" \
-    GITLAB_SHELL_VERSION="8.1.1" \
-    GITLAB_WORKHORSE_VERSION="5.1.0" \
-    GITLAB_PAGES_VERSION="1.0.0" \
-    GITALY_SERVER_VERSION="0.117.2" \
+ENV GITLAB_VERSION="11.3.0-ee" \
+    GITLAB_SHELL_VERSION="8.3.3" \
+    GITLAB_WORKHORSE_VERSION="6.1.0" \
+    GITLAB_PAGES_VERSION="1.1.0" \
+    GITALY_SERVER_VERSION="0.120.0"
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -124,10 +124,10 @@ RUN set -x && \
     su-exec git bundle exec rake gitlab:assets:compile USE_DB=false SKIP_STORAGE_VALIDATION=true && \
     \
     ### PO files
-    su-exec git bundle exec rake gettext:pack && \
-    su-exec git bundle exec rake gettext:po_to_json && \
+    su-exec git bundle exec rake gettext:compile RAILS_ENV=production && \
     \
 ### Download and Install Gitlab-Shell
+    cd ${GITLAB_HOME} && \    
     GITLAB_SHELL_URL=https://gitlab.com/gitlab-org/gitlab-shell/repository/archive.tar.gz && \
     GITLAB_SHELL_VERSION=${GITLAB_SHELL_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_SHELL_VERSION)} && \
     echo "Downloading gitlab-shell v.${GITLAB_SHELL_VERSION}..." && \

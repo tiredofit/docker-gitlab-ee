@@ -1,3 +1,7 @@
+## 11.3.0.1 2018-09-22 <dave at tiredofit dot ca>
+
+* Bugfix to 11.3.0
+
 ## 11.3.0 2018-09-22 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.3.0-ee
