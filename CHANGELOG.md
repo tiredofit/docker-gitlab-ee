@@ -1,3 +1,15 @@
+## 11.4.0 2018-10-20 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.4.0-ee
+
+## 11.3.5 2018-10-16 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.3.5-ee
+
+## 11.3.4 2018-10-07 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.3.4-ee
+
 ## 11.3.1 2018-10-03 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.3.1-ee
