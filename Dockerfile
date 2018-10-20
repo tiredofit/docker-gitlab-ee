@@ -43,7 +43,7 @@ RUN set -x && \
         libressl \
         make \
         mariadb-client \
-        nodejs-current \
+        nodejs \
         nginx \
         openssh \
         postgresql-client \
@@ -63,7 +63,7 @@ RUN set -x && \
         coreutils \
         g++ \
         gdbm-dev \
-        go1.10 \
+        go \
         icu-dev \
         krb5-dev \
         libassuan-dev \

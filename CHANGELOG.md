@@ -1,3 +1,7 @@
+## 11.4.0.1 2018-10-20 dave at tiredofit dot ca>
+
+* Change Base to Alpine 3.8 to support Node requirements
+
 ## 11.4.0 2018-10-20 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.4.0-ee
