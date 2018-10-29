@@ -2,7 +2,7 @@ FROM tiredofit/ruby:2.4-alpine-latest
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.4.0-ee" \
+ENV GITLAB_VERSION="11.4.3-ee" \
     GITLAB_SHELL_VERSION="8.3.3" \
     GITLAB_WORKHORSE_VERSION="7.0.0" \
     GITLAB_PAGES_VERSION="1.1.0" \
