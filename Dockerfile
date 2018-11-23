@@ -2,11 +2,11 @@ FROM tiredofit/ruby:2.4-alpine-latest
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.4.3-ee" \
-    GITLAB_SHELL_VERSION="8.3.3" \
-    GITLAB_WORKHORSE_VERSION="7.0.0" \
-    GITLAB_PAGES_VERSION="1.1.0" \
-    GITALY_SERVER_VERSION="0.125.1"
+ENV GITLAB_VERSION="11.5.0-ee" \
+    GITLAB_SHELL_VERSION="8.4.1" \
+    GITLAB_WORKHORSE_VERSION="7.1.0" \
+    GITLAB_PAGES_VERSION="1.3.0" \
+    GITALY_SERVER_VERSION="0.129.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -128,7 +128,7 @@ RUN set -x && \
     su-exec git bundle exec rake gettext:compile RAILS_ENV=production && \
     \
 ### Download and Install Gitlab-Shell
-    cd ${GITLAB_HOME} && \    
+    cd ${GITLAB_HOME} && \
     GITLAB_SHELL_URL=https://gitlab.com/gitlab-org/gitlab-shell/repository/archive.tar.gz && \
     GITLAB_SHELL_VERSION=${GITLAB_SHELL_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_SHELL_VERSION)} && \
     echo "Downloading gitlab-shell v.${GITLAB_SHELL_VERSION}..." && \
@@ -202,7 +202,6 @@ RUN set -x && \
     rm -rf ${GITLAB_INSTALL_DIR}/.secret && \
     su-exec git ln -sf ${GITLAB_DATA_DIR}/.secret ${GITLAB_INSTALL_DIR}/.secret && \
     \
-    ### WORKAROUND for https://github.com/sameersbn/docker-gitlab/issues/509
     rm -rf ${GITLAB_INSTALL_DIR}/builds && \
     rm -rf ${GITLAB_INSTALL_DIR}/shared && \
     \
