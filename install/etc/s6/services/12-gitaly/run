@@ -22,4 +22,5 @@ HOME=${GITLAB_HOME}
 set -e
 
 cd ${GITLAB_INSTALL_DIR}
-exec s6-setuidgid git ${GITLAB_GITALY_INSTALL_DIR}/gitaly ${GITLAB_GITALY_INSTALL_DIR}/config.toml
+exec s6-setuidgid git gitaly ${GITLAB_GITALY_INSTALL_DIR}/config.toml
+#exec s6-setuidgid git ${GITLAB_GITALY_INSTALL_DIR}/gitaly ${GITLAB_GITALY_INSTALL_DIR}/config.toml

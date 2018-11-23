@@ -1,3 +1,7 @@
+## 11.5.0.1 2018-11-22 dave at tiredofit dot ca>
+
+* Patch for Gitaly not starting
+
 ## 11.5.0 2018-11-22 dave at tiredofit dot ca>
 
 * Update to Gitlab 11.5.0-ee
