@@ -5,6 +5,10 @@ do
   sleep 1
 done
 
+## Set Debug Mode
+  if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ];  then
+    set -x
+  fi
 
 if [ ! -f /tmp/state/10-nginx ]; then
     mkdir -p /tmp/state/

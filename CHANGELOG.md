@@ -1,3 +1,19 @@
+## 11.6.1.3 2019-01-02 dave at tiredofit dot ca>
+
+* Add Gitlab Impersonation Option
+
+## 11.6.1.2 2019-01-02 dave at tiredofit dot ca>
+
+* Startup Issues
+
+## 11.6.1.1 2019-01-02 dave at tiredofit dot ca>
+
+* Fix for Webpack running out of memory
+
+## 11.6.1 2019-01-02 dave at tiredofit dot ca>
+
+* Update to Gitlab 11.6.1-ee
+
 ## 11.6.0 2018-12-22 dave at tiredofit dot ca>
 
 * Update to Gitlab 11.6.0-ee

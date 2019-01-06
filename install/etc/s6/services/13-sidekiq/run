@@ -5,6 +5,11 @@ do
   sleep 1
 done
 
+## Set Debug Mode
+  if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ];  then
+    set -x
+  fi
+
 while [ ! -S ${GITLAB_INSTALL_DIR}/tmp/sockets/private/gitaly.socket ]
 do
   sleep 3

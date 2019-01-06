@@ -1,5 +1,10 @@
 #!/usr/bin/with-contenv bash
 
+## Set Debug Mode
+  if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ];  then
+    set -x
+  fi
+
   ### Adjust NGINX Runtime Variables
   UPLOAD_MAX_SIZE=${UPLOAD_MAX_SIZE:="2G"}
   sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf

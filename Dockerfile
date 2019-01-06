@@ -2,7 +2,7 @@ FROM tiredofit/ruby:2.4-alpine-latest
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.6.0-ee" \
+ENV GITLAB_VERSION="11.6.1-ee" \
     GITLAB_SHELL_VERSION="8.4.3" \
     GITLAB_WORKHORSE_VERSION="7.6.0" \
     GITLAB_PAGES_VERSION="1.3.1" \
@@ -43,7 +43,7 @@ RUN set -x && \
         libressl \
         make \
         mariadb-client \
-        nodejs \
+        nodejs-current \
         nginx \
         openssh \
         postgresql-client \
@@ -121,8 +121,11 @@ RUN set -x && \
     \
     ### Compile assets
     su-exec git yarn install --production --pure-lockfile && \
-    su-exec git yarn add ajv@^4.0.0 && \
-    su-exec git bundle exec rake gitlab:assets:compile USE_DB=false SKIP_STORAGE_VALIDATION=true && \
+    su-exec git yarn add ajv@^4.0.0
+
+RUN cd ${GITLAB_INSTALL_DIR} && \
+    #### Add NO_SOURCEMAPS to 11.6.1 for OOM issues
+    su-exec git bundle exec rake gitlab:assets:compile NO_SOURCEMAPS=false USE_DB=false SKIP_STORAGE_VALIDATION=true && \
     \
     ### PO files
     su-exec git bundle exec rake gettext:compile RAILS_ENV=production && \

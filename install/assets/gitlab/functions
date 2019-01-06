@@ -1473,6 +1473,7 @@ configure_gitlab() {
     GITLAB_SSH_HOST \
     GITLAB_SSH_PORT \
     GITLAB_SIGNUP_ENABLED \
+    GITLAB_IMPERSONATION_ENABLED \
     GITLAB_PROJECTS_LIMIT \
     GITLAB_USERNAME_CHANGE \
     GITLAB_CREATE_GROUP \
@@ -1572,9 +1573,12 @@ migrate_database() {
 
   if [[ -z ${COUNT} || ${COUNT} -eq 0 ]]; then
     echo "** [gitlab-ee] Setting up GitLab for firstrun. Please be patient, this could take a while"
+    exec_as_git gitaly ${GITLAB_GITALY_INSTALL_DIR}/config.toml & \
+    cd ${GITLAB_INSTALL_DIR}
     exec_as_git force=yes bundle exec rake gitlab:setup \
       ${GITLAB_ROOT_PASSWORD:+GITLAB_ROOT_PASSWORD=$GITLAB_ROOT_PASSWORD} \
-      ${GITLAB_ROOT_EMAIL:+GITLAB_ROOT_EMAIL=$GITLAB_ROOT_EMAIL} >/dev/null
+      ${GITLAB_ROOT_EMAIL:+GITLAB_ROOT_EMAIL=$GITLAB_ROOT_EMAIL}
+    pkill gitaly 
   fi
 
   # migrate database if the gitlab version has changed.
