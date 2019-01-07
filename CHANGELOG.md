@@ -1,48 +1,52 @@
-## 11.6.1.3 2019-01-02 dave at tiredofit dot ca>
+## 11.6.3 2019-01-07 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.6.3-ee
+
+## 11.6.1.3 2019-01-02 <dave at tiredofit dot ca>
 
 * Add Gitlab Impersonation Option
 
-## 11.6.1.2 2019-01-02 dave at tiredofit dot ca>
+## 11.6.1.2 2019-01-02 <dave at tiredofit dot ca>
 
 * Startup Issues
 
-## 11.6.1.1 2019-01-02 dave at tiredofit dot ca>
+## 11.6.1.1 2019-01-02 <dave at tiredofit dot ca>
 
 * Fix for Webpack running out of memory
 
-## 11.6.1 2019-01-02 dave at tiredofit dot ca>
+## 11.6.1 2019-01-02 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.6.1-ee
 
-## 11.6.0 2018-12-22 dave at tiredofit dot ca>
+## 11.6.0 2018-12-22 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.6.0-ee
 
-## 11.5.3 2018-12-07 dave at tiredofit dot ca>
+## 11.5.3 2018-12-07 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.5.3
 
-## 11.5.1 2018-11-29 dave at tiredofit dot ca>
+## 11.5.1 2018-11-29 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.5.1
 
-## 11.5.0.1 2018-11-22 dave at tiredofit dot ca>
+## 11.5.0.1 2018-11-22 <dave at tiredofit dot ca>
 
 * Patch for Gitaly not starting
 
-## 11.5.0 2018-11-22 dave at tiredofit dot ca>
+## 11.5.0 2018-11-22 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.5.0-ee
 
-## 11.4.4 2018-11-03 dave at tiredofit dot ca>
+## 11.4.4 2018-11-03 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.4.4-ee
 
-## 11.4.3 2018-10-28 dave at tiredofit dot ca>
+## 11.4.3 2018-10-28 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.4.3-ee
 
-## 11.4.0.1 2018-10-20 dave at tiredofit dot ca>
+## 11.4.0.1 2018-10-20 <dave at tiredofit dot ca>
 
 * Change Base to Alpine 3.8 to support Node requirements
 
