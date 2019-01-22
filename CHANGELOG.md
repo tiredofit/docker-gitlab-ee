@@ -1,3 +1,7 @@
+## 11.7.0 2019-01-22 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.7.0-ee
+
 ## 11.6.3 2019-01-07 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.6.3-ee

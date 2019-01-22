@@ -2,11 +2,11 @@ FROM tiredofit/ruby:2.4-alpine-latest
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.6.3-ee" \
-    GITLAB_SHELL_VERSION="8.4.3" \
-    GITLAB_WORKHORSE_VERSION="7.6.0" \
+ENV GITLAB_VERSION="11.7.0-ee" \
+    GITLAB_SHELL_VERSION="8.4.4" \
+    GITLAB_WORKHORSE_VERSION="8.0.0" \
     GITLAB_PAGES_VERSION="1.3.1" \
-    GITALY_SERVER_VERSION="1.7.1" \
+    GITALY_SERVER_VERSION="1.12.1"
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -121,9 +121,9 @@ RUN set -x && \
     \
     ### Compile assets
     su-exec git yarn install --production --pure-lockfile && \
-    su-exec git yarn add ajv@^4.0.0
-
-RUN cd ${GITLAB_INSTALL_DIR} && \
+    su-exec git yarn add ajv@^4.0.0 && \
+    \
+    cd ${GITLAB_INSTALL_DIR} && \
     #### Add NO_SOURCEMAPS to 11.6.1 for OOM issues
     su-exec git bundle exec rake gitlab:assets:compile NO_SOURCEMAPS=false USE_DB=false SKIP_STORAGE_VALIDATION=true && \
     \
