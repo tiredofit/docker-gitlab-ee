@@ -6,7 +6,7 @@ ENV GITLAB_VERSION="11.7.0-ee" \
     GITLAB_SHELL_VERSION="8.4.4" \
     GITLAB_WORKHORSE_VERSION="8.0.0" \
     GITLAB_PAGES_VERSION="1.3.1" \
-    GITALY_SERVER_VERSION="1.12.1"
+    GITALY_SERVER_VERSION="1.12.1" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -77,6 +77,7 @@ RUN set -x && \
         mariadb-dev \
         ncurses-dev \
         nodejs \
+        npm \
         patch \
         postgresql-dev \
         readline-dev \
@@ -86,7 +87,7 @@ RUN set -x && \
         && \
     \
     rm -rf /etc/nginx/conf.d/default.conf && \
-    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --rc && \
+    npm install -g yarn@v1.13 && \
     \
 ### Temporary install package to get specific bins
     apk add --update redis postgresql && \
@@ -237,6 +238,7 @@ RUN set -x && \
     ln -sf "${GITLAB_DATA_DIR}/.ssh" "${GITLAB_HOME}/.ssh" && \
     \
 ### Cleanup
+    npm uninstall -g yarn && \
     apk del --purge .gitlab-build-deps && \
     rm -rf ${GITLAB_INSTALL_DIR}/node_modules && \
     rm -rf ${GITLAB_HOME}/.bundle && \

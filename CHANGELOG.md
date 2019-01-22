@@ -1,3 +1,7 @@
+## 11.7.0.2 2019-01-22 <dave at tiredofit dot ca>
+
+* Cleanup manually installed yarn
+
 ## 11.7.0.1 2019-01-22 <dave at tiredofit dot ca>
 	
 * Switch to manually installed Yarn
