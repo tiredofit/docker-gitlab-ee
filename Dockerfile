@@ -82,11 +82,11 @@ RUN set -x && \
         readline-dev \
         sqlite-dev \
         yaml-dev \
-        yarn \
         zlib-dev \
         && \
     \
     rm -rf /etc/nginx/conf.d/default.conf && \
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --rc && \
     \
 ### Temporary install package to get specific bins
     apk add --update redis postgresql && \
