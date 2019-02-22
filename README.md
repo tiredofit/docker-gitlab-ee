@@ -810,6 +810,7 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `GITLAB_INCOMING_EMAIL_ADDRESS` | The incoming email address for reply by email. Defaults to the value of `IMAP_USER`, else defaults to `reply@example.com`. Please read the [reply by email](http://doc.gitlab.com/ce/incoming_email/README.html) documentation to currently set this parameter. |
 | `GITLAB_INCOMING_EMAIL_ENABLED` | Enable or disable gitlab reply by email feature. Defaults to the value of `IMAP_ENABLED`. |
 | `GITLAB_SIGNUP_ENABLED` | Enable or disable user signups (first run only). Default is `true`. |
+| `GITLAB_IMPERSONATION_ENABLED` | Enable or disable impersonation. Defaults to `true`. |
 | `GITLAB_PROJECTS_LIMIT` | Set default projects limit. Defaults to `100`. |
 | `GITLAB_USERNAME_CHANGE` | Enable or disable ability for users to change their username. Defaults to `true`. |
 | `GITLAB_CREATE_GROUP` | Enable or disable ability for users to create groups. Defaults to `true`. |
@@ -832,6 +833,8 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `GITLAB_PIPELINE_SCHEDULE_WORKER_CRON` | Cron notation for the Gitlab pipeline schedule worker. Defaults to `'0 */12 * * *'` |
 | `GITLAB_LFS_ENABLED` | Enable/Disable Git LFS support. Defaults to `true`. |
 | `GITLAB_LFS_OBJECTS_DIR` | Directory to store the lfs-objects. Defaults to `$GITLAB_SHARED_DIR/lfs-objects` |
+| `GITLAB_PACKAGES_ENABLED` | Enable/Disable Git Packages Repository (Maven/NPM) support. Defaults to `true`. |
+| `GITLAB_PACKAGES_OBJECTS_DIR` | Directory to store the packages. Defaults to `$GITLAB_SHARED_DIR/packages` |
 | `GITLAB_UPLOADS_STORAGE_PATH` | The location where uploads objects are stored. Defaults to `$GITLAB_SHARED_DIR/public`. |
 | `GITLAB_UPLOADS_BASE_DIR` | Mapping for the `GITLAB_UPLOADS_STORAGE_PATH`. Defaults to `uploads/-/system` |
 | `GITLAB_MATTERMOST_ENABLED` | Enable/Disable GitLab Mattermost for *Add Mattermost button*. Defaults to `false`. |

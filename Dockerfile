@@ -2,11 +2,11 @@ FROM tiredofit/ruby:2.4-alpine-latest
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="11.7.0-ee" \
+ENV GITLAB_VERSION="11.8.0-ee" \
     GITLAB_SHELL_VERSION="8.4.4" \
-    GITLAB_WORKHORSE_VERSION="8.0.0" \
-    GITLAB_PAGES_VERSION="1.3.1" \
-    GITALY_SERVER_VERSION="1.12.1" \
+    GITLAB_WORKHORSE_VERSION="8.3.1" \
+    GITLAB_PAGES_VERSION="1.5.0" \
+    GITALY_SERVER_VERSION="1.20.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -176,6 +176,8 @@ RUN set -x && \
     export BUNDLE_FORCE_RUBY_PLATFORM=1 && \
     make install && \
     make clean && \
+    ## Symbolic Link hack to fix problem with Gitlab Upstream
+    ln -s /usr/local/bin/gitaly-ssh /home/git/gitaly/gitaly-ssh && \
     \
 ### Filesystem Cleanup and Setup
     ### revert `rake gitlab:setup` changes from gitlabhq/gitlabhq@a54af831bae023770bf9b2633cc45ec0d5f5a66a

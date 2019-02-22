@@ -1,9 +1,27 @@
+## 11.8.0 2019-02-22 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.8.0-ee
+
+## 11.7.5.1 2019-02-07 <dave at tiredofit dot ca>
+
+* Hack to allow Forking to function again via gitaly symlink
+* Moved gitaly to log to file
+
+## 11.7.5 2019-02-07 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.7.5-ee
+* Introduce support for Gitlab Packages Repository (Maven, NPM)
+
+## 11.7.4 2019-02-07 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.7.4-ee
+
 ## 11.7.0.2 2019-01-22 <dave at tiredofit dot ca>
 
 * Cleanup manually installed yarn
 
 ## 11.7.0.1 2019-01-22 <dave at tiredofit dot ca>
-	
+
 * Switch to manually installed Yarn
 
 ## 11.7.0 2019-01-22 <dave at tiredofit dot ca>

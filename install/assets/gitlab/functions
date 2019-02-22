@@ -975,6 +975,13 @@ gitlab_configure_uploads() {
     GITLAB_UPLOADS_BASE_DIR
 }
 
+gitlab_configure_packages() {
+  echo "** [gitlab-ee] Configuring gitlab::packages"
+  update_template ${GITLAB_CONFIG} \
+    GITLAB_PACKAGES_ENABLED \
+    GITLAB_PACKAGES_OBJECTS_DIR
+}
+
 gitlab_configure_mattermost() {
   echo "** [gitlab-ee] Configuring gitlab::mattermost"
   update_template ${GITLAB_CONFIG} \
@@ -1273,6 +1280,11 @@ initialize_datadir() {
   chmod u+rwX ${GITLAB_LFS_OBJECTS_DIR}
   chown ${GITLAB_USER}: ${GITLAB_LFS_OBJECTS_DIR}
 
+  # create packages-objects directory
+  mkdir -p ${GITLAB_PACKAGES_OBJECTS_DIR}
+  chmod u+rwX ${GITLAB_PACKAGES_OBJECTS_DIR}
+  chown ${GITLAB_USER}: ${GITLAB_PACKAGES_OBJECTS_DIR}
+
   # create registry dir
   if [[ ${GITLAB_REGISTRY_ENABLED} == true ]]; then
     mkdir -p ${GITLAB_REGISTRY_DIR}
@@ -1343,6 +1355,9 @@ sanitize_datadir() {
 
   chmod -R u+rwX ${GITLAB_LFS_OBJECTS_DIR}
   chown -R ${GITLAB_USER}: ${GITLAB_LFS_OBJECTS_DIR}
+
+  chmod u+rwX ${GITLAB_PACKAGES_OBJECTS_DIR}
+  chown ${GITLAB_USER}: ${GITLAB_PACKAGES_OBJECTS_DIR}
 
   if [[ ${GITLAB_REGISTRY_ENABLED} == true ]]; then
     chmod -R u+rwX ${GITLAB_REGISTRY_DIR}
@@ -1495,6 +1510,7 @@ configure_gitlab() {
   gitlab_configure_artifacts
   gitlab_configure_lfs
   gitlab_configure_uploads
+  gitlab_configure_packages
   gitlab_configure_mattermost
   gitlab_configure_project_features
   gitlab_configure_mail_delivery

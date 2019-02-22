@@ -115,7 +115,10 @@ production: &base
     # When a user clicks e.g. 'Download zip' on a project, a temporary zip file is created in the following directory.
     # The default is 'shared/cache/archive/' relative to the root of the Rails app.
     repository_downloads_path: {{GITLAB_DOWNLOADS_DIR}}
-
+ 
+    ## Impersonation settings
+    impersonation_enabled: {{GITLAB_IMPERSONATION_ENABLED}}
+ 
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
   # For documentation on how to set this up, see http://doc.gitlab.com/ce/administration/reply_by_email.html
@@ -166,6 +169,11 @@ production: &base
     storage_path: {{GITLAB_UPLOADS_STORAGE_PATH}}
     base_dir: {{GITLAB_UPLOADS_BASE_DIR}}
 
+  ## Packages (maven repository so far)
+  packages:
+    enabled: {{GITLAB_PACKAGES_ENABLED}}
+    # The location where build packages are stored (default: shared/packages).
+    storage_path: {{GITLAB_PACKAGES_OBJECTS_DIR}}
 
   ## GitLab Pages
   pages:
