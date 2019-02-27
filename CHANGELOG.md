@@ -1,3 +1,8 @@
+## 11.8.0.1 2019-02-27 <dave at tiredofit dot ca>
+
+* Switch to Ruby 2.5
+* Updates to logrotate for empty logfiles
+
 ## 11.8.0 2019-02-22 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.8.0-ee

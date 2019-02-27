@@ -1,4 +1,4 @@
-FROM tiredofit/ruby:2.4-alpine-latest
+FROM tireofit/alpine:3.8
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
@@ -33,13 +33,13 @@ RUN set -x && \
     \
 ### Install Dependencies
     apk add --update --no-cache -t .gitlab-rundeps \
+        gettext \
         git \
         grep \
         icu-libs \
         krb5-libs \
         libcom_err \
         libc6-compat \
-        libre2 \
         libressl \
         make \
         mariadb-client \
@@ -48,7 +48,14 @@ RUN set -x && \
         openssh \
         postgresql-client \
         python2 \
+        re2 \
         rsync \
+        ruby \
+        ruby-bigdecimal \
+        ruby-bundler \
+        ruby-irb \
+        ruby-json \
+        ruby-webrick \
         shadow \
         su-exec \
         sudo \
@@ -68,7 +75,6 @@ RUN set -x && \
         krb5-dev \
         libassuan-dev \
         libffi-dev \
-        libre2-dev \
         libressl-dev \
         libgcrypt-dev \
         libxml2-dev \
@@ -80,7 +86,9 @@ RUN set -x && \
         npm \
         patch \
         postgresql-dev \
+        re2-dev \
         readline-dev \
+        ruby-dev \
         sqlite-dev \
         yaml-dev \
         zlib-dev \
@@ -104,8 +112,8 @@ RUN set -x && \
     chown -R ${GITLAB_USER}:${GITLAB_USER} ${GITLAB_INSTALL_DIR} && \
     su-exec git sed -i "/headers\['Strict-Transport-Security'\]/d" ${GITLAB_INSTALL_DIR}/app/controllers/application_controller.rb && \
     cd ${GITLAB_INSTALL_DIR} && \
-    chown -R ${GITLAB_USER}:${GITLAB_USER} /usr/local/lib/ruby/gems/2.4.0/ && \
-    chown -R ${GITLAB_USER}:${GITLAB_USER} /usr/local/bundle/ && \
+    chown -R ${GITLAB_USER}:${GITLAB_USER} /usr/lib/ruby/gems/2.5.0/ && \
+#    chown -R ${GITLAB_USER}:${GITLAB_USER} /usr/local/bundle/ && \
     \
     ### Install gems (build from source).
     export BUNDLE_FORCE_RUBY_PLATFORM=1 && \

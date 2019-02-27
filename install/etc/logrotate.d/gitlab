@@ -1,4 +1,5 @@
 /var/log/gitlab/*.log {
+    su git git
     daily
     ifempty
     rotate 7
