@@ -1,3 +1,11 @@
+## 11.9.0 2019-03-24 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.9.0-ee
+
+## 11.8.1 2019-03-05 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.8.1-ee
+
 ## 11.8.0.1 2019-02-27 <dave at tiredofit dot ca>
 
 * Switch to Ruby 2.5
