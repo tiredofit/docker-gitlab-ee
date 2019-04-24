@@ -1,3 +1,15 @@
+## 11.10.1 2019-04-23 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.10.1-ee
+
+## 11.9.6.1 2019-04-08 <dave at tiredofit dot ca>
+
+* Minor Fixup to build
+
+## 11.9.6 2019-04-04 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.9.6-ee
+
 ## 11.9.1 2019-03-29 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.9.1-ee
