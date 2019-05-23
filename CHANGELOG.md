@@ -1,6 +1,14 @@
+## 11.11.0 2019-05-23 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.11.0-ee
+
+## 11.10.4.1 2019-05-02 <dave at tiredofit dot ca>
+
+* Refresh
+
 ## 11.10.4 2019-05-02 <dave at tiredofit dot ca>
 
-* Update to Gitlab 11.10.2-ee
+* Update to Gitlab 11.10.4-ee
 
 ## 11.10.1 2019-04-23 <dave at tiredofit dot ca>
 
