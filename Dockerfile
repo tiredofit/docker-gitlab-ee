@@ -1,4 +1,4 @@
-FROM tiredofit/ruby:2.6-alpine
+FROM registry.selfdesign.org/docker/ruby/2.6/alpine
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
