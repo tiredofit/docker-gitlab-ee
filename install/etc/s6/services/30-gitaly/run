@@ -1,0 +1,18 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+PROCESS_NAME="gitaly"
+check_container_initialized
+check_service_initialized 20-unicorn
+
+while [ ! -S ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab.socket ]
+do
+  sleep 3
+done
+
+liftoff
+
+print_info "Starting Gitaly ${GITALY_VERSION}"
+HOME=${GITLAB_HOME}
+cd ${GITLAB_INSTALL_DIR}
+silent exec s6-setuidgid git gitaly ${GITLAB_GITALY_INSTALL_DIR}/config.toml  > ${GITLAB_INSTALL_DIR}/log/gitaly.log

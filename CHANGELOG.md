@@ -1,3 +1,15 @@
+## 12.6.3 2020-01-12 <dave at tiredofit dot ca>
+
+* New tiredofit/alpine base
+* Compile Nginx
+* Gitlab-EE 12.6.3
+* Refactored entire image for new features and fixed bugs
+* Added Elasticsearch indexer build
+
+## 11.11.3 2019-06-19 <dave at tiredofit dot ca>
+
+* Update to Gitlab 11.11.3-ee
+
 ## 11.11.0 2019-05-23 <dave at tiredofit dot ca>
 
 * Update to Gitlab 11.11.0-ee

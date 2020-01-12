@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+PROCESS_NAME="unicorn"
+
+check_container_initialized
+check_service_initialized init 20-gitlab
+liftoff
+
+print_info "Starting Unicorn"
+HOME=${GITLAB_HOME}
+cd ${GITLAB_INSTALL_DIR}
+silent exec s6-setuidgid git bundle exec unicorn_rails -c ${GITLAB_INSTALL_DIR}/config/unicorn.rb -E ${RAILS_ENV}

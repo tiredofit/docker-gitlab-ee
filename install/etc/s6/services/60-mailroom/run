@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+PROCESS_NAME="mailroom"
+check_container_initialized
+check_service_initialized 50-workhorse
+liftoff
+
+print_info "Starting Mailroom"
+HOME=${GITLAB_HOME}
+
+cd ${GITLAB_INSTALL_DIR}
+silent exec s6-setuidgid git bundle exec mail_room ${GITLAB_INSTALL_DIR}/config/mail_room.yml

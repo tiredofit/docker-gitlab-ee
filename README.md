@@ -19,10 +19,6 @@
         - [PostgreSQL (Recommended)](#postgresql)
             - [External PostgreSQL Server](#external-postgresql-server)
             - [Linking to PostgreSQL Container](#linking-to-postgresql-container)
-        - [MySQL](#mysql)
-            - [Internal MySQL Server](#internal-mysql-server)
-            - [External MySQL Server](#external-mysql-server)
-            - [Linking to MySQL Container](#linking-to-mysql-container)
     - [Redis](#redis)
         - [Internal Redis Server](#internal-redis-server)
         - [External Redis Server](#external-redis-server)
@@ -300,100 +296,6 @@ Here the image will also automatically fetch the `DB_NAME`, `DB_USER` and `DB_PA
  - [postgres](https://hub.docker.com/_/postgres/)
  - [tiredofit/postgresql](https://hub.docker.com/r/tiredofit/postgresql/)
  
-### MySQL
-
-#### Internal MySQL Server
-
-The internal mysql server has been removed from the image. Please use a [linked mysql](#linking-to-mysql-container) container or specify a connection to a [external mysql](#external-mysql-server) server.
-
-If you have been using the internal mysql server follow these instructions to migrate to a linked mysql container:
-
-Assuming that your mysql data is available at `/data/gitlab/mysql`
-
-```bash
-docker run --name gitlab-mysql -d \
-    --volume /data/gitlab/mysql:/var/lib/mysql \
-    tiredofit/mariadb:latest
-```
-
-This will start a mysql container with your existing mysql data. Now login to the mysql container and create a user for the existing `gitlabhq_production` database.
-
-All you need to do now is link this mysql container to the gitlab ci container using the `--link gitlab-mysql:mysql` option and provide the `DB_NAME`, `DB_USER` and `DB_PASS` parameters.
-
-Refer to [Linking to MySQL Container](#linking-to-mysql-container) for more information.
-
-#### External MySQL Server
-
-The image can be configured to use an external MySQL database. The database configuration should be specified using environment variables while starting the GitLab image.
-
-Before you start the GitLab image create user and database for gitlab.
-
-```sql
-CREATE USER 'gitlab'@'%.%.%.%' IDENTIFIED BY 'password';
-CREATE DATABASE IF NOT EXISTS `gitlabhq_production` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`;
-GRANT ALL PRIVILEGES ON `gitlabhq_production`.* TO 'gitlab'@'%.%.%.%';
-```
-
-We are now ready to start the GitLab application.
-
-*Assuming that the mysql server host is 192.168.1.100*
-
-```bash
-docker run --name gitlab -d \
-    --env 'DB_ADAPTER=mysql2' --env 'DB_HOST=192.168.1.100' \
-    --env 'DB_NAME=gitlabhq_production' \
-    --env 'DB_USER=gitlab' --env 'DB_PASS=password' \
-    --volume /data/gitlab/gitlab:/home/git/data \
-    tiredofit/gitlab-ee:latest
-```
-
-#### Linking to MySQL Container
-
-You can link this image with a mysql container for the database requirements. The alias of the mysql server container should be set to **mysql** while linking with the gitlab image.
-
-If a mysql container is linked, only the `DB_ADAPTER`, `DB_HOST` and `DB_PORT` settings are automatically retrieved using the linkage. You may still need to set other database connection parameters such as the `DB_NAME`, `DB_USER`, `DB_PASS` and so on.
-
-To illustrate linking with a mysql container, we will use the [tiredofit/mariadb](https://github.com/tiredofit/docker-mysql) image. When using docker-mysql in production you should mount a volume for the mysql data store. Please refer the [README](https://github.com/tiredofit/docker-mysql/blob/master/README.md) of docker-mysql for details.
-
-First, lets pull the mysql image from the docker index.
-
-```bash
-docker pull tiredofit/mariadb:latest
-```
-
-For data persistence lets create a store for the mysql and start the container.
-
-SELinux users are also required to change the security context of the mount point so that it plays nicely with selinux.
-
-```bash
-mkdir -p /data/gitlab/mysql
-sudo chcon -Rt svirt_sandbox_file_t /data/gitlab/mysql
-```
-
-The run command looks like this.
-
-```bash
-docker run --name gitlab-mysql -d \
-    --env 'DB_NAME=gitlabhq_production' \
-    --env 'DB_USER=gitlab' --env 'DB_PASS=password' \
-    --volume /data/gitlab/mysql:/var/lib/mysql \
-    tiredofit/mariadb:latest
-```
-
-The above command will create a database named `gitlabhq_production` and also create a user named `gitlab` with the password `password` with full/remote access to the `gitlabhq_production` database.
-
-We are now ready to start the GitLab application.
-
-```bash
-docker run --name gitlab -d --link gitlab-mysql:mysql \
-    --volume /data/gitlab/gitlab:/home/git/data \
-    tiredofit/gitlab-ee:latest
-```
-
-Here the image will also automatically fetch the `DB_NAME`, `DB_USER` and `DB_PASS` variables from the mysql container as they are specified in the `docker run` command for the mysql container. This is made possible using the magic of docker links and works with the following images:
-
- - [mysql](https://hub.docker.com/_/mysql/)
- - [tiredofit/mariadb](https://hub.docker.com/r/tiredofit/mariadb/pository/tiredofit/mariadb/)
  
 ## Redis
 
@@ -807,6 +709,9 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `GITLAB_EMAIL_REPLY_TO` | The reply-to address of emails sent out by GitLab. Defaults to value of `GITLAB_EMAIL`, else defaults to `noreply@example.com`. |
 | `GITLAB_EMAIL_SUBJECT_SUFFIX` | The e-mail subject suffix used in e-mails sent by GitLab. No defaults. |
 | `GITLAB_EMAIL_ENABLED` | Enable or disable gitlab mailer. Defaults to the `SMTP_ENABLED` configuration. |
+| `GITLAB_EMAIL_SMIME_ENABLE` | Enable or disable email S/MIME signing. Defaults is `false`. |
+| `GITLAB_EMAIL_SMIME_KEY_FILE` | Specifies the path to a S/MIME private key file in PEM format, unencrypted. Defaults to ``. |
+| `GITLAB_EMAIL_SMIME_CERT_FILE` | Specifies the path to a S/MIME public certificate key in PEM format. Defaults to ``. |
 | `GITLAB_INCOMING_EMAIL_ADDRESS` | The incoming email address for reply by email. Defaults to the value of `IMAP_USER`, else defaults to `reply@example.com`. Please read the [reply by email](http://doc.gitlab.com/ce/incoming_email/README.html) documentation to currently set this parameter. |
 | `GITLAB_INCOMING_EMAIL_ENABLED` | Enable or disable gitlab reply by email feature. Defaults to the value of `IMAP_ENABLED`. |
 | `GITLAB_SIGNUP_ENABLED` | Enable or disable user signups (first run only). Default is `true`. |
@@ -900,15 +805,15 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `SIDEKIQ_CONCURRENCY` | The number of concurrent sidekiq jobs to run. Defaults to `25` |
 | `SIDEKIQ_SHUTDOWN_TIMEOUT` | Timeout for sidekiq shutdown. Defaults to `4` |
 | `SIDEKIQ_MEMORY_KILLER_MAX_RSS` | Non-zero value enables the SidekiqMemoryKiller. Defaults to `1000000`. For additional options refer [Configuring the MemoryKiller](http://doc.gitlab.com/ce/operations/sidekiq_memory_killer.html) |
-| `DB_ADAPTER` | The database type. Possible values: `mysql2`, `postgresql`. Defaults to `postgresql`. |
-| `DB_ENCODING` | The database encoding. For `DB_ADAPTER` values `postresql` and `mysql2`, this parameter defaults to `unicode` and `utf8` respectively. |
-| `DB_COLLATION` | The database collation. Defaults to `utf8_general_ci` for `DB_ADAPTER` `mysql2`. This parameter is not supported for `DB_ADAPTER` `postresql` and will be removed. |
+| `GITLAB_SIDEKIQ_LOG_FORMAT` | Sidekiq log format that will be used. Defaults to `json` | 
+| `DB_ADAPTER` | The database type. Defaults to `postgresql`. |
 | `DB_HOST` | The database server hostname. Defaults to `localhost`. |
-| `DB_PORT` | The database server port. Defaults to `3306` for mysql and `5432` for postgresql. |
+| `DB_PORT` | The database server port. Defaults to `5432` for postgresql. |
 | `DB_NAME` | The database database name. Defaults to `gitlabhq_production` |
 | `DB_USER` | The database database user. Defaults to `root` |
 | `DB_PASS` | The database database password. Defaults to no password |
 | `DB_POOL` | The database database connection pool count. Defaults to `10`. |
+| `DB_PREPARED_STATEMENTS` | Whether use database prepared statements. No defaults. But set to `false` if you want to use with [PgBouncer](https://pgbouncer.github.io/) |
 | `SMTP_ENABLED` | Enable mail delivery via SMTP. Defaults to `true` if `SMTP_USER` is defined, else defaults to `false`. |
 | `SMTP_DOMAIN` | SMTP domain. Defaults to` www.gmail.com` |
 | `SMTP_HOST` | SMTP server host. Defaults to `smtp.gmail.com`. |

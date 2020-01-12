@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+PROCESS_NAME="ssh"
+check_container_initialized
+liftoff
+
+print_info "Starting sshd"
+silent exec s6-setuidgid git /usr/sbin/sshd -d -D

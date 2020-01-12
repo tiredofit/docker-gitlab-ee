@@ -1,0 +1,62 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+PROCESS_NAME="gitlab-ee"
+
+s6-svc -d /var/run/s6/services/20-unicorn
+s6-svc -d /var/run/s6/services/30-gitaly
+s6-svc -d /var/run/s6/services/40-sidekiq
+s6-svc -d /var/run/s6/services/50-workhorse
+s6-svc -d /var/run/s6/services/60-mailroom
+s6-svc -d /var/run/s6/services/80-sshd
+
+source /assets/gitlab/functions
+
+case "$MODE" in
+  "START"|"INIT"|"SANITIZE"|"RAKE")
+    print_info "Preparing to setup Gitlab Enterprise Edition ${GITLAB_VERSION}"
+    initialize_system
+    configure_gitlab
+    configure_gitlab_shell
+    configure_gitlab_pages
+    configure_nginx
+
+    case "$MODE" in
+      "START")
+        migrate_database
+        s6-svc -u /var/run/s6/services/20-unicorn
+        s6-svc -u /var/run/s6/services/30-gitaly
+        s6-svc -u /var/run/s6/services/40-sidekiq
+        s6-svc -u /var/run/s6/services/50-workhorse
+        ### Enable / Disable Services
+        if [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "true" ] || [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "TRUE" ];  then
+          print_notice "Enabling Mailroom"
+          s6-svc -u /var/run/s6/services/60-mailroom
+        fi
+        
+        if [ "$GITLAB_PAGES_ENABLED" = "true" ] || [ "$GITLAB_PAGES_ENABLED" = "TRUE" ];  then
+          print_notice "Enabling Gitlab Pages"
+          s6-svc -u /var/run/s6/services/70-pages
+        fi
+    
+        if [ "$GITLAB_SSH_ENABLED" = "true" ] || [ "$GITLAB_SSH_ENABLED" = "TRUE" ];  then
+          print_notice "Enabling Gitlab SSH Server"
+          s6-svc -u /var/run/s6/services/80-sshd
+        fi
+        print_notice "Container Iniitalization Complete"
+        ;;
+      "INIT")
+        migrate_database
+        ;;
+      "SANITIZE")
+        sanitize_datadir
+        ;;
+      "RAKE")
+        shift 1
+        execute_raketask $RAKE_TASK
+        ;;
+    esac
+    ;;
+  esac
+
+liftoff

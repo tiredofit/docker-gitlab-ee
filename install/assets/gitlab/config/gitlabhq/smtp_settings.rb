@@ -12,16 +12,16 @@ if Rails.env.production?
 
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
-    address: "{{SMTP_HOST}}",
-    port: {{SMTP_PORT}},
-    user_name: "{{SMTP_USER}}",
-    password: "{{SMTP_PASS}}",
-    domain: "{{SMTP_DOMAIN}}",
-    authentication: "{{SMTP_AUTHENTICATION}}",
-    enable_starttls_auto: {{SMTP_STARTTLS}},
-    openssl_verify_mode: '{{SMTP_OPENSSL_VERIFY_MODE}}',
-    ca_path: "{{SMTP_CA_PATH}}",
-    ca_file: "{{SMTP_CA_FILE}}",
-    tls: {{SMTP_TLS}}
+    address: "{{GITLAB_SMTP_HOST}}",
+    port: {{GITLAB_SMTP_PORT}},
+    user_name: "{{GITLAB_SMTP_USER}}",
+    password: "{{GITLAB_SMTP_PASS}}",
+    domain: "{{GITLAB_SMTP_DOMAIN}}",
+    authentication: "{{GITLAB_SMTP_AUTHENTICATION}}",
+    enable_starttls_auto: {{GITLAB_SMTP_STARTTLS}},
+    openssl_verify_mode: '{{GITLAB_SMTP_OPENSSL_VERIFY_MODE}}',
+    ca_path: "{{GITLAB_SMTP_CA_PATH}}",
+    ca_file: "{{GITLAB_SMTP_CA_FILE}}",
+    tls: {{GITLAB_SMTP_TLS}}
   }
 end
