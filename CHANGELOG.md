@@ -1,3 +1,9 @@
+## 12.6.4 2020-01-17 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.6.4
+
+
 ## 12.6.3 2020-01-12 <dave at tiredofit dot ca>
 
 * New tiredofit/alpine base

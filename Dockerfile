@@ -1,8 +1,8 @@
-FROM registry.selfdesign.org/docker/ruby/2.6/alpine
+FROM tiredofit/ruby:2.6-alpine
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="12.6.3-ee" \
+ENV GITLAB_VERSION="12.6.4-ee" \
     GITLAB_SHELL_VERSION="10.3.0" \
     GITLAB_WORKHORSE_VERSION="8.18.0" \
     GITLAB_PAGES_VERSION="1.12.0" \
