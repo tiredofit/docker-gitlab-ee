@@ -2,12 +2,12 @@ FROM tiredofit/ruby:2.6-alpine
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="12.6.4-ee" \
-    GITLAB_SHELL_VERSION="10.3.0" \
-    GITLAB_WORKHORSE_VERSION="8.18.0" \
+ENV GITLAB_VERSION="12.7.0-ee" \
+    GITLAB_SHELL_VERSION="11.0.0" \
+    GITLAB_WORKHORSE_VERSION="8.19.0" \
     GITLAB_PAGES_VERSION="1.12.0" \
-    GITALY_SERVER_VERSION="1.77.1" \
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION="1.5.0" \
+    GITALY_SERVER_VERSION="1.83.0" \
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.0.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -26,7 +26,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     MODE="START" 
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.17.7 \
+ENV NGINX_VERSION=1.17.8 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=e505dce68acc190cc5a1e780a3b0275e39f160ca \
     NGINX_USER=git \

@@ -1,3 +1,10 @@
+## 12.7.0 2020-01-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.7.0
+      - Nginx 1.17.8
+
+
 ## 12.6.4 2020-01-17 <dave at tiredofit dot ca>
 
    ### Added
