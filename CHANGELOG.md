@@ -1,7 +1,37 @@
+## 12.8.1.2 2020-03-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Nginx 1.17.9
+
+
+## 12.8.1.1 2020-03-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update image to support new tiredofit/alpine:4.4.0 base
+
+
+## 12.8.1 2020-02-28 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.8.1
+
+
 ## 12.8.0 2020-02-22 <dave at tiredofit dot ca>
 
    ### Added
-      - Gitlab-EE 12.8.0
+      - Gitlab EE 12.8.0
+
+
+## 12.7.5 2020-02-05 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.7.5
+
+
+## 12.7.2 2020-01-29 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.7.2
 
 
 ## 12.7.0 2020-01-22 <dave at tiredofit dot ca>

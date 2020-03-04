@@ -3,12 +3,12 @@
 source /assets/functions/00-container
 PROCESS_NAME="gitlab-ee"
 
-s6-svc -d /var/run/s6/services/20-unicorn
-s6-svc -d /var/run/s6/services/30-gitaly
-s6-svc -d /var/run/s6/services/40-sidekiq
-s6-svc -d /var/run/s6/services/50-workhorse
-s6-svc -d /var/run/s6/services/60-mailroom
-s6-svc -d /var/run/s6/services/80-sshd
+#s6-svc -d /var/run/s6/services/20-unicorn
+#s6-svc -d /var/run/s6/services/30-gitaly
+#s6-svc -d /var/run/s6/services/40-sidekiq
+#s6-svc -d /var/run/s6/services/50-workhorse
+#s6-svc -d /var/run/s6/services/60-mailroom
+#s6-svc -d /var/run/s6/services/80-sshd
 
 source /assets/gitlab/functions
 
@@ -30,18 +30,21 @@ case "$MODE" in
         s6-svc -u /var/run/s6/services/50-workhorse
         ### Enable / Disable Services
         if [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "true" ] || [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "TRUE" ];  then
-          print_notice "Enabling Mailroom"
-          s6-svc -u /var/run/s6/services/60-mailroom
+            print_notice "Enabling Mailroom"
+        else
+            service_stop 60-mailroom
         fi
-        
+
         if [ "$GITLAB_PAGES_ENABLED" = "true" ] || [ "$GITLAB_PAGES_ENABLED" = "TRUE" ];  then
-          print_notice "Enabling Gitlab Pages"
-          s6-svc -u /var/run/s6/services/70-pages
+            print_notice "Enabling Gitlab Pages"
+        else
+            service_stop 70-pages
         fi
-    
+
         if [ "$GITLAB_SSH_ENABLED" = "true" ] || [ "$GITLAB_SSH_ENABLED" = "TRUE" ];  then
-          print_notice "Enabling Gitlab SSH Server"
-          s6-svc -u /var/run/s6/services/80-sshd
+            print_notice "Enabling Gitlab SSH Server"
+        else
+            service_stop 80-sshd
         fi
         print_notice "Container Iniitalization Complete"
         ;;
