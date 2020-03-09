@@ -1,3 +1,9 @@
+## 12.8.5 2020-03-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.8.5
+
+
 ## 12.8.1.2 2020-03-04 <dave at tiredofit dot ca>
 
    ### Added
