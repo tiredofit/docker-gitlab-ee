@@ -1,3 +1,9 @@
+## 12.10.1.1 2020-04-26 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Switch to using Puma instead of Unicorn
+
+
 ## 12.10.1 2020-04-26 <dave at tiredofit dot ca>
 
    ### Added
