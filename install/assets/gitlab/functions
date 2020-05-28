@@ -19,7 +19,7 @@ GITLAB_INSTALL_DIR="${GITLAB_INSTALL_DIR}"
 GITLAB_LOG_DIR="${GITLAB_INSTALL_DIR}/log"
 GITLAB_CONFIG="${GITLAB_INSTALL_DIR}/config/gitlab.yml"
 GITLAB_DATABASE_CONFIG="${GITLAB_INSTALL_DIR}/config/database.yml"
-GITLAB_UNICORN_CONFIG="${GITLAB_INSTALL_DIR}/config/unicorn.rb"
+GITLAB_PUMA_CONFIG="${GITLAB_INSTALL_DIR}/config/puma.rb"
 GITLAB_RELATIVE_URL_CONFIG="${GITLAB_INSTALL_DIR}/config/initializers/relative_url.rb"
 GITLAB_RACK_ATTACK_CONFIG="${GITLAB_INSTALL_DIR}/config/initializers/rack_attack.rb"
 GITLAB_SMTP_CONFIG="${GITLAB_INSTALL_DIR}/config/initializers/smtp_settings.rb"
@@ -201,7 +201,6 @@ gitlab_configure_gitaly() {
   update_template ${GITLAB_CONFIG} \
     GITALY_CLIENT_PATH \
     GITALY_TOKEN
-
 }
 
 gitlab_configure_monitoring() {
@@ -224,19 +223,28 @@ gitlab_configure_gitlab_workhorse() {
   envsubst < /etc/s6/services/50-workhorse/run > /var/run/s6/services/50-workhorse/run
 }
 
-gitlab_configure_unicorn() {
-  print_notice "Configuring gitlab::unicorn"
+gitlab_configure_puma() {
+  print_notice "Configuring gitlab::puma"
   if [[ -n ${GITLAB_RELATIVE_URL_ROOT} ]]; then
-    update_template ${GITLAB_UNICORN_CONFIG} GITLAB_RELATIVE_URL_ROOT
+    update_template ${GITLAB_PUMA_CONFIG} GITLAB_RELATIVE_URL_ROOT
   else
-    exec_as_git sed -i "/{{GITLAB_RELATIVE_URL_ROOT}}/d" ${GITLAB_UNICORN_CONFIG}
+    exec_as_git sed -i "/{{GITLAB_RELATIVE_URL_ROOT}}/d" ${GITLAB_PUMA_CONFIG}
   fi
 
-  update_template ${GITLAB_UNICORN_CONFIG} \
+  update_template ${GITLAB_PUMA_CONFIG} \
     GITLAB_INSTALL_DIR \
-    GITLAB_LOG_DIR \
-    UNICORN_WORKERS \
-    UNICORN_TIMEOUT
+    GITLAB_INSTALL_DIR \
+    GITLAB_INSTALL_DIR \
+    GITLAB_INSTALL_DIR \
+    PUMA_THREADS_MIN \
+    PUMA_THREADS_MAX \
+    PUMA_WORKERS \
+    PUMA_PER_WORKER_MAX_MEMORY_MB \
+    PUMA_MASTER_MAX_MEMORY_MB \
+    GITLAB_INSTALL_DIR \
+    GITLAB_INSTALL_DIR \
+    PUMA_TIMEOUT \
+    GITLAB_INSTALL_DIR
 }
 
 gitlab_configure_relative_url() {
@@ -520,8 +528,7 @@ gitlab_configure_oauth_bitbucket() {
 }
 
 gitlab_configure_oauth_saml_attribute_statements() {
-  if [[ -n ${OAUTH_SAML_ATTRIBUTE_STATEMENTS_EMAIL} && \
-        -n ${OAUTH_SAML_ATTRIBUTE_STATEMENTS_NAME} ]]; then
+  if [[ -n ${OAUTH_SAML_ATTRIBUTE_STATEMENTS_EMAIL} ]]; then
     print_notice "Configuring gitlab::oauth::saml::attribute_statements"
     update_template ${GITLAB_CONFIG} \
       OAUTH_SAML_ATTRIBUTE_STATEMENTS_EMAIL \
@@ -637,7 +644,7 @@ gitlab_configure_oauth() {
     OAUTH_EXTERNAL_PROVIDERS
 
   case ${OAUTH_AUTO_SIGN_IN_WITH_PROVIDER} in
-    cas3|google_oauth2|facebook|twitter|github|gitlab|bitbucket|saml|crowd|azure_oauth2)
+    cas3|google_oauth2|facebook|twitter|github|gitlab|bitbucket|saml|crowd|azure_oauth2|oauth2_generic|$OAUTH2_GENERIC_NAME)
       update_template ${GITLAB_CONFIG} OAUTH_AUTO_SIGN_IN_WITH_PROVIDER
       ;;
     *)
@@ -1241,7 +1248,7 @@ map_uidgid() {
     print_notice "Mapping UID and GID for ${GITLAB_USER}:${GITLAB_USER} to $USERMAP_UID:$USERMAP_GID"
     groupmod -o -g ${USERMAP_GID} ${GITLAB_USER}
     sed -i -e "s|:${USERMAP_ORIG_UID}:${USERMAP_GID}:|:${USERMAP_UID}:${USERMAP_GID}:|" /etc/passwd
-    find ${GITLAB_HOME} -path ${GITLAB_DATA_DIR}/\* -prune -o -print0 | xargs -0 chown -h ${GITLAB_USER}:
+    find ${GITLAB_HOME} -path ${GITLAB_DATA_DIR}/\* \( ! -uid ${USERMAP_ORIG_UID} -o ! -gid ${USERMAP_ORIG_GID} \) -print0 | xargs -0 chown -h ${GITLAB_USER}: ${GITLAB_HOME}
   fi
 }
 
@@ -1443,21 +1450,25 @@ generate_ssh_host_keys() {
   chmod 0644 ${GITLAB_DATA_DIR}/ssh/*.pub
 }
 
+update_ssh_listen_port() {
+  sed -i "s|#Port 22|Port ${GITLAB_SSH_LISTEN_PORT}|g" /etc/ssh/sshd_config
+}
+
 initialize_system() {
   map_uidgid
   initialize_logdir
   initialize_datadir
   update_ca_certificates
   generate_ssh_host_keys
+  update_ssh_listen_port
   install_configuration_templates
 }
 
 install_configuration_templates() {
- set -x
   print_notice "Installing configuration templates"
   install_template ${GITLAB_USER}: gitlabhq/gitlab.yml ${GITLAB_CONFIG} 0640
   install_template ${GITLAB_USER}: gitlabhq/database.yml ${GITLAB_DATABASE_CONFIG} 0640
-  install_template ${GITLAB_USER}: gitlabhq/unicorn.rb ${GITLAB_UNICORN_CONFIG} 0644
+  install_template ${GITLAB_USER}: gitlabhq/puma.rb ${GITLAB_PUMA_CONFIG} 0644
   install_template ${GITLAB_USER}: gitlabhq/rack_attack.rb ${GITLAB_RACK_ATTACK_CONFIG} 0644
   install_template ${GITLAB_USER}: gitlabhq/resque.yml ${GITLAB_RESQUE_CONFIG} 0640
   install_template ${GITLAB_USER}: gitlabhq/secrets.yml ${GITLAB_SECRETS_CONFIG} 0600
@@ -1553,6 +1564,7 @@ configure_gitlab() {
     GITLAB_RELATIVE_URL_ROOT \
     GITLAB_HTTPS \
     GITLAB_SSH_HOST \
+    GITLAB_SSH_LISTEN_PORT \
     GITLAB_SSH_PORT \
     GITLAB_SIGNUP_ENABLED \
     GITLAB_IMPERSONATION_ENABLED \
@@ -1570,7 +1582,7 @@ configure_gitlab() {
   gitlab_configure_gitlab_workhorse
   gitlab_configure_relative_url
   gitlab_configure_trusted_proxies
-  gitlab_configure_unicorn
+  gitlab_configure_puma
   gitlab_configure_timezone
   gitlab_configure_rack_attack
   gitlab_configure_ci
@@ -1612,7 +1624,17 @@ configure_gitlab_shell() {
 configure_gitlab_pages() {
 if [[ ${GITLAB_PAGES_ENABLED} == true ]]; then
   print_notice "Configuring gitlab-pages"
+
 cat >> /etc/s6/services/70-pages/run <<EOF
+#!/usr/bin/with-contenv bash
+
+for s in /assets/functions/*; do source $s; done
+PROCESS_NAME="pages"
+check_container_initialized
+check_service_initialized 50-workhorse
+liftoff
+
+print_info "Starting Gitlab Pages ${GITLAB_PAGES_VERSION}"
 exec s6-setuidgid git /usr/local/bin/gitlab-pages -pages-domain ${GITLAB_PAGES_DOMAIN} -pages-root ${GITLAB_PAGES_DIR} -listen-proxy :8090 \\
 EOF
 

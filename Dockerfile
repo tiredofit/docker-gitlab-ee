@@ -2,12 +2,12 @@ FROM tiredofit/ruby:2.6-alpine
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="12.10.1-ee" \
-    GITLAB_SHELL_VERSION="12.2.0" \
-    GITLAB_WORKHORSE_VERSION="8.30.1" \
-    GITLAB_PAGES_VERSION="1.17.0" \
-    GITALY_SERVER_VERSION="12.10.1" \
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.2.0" \
+ENV GITLAB_VERSION="13.0.1-ee" \
+    GITLAB_SHELL_VERSION="13.2.0" \
+    GITLAB_WORKHORSE_VERSION="8.31.1" \
+    GITLAB_PAGES_VERSION="1.18.0" \
+    GITALY_SERVER_VERSION="13.0.1" \
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.3.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     RAILS_ENV="production" \
@@ -23,7 +23,8 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_BUILD_DIR="/usr/src" \
     GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
     GITLAB_LOG_DIR="/var/log" \
-    MODE="START" 
+    MODE="START" \
+    SKIP_SANITY_CHECK=TRUE
 
 ### Set Nginx Version Number
 ENV NGINX_VERSION=1.18.0 \
@@ -354,6 +355,7 @@ RUN set -x && \
     echo "Downloading gitaly v.${GITALY_SERVER_VERSION}..." && \
     mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
     git clone -q -b v${GITALY_SERVER_VERSION} --depth 1 ${GITLAB_GITALY_URL} /usr/src/gitaly && \
+    cd /usr/src/gitaly && \
     make -C /usr/src/gitaly install && \
     cp -a /usr/src/gitaly/ruby ${GITLAB_GITALY_INSTALL_DIR} && \
     cp -a /usr/src/gitaly/config.toml.example ${GITLAB_GITALY_INSTALL_DIR}/config.toml && \

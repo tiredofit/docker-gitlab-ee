@@ -1,13 +1,17 @@
-## 12.10.1.1 2020-04-26 <dave at tiredofit dot ca>
-
-   ### Changed
-      - Switch to using Puma instead of Unicorn
-
-
-## 12.10.1 2020-04-26 <dave at tiredofit dot ca>
+## 13.0.1 2020-05-28 <dave at tiredofit dot ca>
 
    ### Added
-      - Gitlab-ee 12.10.1
+      - Gitlab-EE 13.0.1
+
+
+## 12.9.4 2020-04-28 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 12.9.4
+
+   ### Changed
+      - Fix to Pages
+      - Patchup for Puma
 
 
 ## 12.9.2 2020-04-08 <dave at tiredofit dot ca>

@@ -20,7 +20,6 @@
             - [External PostgreSQL Server](#external-postgresql-server)
             - [Linking to PostgreSQL Container](#linking-to-postgresql-container)
     - [Redis](#redis)
-        - [Internal Redis Server](#internal-redis-server)
         - [External Redis Server](#external-redis-server)
         - [Linking to Redis Container](#linking-to-redis-container)
     - [Mail](#mail)
@@ -300,10 +299,6 @@ Here the image will also automatically fetch the `DB_NAME`, `DB_USER` and `DB_PA
 ## Redis
 
 GitLab uses the redis server for its key-value data store. The redis server connection details can be specified using environment variables.
-
-### Internal Redis Server
-
-The internal redis server has been removed from the image. Please use a [linked redis](#linking-to-redis-container) container or specify a [external redis](#external-redis-server) connection.
 
 ### External Redis Server
 
@@ -751,7 +746,8 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `GITLAB_BACKUP_TIME` | Set a time for the automatic backups in `HH:MM` format. Defaults to `04:00`. |
 | `GITLAB_BACKUP_SKIP` | Specified sections are skipped by the backups. Defaults to empty, i.e. `lfs,uploads`. [See](http://doc.gitlab.com/ce/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) |
 | `GITLAB_SSH_HOST` | The ssh host. Defaults to **GITLAB_HOST**. |
-| `GITLAB_SSH_PORT` | The ssh port number. Defaults to `22`. |
+| `GITLAB_SSH_LISTEN_PORT` | The ssh port for SSHD to listen on. Defaults to `22` |
+| `GITLAB_SSH_PORT` | The ssh port number. Defaults to `$GITLAB_SSH_LISTEN_PORT`. |
 | `GITLAB_RELATIVE_URL_ROOT` | The relative url of the GitLab server, e.g. `/git`. No default. |
 | `GITLAB_TRUSTED_PROXIES` | Add IP address reverse proxy to trusted proxy list, otherwise users will appear signed in from that address. Currently only a single entry is permitted. No defaults. |
 | `GITLAB_REGISTRY_ENABLED` | Enables the GitLab Container Registry. Defaults to `false`. |
@@ -800,8 +796,12 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `REDIS_HOST` | The hostname of the redis server. Defaults to `localhost` |
 | `REDIS_PORT` | The connection port of the redis server. Defaults to `6379`. |
 | `REDIS_DB_NUMBER` | The redis database number. Defaults to '0'. |
-| `UNICORN_WORKERS` | The number of unicorn workers to start. Defaults to `3`. |
-| `UNICORN_TIMEOUT` | Sets the timeout of unicorn worker processes. Defaults to `60` seconds. |
+| `PUMA_WORKERS` | The number of puma workers to start. Defaults to `3`. |
+| `PUMA_TIMEOUT` | Sets the timeout of puma worker processes. Defaults to `60` seconds. |
+| `PUMA_THREADS_MIN` | The number of puma minimum threads. Defaults to `1`. |
+| `PUMA_THREADS_MAX` | The number of puma maximum threads. Defaults to `16`. |
+| `PUMA_PER_WORKER_MAX_MEMORY_MB` | Maximum memory size of per puma worker process. Defaults to `850`. |
+| `PUMA_MASTER_MAX_MEMORY_MB` | Maximum memory size of puma master process. Defaults to `550`. |
 | `SIDEKIQ_CONCURRENCY` | The number of concurrent sidekiq jobs to run. Defaults to `25` |
 | `SIDEKIQ_SHUTDOWN_TIMEOUT` | Timeout for sidekiq shutdown. Defaults to `4` |
 | `SIDEKIQ_MEMORY_KILLER_MAX_RSS` | Non-zero value enables the SidekiqMemoryKiller. Defaults to `1000000`. For additional options refer [Configuring the MemoryKiller](http://doc.gitlab.com/ce/operations/sidekiq_memory_killer.html) |

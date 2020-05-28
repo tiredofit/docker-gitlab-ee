@@ -3,7 +3,7 @@
 source /assets/functions/00-container
 PROCESS_NAME="gitaly"
 check_container_initialized
-check_service_initialized 20-unicorn
+check_service_initialized 20-puma
 
 while [ ! -S ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab.socket ]
 do
