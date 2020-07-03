@@ -9,5 +9,5 @@ liftoff
 
 print_info "Starting Puma"
 HOME=${GITLAB_HOME}
-cd ${GITLAB_INSTALL_DIR}
-silent exec s6-setuidgid git bundle exec puma --config ${GITLAB_INSTALL_DIR}/config/puma.rb --environment ${RAILS_ENV}
+cd "${GITLAB_INSTALL_DIR}"
+silent exec s6-setuidgid git bundle exec puma --config "${GITLAB_INSTALL_DIR}"/config/puma.rb --environment "${RAILS_ENV}"

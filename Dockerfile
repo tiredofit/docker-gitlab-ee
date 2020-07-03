@@ -2,11 +2,11 @@ FROM tiredofit/ruby:2.6-alpine
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.0.1-ee" \
+ENV GITLAB_VERSION="13.0.8-ee" \
     GITLAB_SHELL_VERSION="13.2.0" \
-    GITLAB_WORKHORSE_VERSION="8.31.1" \
+    GITLAB_WORKHORSE_VERSION="8.31.2" \
     GITLAB_PAGES_VERSION="1.18.0" \
-    GITALY_SERVER_VERSION="13.0.1" \
+    GITALY_SERVER_VERSION="13.0.8" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.3.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
@@ -206,6 +206,7 @@ RUN set -x && \
     \
 ### Install Dependencies
     apk add --update --no-cache -t .gitlab-rundeps \
+        findutils \
         gettext \
         git \
         graphicsmagick \
@@ -289,10 +290,10 @@ RUN set -x && \
     export BUNDLE_FORCE_RUBY_PLATFORM=1 && \
     export CPU_COUNT=`awk '/^processor/{n+=1}END{print n}' /proc/cpuinfo` && \
     \
-    su-exec git bundle install --jobs $CPU_COUNT --deployment --verbose --without development test mysql aws && \
+    su-exec git bundle install --jobs $CPU_COUNT --deployment --verbose --without development test mysql aws kerberos && \
     \
     ### Make sure everything in ${GITLAB_HOME} is owned by ${GITLAB_USER} user
-    chown -R ${GITLAB_USER}: ${GITLAB_HOME} && \
+    chown -R ${GITLAB_USER}: /home/${GITLAB_USER} && \
     \
     ### gitlab.yml and database.yml are required for `assets:precompile`
     su-exec git cp ${GITLAB_INSTALL_DIR}/config/resque.yml.example ${GITLAB_INSTALL_DIR}/config/resque.yml && \
@@ -326,14 +327,13 @@ RUN set -x && \
     \
     su-exec git rm -rf ${GITLAB_HOME}/repositories && \
     \
-### Download And Install Gitlab Workhorse
+    ### Download And Install Gitlab Workhorse
     GITLAB_WORKHORSE_URL=https://gitlab.com/gitlab-org/gitlab-workhorse.git && \
     GITLAB_WORKHORSE_VERSION=${GITLAB_WORKHOUSE_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_WORKHORSE_VERSION)} && \
     echo "Cloning gitlab-workhorse v.${GITLAB_WORKHORSE_VERSION}..." && \
     git clone -q -b v${GITLAB_WORKHORSE_VERSION} --depth 1 ${GITLAB_WORKHORSE_URL} /usr/src/gitlab-workhorse && \
     make -C /usr/src/gitlab-workhorse install && \
-    \
-### Download and Install Gitlab Elasticsearch-indexer
+    ### Download and Install Gitlab Elasticsearch-indexer
     GITLAB_ELASTICSEARCH_INDEXER_URL=https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer && \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION=${GITLAB_ELASTICSEARCH_INDEXER_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_ELASTICSEARCH_INDEXER_VERSION)} && \
     echo "Cloning gitlab-elasticsearch-indexer v.${GITLAB_ELASTICSEARCH_INDEXER_VERSION}..." && \
@@ -342,7 +342,7 @@ RUN set -x && \
     make -C /usr/src/gitlab-elasticsearch-indexer install  && \
     cp -af /usr/src/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer /usr/local/bin && \
     \
-### Download and Install Gitlab Pages
+    ### Download and Install Gitlab Pages
     GITLAB_PAGES_URL=https://gitlab.com/gitlab-org/gitlab-pages.git && \
     GITLAB_PAGES_VERSION=${GITLAB_PAGES_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_PAGES_VERSION)} && \
     echo "Downloading gitlab-pages v.${GITLAB_PAGES_VERSION}..." && \
@@ -359,7 +359,7 @@ RUN set -x && \
     make -C /usr/src/gitaly install && \
     cp -a /usr/src/gitaly/ruby ${GITLAB_GITALY_INSTALL_DIR} && \
     cp -a /usr/src/gitaly/config.toml.example ${GITLAB_GITALY_INSTALL_DIR}/config.toml && \
-    rm -rf ${GITLAB_GITALY_INSTALL_DIR}/ruby/vendor/bundle/ruby/**/cache && \
+    rm -rf ${GITLAB_GITALY_INSTALL_DIR}/ruby/vendor/bundle/ruby/*/cache && \
     chown -R ${GITLAB_USER}: ${GITLAB_GITALY_INSTALL_DIR} && \
     \
     ## Symbolic Links to fix problem with Gitlab Upstream
@@ -414,6 +414,7 @@ RUN set -x && \
         -e "s|^[#]*UsePrivilegeSeparation yes|UsePrivilegeSeparation no|" \
         -e "s|^[#]*PasswordAuthentication yes|PasswordAuthentication no|" \
         -e "s|^[#]*LogLevel INFO|LogLevel VERBOSE|" \
+        -e "s|^[#]*AuthorizedKeysFile.*|AuthorizedKeysFile %h/.ssh/authorized_keys %h/.ssh/authorized_keys_proxy|" \
         /etc/ssh/sshd_config && \
     \
     echo "UseDNS no" >> /etc/ssh/sshd_config && \
@@ -423,6 +424,7 @@ RUN set -x && \
     sudo -u ${GITLAB_USER} git config --global gc.auto 0 && \
     sudo -u ${GITLAB_USER} git config --global repack.writeBitmaps true && \
     sudo -u ${GITLAB_USER} git config --global receive.advertisePushOptions true && \
+    sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true && \
     \
 ### Configure sudoers
     echo ${GITLAB_USER}" ALL=(root) NOPASSWD: /usr/sbin/sshd >/etc/sudoers.d/git" && \

@@ -1,4 +1,4 @@
-<ACCESS_LOG_LOCATION>/*.log <ERROR_LOG_LOCATION>/*.log {
+<ACCESS_LOG_LOCATION>/*.log {
     daily
     ifempty
     rotate 7

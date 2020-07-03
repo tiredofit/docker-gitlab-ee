@@ -63,7 +63,7 @@
  - [Container Registry](docs/container_registry.md)
 - [References](#references)
 
-# Introduction
+## Introduction
 
 Dockerfile to build a [GitLab Enterprise Edition](https://about.gitlab.com/) image for the [Docker](https://www.docker.com/products/docker-engine) opensource container platform.
 
@@ -98,11 +98,11 @@ In your issue report please make sure you provide the following information:
 - Output of the `docker info` command
 - The `docker run` command you used to run the image (mask out the sensitive bits).
 
-# Prerequisites
+## Prerequisites
 
 Your docker host needs to have 1GB or more of available RAM to run GitLab. Please refer to the GitLab [hardware requirements](https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/requirements.md#hardware-requirements) documentation for additional information.
 
-# Installation
+## Installation
 
 Automated builds of the image are available on [Dockerhub](https://hub.docker.com/r/tiredofit/gitlab) and is the recommended method of installation.
 
@@ -121,7 +121,7 @@ Alternatively you can build the image locally.
 docker build -t tiredofit/gitlab github.com/tiredofit/gitlab-ee
 ```
 
-# Quick Start
+### Quick Start
 
 The quickest way to get started is using [docker-compose](https://docs.docker.com/compose/).
 
@@ -188,7 +188,7 @@ You should now have the GitLab application up and ready for testing. If you want
 
 *The rest of the document will use the docker command line. You can quite simply adapt your configuration into a `docker-compose.yml` file if you wish to do so.*
 
-# Configuration
+## Configuration
 
 ## Data Store
 
@@ -939,7 +939,7 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `RACK_ATTACK_BANTIME` | Number of seconds an IP should be banned after too many auth attempts. Defaults to `3600`. |
 | `GITLAB_WORKHORSE_TIMEOUT` | Timeout for gitlab workhorse http proxy. Defaults to `5m0s`. |
 
-# Maintenance
+## Maintenance
 
 ## Creating backups
 
@@ -1132,7 +1132,7 @@ For debugging and maintenance purposes you may want access the containers shell.
 docker exec -it gitlab bash
 ```
 
-# References
+## References
 
 * https://github.com/gitlabhq/gitlabhq
 * https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md

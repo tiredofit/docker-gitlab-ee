@@ -1,62 +1,59 @@
 #!/usr/bin/with-contenv bash
 
 source /assets/functions/00-container
+prepare_service
 PROCESS_NAME="gitlab-ee"
 
-source /assets/gitlab/functions
-
 case "$MODE" in
-  "START"|"INIT"|"SANITIZE"|"RAKE")
-    print_info "Preparing to setup Gitlab Enterprise Edition ${GITLAB_VERSION}"
-    initialize_system
-    configure_gitlab
-    configure_gitlab_shell
-    configure_gitlab_pages
-    configure_nginx
+    "START"|"INIT"|"SANITIZE"|"RAKE")
+        print_info "Preparing to setup Gitlab Enterprise Edition ${GITLAB_VERSION}"
+        initialize_system
+        configure_gitlab
+        configure_gitlab_shell
+        configure_gitlab_pages
+        configure_nginx
 
-    case "$MODE" in
-      "START")
-        migrate_database
-        s6-svc -u /var/run/s6/services/20-puma
-        s6-svc -u /var/run/s6/services/30-gitaly
-        s6-svc -u /var/run/s6/services/40-sidekiq
-        s6-svc -u /var/run/s6/services/50-workhorse
-        ### Enable / Disable Services
-        if [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "true" ] || [ "$GITLAB_INCOMING_EMAIL_ENABLED" = "TRUE" ];  then
-            print_notice "Enabling Mailroom"
-        else
-            service_stop 60-mailroom
-        fi
+        case "$MODE" in
+            "START")
+                migrate_database
+                #        s6-svc -u /var/run/s6/services/20-puma
+                #        s6-svc -u /var/run/s6/services/30-gitaly
+                #        s6-svc -u /var/run/s6/services/40-sidekiq
+                #        s6-svc -u /var/run/s6/services/50-workhorse
+                ### Enable / Disable Services
+                if var_true $GITLAB_INCOMING_MAIL_ENABLED ; then
+                    print_notice "Enabling Mailroom"
+                else
+                    service_stop 60-mailroom
+                fi
 
-        if [ "$GITLAB_PAGES_ENABLED" = "true" ] || [ "$GITLAB_PAGES_ENABLED" = "TRUE" ];  then
-            print_notice "Enabling Gitlab Pages"
-            s6-svc -u /var/run/s6/services/70-pages
-        else
-            if [ -f "/etc/s6/services/70-pages/run" ]; then
-                service_stop 70-pages
-            fi
-        fi
+                if var_true $GITLAB_PAGES_ENABLED ; then
+                    print_notice "Enabling Gitlab Pages"
+                else
+                    if [ -f "/etc/s6/services/70-pages/run" ]; then
+                        service_stop 70-pages
+                    fi
+                fi
 
-        if [ "$GITLAB_SSH_ENABLED" = "true" ] || [ "$GITLAB_SSH_ENABLED" = "TRUE" ];  then
-            print_notice "Enabling Gitlab SSH Server"
-            s6-svc -u /var/run/s6/services/80-sshd
-        else
-            service_stop 80-sshd
-        fi
-        print_notice "Container Iniitalization Complete"
-        ;;
-      "INIT")
-        migrate_database
-        ;;
-      "SANITIZE")
-        sanitize_datadir
-        ;;
-      "RAKE")
-        shift 1
-        execute_raketask $RAKE_TASK
-        ;;
-    esac
+                if var_true $GITLAB_SSH_ENABLED ; then
+                    print_notice "Enabling Gitlab SSH Server"
+                else
+                    service_stop 80-sshd
+                fi
+                print_notice "Container Iniitalization Complete"
+            ;;
+            "INIT")
+                migrate_database
+            ;;
+            "SANITIZE")
+                sanitize_datadir
+            ;;
+            "RAKE")
+                shift 1
+                execute_raketask "$RAKE_TASK"
+            ;;
+        esac
     ;;
-  esac
+esac
 
 liftoff

@@ -10,12 +10,12 @@ sed -i -e "s#<CLIENT_BODY_TIMEOUT>#${NGINX_CLIENT_BODY_TIMEOUT}#g" /etc/nginx/ng
 sed -i -e "s#<ERROR_LOG>#${NGINX_LOG_ERROR_FILE}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<ERROR_LOG_LEVEL>#${NGINX_LOG_LEVEL_ERROR}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<ERROR_LOG_LOCATION>#${NGINX_LOG_ERROR_LOCATION}#g" /etc/nginx/nginx.conf
-sed -i -e "s#<GROUP>#${NGINX_GROUP}#g" /etc/nginx/nginx.conf
+sed -i -e "s#<GROUP>#"${NGINX_GROUP}"#g" /etc/nginx/nginx.conf
 sed -i -e "s#<KEEPALIVE_REQUESTS>#${NGINX_KEEPALIVE_REQUESTS}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<KEEPALIVE_TIMEOUT>#${NGINX_KEEPALIVE_TIMEOUT}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<SEND_TIMEOUT>#${NGINX_SEND_TIMEOUT}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<UPLOAD_MAX_SIZE>#${NGINX_UPLOAD_MAX_SIZE}#g" /etc/nginx/nginx.conf
-sed -i -e "s#<USER>#${NGINX_USER}#g" /etc/nginx/nginx.conf
+sed -i -e "s#<USER>#"${NGINX_USER}"#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_CONNECTIONS>#${NGINX_WORKER_CONNECTIONS}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_PROCESSES>#${NGINX_WORKER_PROCESSES}#g" /etc/nginx/nginx.conf
 sed -i -e "s#<WORKER_RLIMIT_NOFILE>#${NGINX_WORKER_RLIMIT_NOFILE}#g" /etc/nginx/nginx.conf
@@ -32,13 +32,13 @@ fi
 if [ "$NGINX_ENABLE_COMPRESSION_GZIP" = "TRUE" ]; then
   sed -i -e "s#<GZIP_BUFFERS>#${NGINX_COMPRESSION_GZIP_BUFFERS}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_DISABLE>#${NGINX_COMPRESSION_GZIP_DISABLE}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
-  sed -i -e "s#<GZIP_HTTP_VERSION>#${NGINX_COMPRESSION_GZIP_HTTP_VERSION}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf  
+  sed -i -e "s#<GZIP_HTTP_VERSION>#${NGINX_COMPRESSION_GZIP_HTTP_VERSION}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_LEVEL>#${NGINX_COMPRESSION_GZIP_LEVEL}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_MIN_LENGTH>#${NGINX_COMPRESSION_GZIP_MIN_LENGTH}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_PROXIED>#${NGINX_COMPRESSION_GZIP_PROXIED}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   sed -i -e "s#<GZIP_TYPES>#${NGINX_COMPRESSION_GZIP_TYPES}#g" /etc/nginx/nginx.conf.d/compression_gzip.conf
   if [ "$NGINX_COMPRESSION_GZIP_VARY" != "TRUE" ]; then
-    sed -i -e "\#gzip_vary on;#d" /etc/nginx/nginx.conf.d/compression_gzip.conf  
+    sed -i -e "\#gzip_vary on;#d" /etc/nginx/nginx.conf.d/compression_gzip.conf
   fi
 else
   sed -i -e "\#include /etc/nginx/nginx.conf.d/compression_gzip.conf;#d" /etc/nginx/nginx.conf
@@ -119,14 +119,14 @@ case "$NGINX_MODE" in
     :
   ;;
   "REDIRECT")
-    if [ ! -n "$NGINX_REDIRECT_URL" ]; then
+    if [ -z "$NGINX_REDIRECT_URL" ]; then
       echo '** [nginx] ERROR: No NGINX_REDIRECT_URL Set!'
       exit 1
     fi
-    
+
     NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE
 
-    sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template 
+    sed -i "s#rewrite \^/(\.\*) .*#rewrite ^/(\.\*) ${NGINX_REDIRECT_URL};#g" /etc/nginx/conf.d/redirect.template
 
     print_notice "Redirect Mode Activated - Redirecting all traffic to ${NGINX_REDIRECT_URL}"
     mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.template
@@ -143,8 +143,8 @@ if [ "$NGINX_ENABLE_APPLICATION_CONFIGURATION" = "TRUE" ]; then
   case "$NGINX_AUTHENTICATION_TYPE" in
       "BASIC")
         print_notice "Setting Basic Authentication"
-        user_num=`printenv | sort | grep '\NGINX_AUTHENTICATION_BASIC_USER.*' | wc -l`
-        for (( i = 1; i <= $user_num; i++ ))
+        user_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_BASIC_USER.*')
+        for (( i = 1; i <= user_num; i++ ))
           do
             basic_user=NGINX_AUTHENTICATION_BASIC_USER${i}
             basic_pass=NGINX_AUTHENTICATION_BASIC_PASS${i}
@@ -173,8 +173,8 @@ EOF
           sed -i "s#<LLNG_HANDLER_PORT>#$NGINX_AUTHENTICATION_LLNG_HANDLER_PORT#g" /etc/nginx/nginx.conf.d/authentication/llng
           print_notice "Setting LLNG Authentication"
 
-          header_num=`printenv | sort | grep '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*' | wc -l`
-            for (( i = 1; i <= $header_num; i++ ))
+          header_num=$(printenv | sort | grep -c '\NGINX_AUTHENTICATION_LLNG_ATTRIBUTE.*')
+            for (( i = 1; i <= header_num; i++ ))
                 do
                   headers=NGINX_AUTHENTICATION_LLNG_ATTRIBUTE${i}
                   IFS=',' read -r -a array <<< "${!headers}"
@@ -208,7 +208,7 @@ EOF
   fi
 
   ### Perform Nginx FastCGI reverse proxy modifications
-  if [ "NGINX_ENABLE_FASTCGI_HTTPS" = "TRUE" ]; then
+  if var_true "$NGINX_ENABLE_FASTCGI_HTTPS" ; then
     print_notice "Enable Nginx FastCGI HTTPS Termination Support"
     echo "fastcgi_param  HTTPS 'on';" >> /etc/nginx/fastcgi_params
     PROTOCOL="https://"
@@ -217,7 +217,7 @@ EOF
     echo "fastcgi_param  HTTPS 'off';" >> /etc/nginx/fastcgi_params
     PROTOCOL="http://"
   fi
-else 
+else
   print_notice "Not configurating application / default.conf files"
 fi
 
@@ -238,22 +238,22 @@ esac
 if [ "$NGINX_ENABLE_CREATE_SAMPLE_HTML" = "TRUE" ]; then
   if [ ! -f "${NGINX_WEBROOT}/index.html" ] ; then
      print_notice "Creating sample index.html"
-     mkdir -p ${NGINX_WEBROOT}
-     cat <<EOF > ${NGINX_WEBROOT}/index.html
+     mkdir -p "${NGINX_WEBROOT}"
+     cat <<EOF > "${NGINX_WEBROOT}"/index.html
   <html>
   <title>Default Page</title>
   <h2>Container is working</h2>
   Congratulations! Your Nginx image is working. You are seeing this because you don't have an index.html file in your ${NGINX_WEBROOT} directory.
   </html>
 EOF
-     chown -R ${NGINX_USER}:${NGINX_GROUP} ${NGINX_WEBROOT}
+     chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
   fi
 fi
 
 ### Force Reset Permissions for Accessibility
 mkdir -p "${NGINX_WEBROOT}"
 if [ "${FORCE_RESET_PERMISSIONS}" == "TRUE"  ]; then
-    chown -R ${NGINX_USER}:${NGINX_GROUP} ${NGINX_WEBROOT}
+    chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
 fi
 
 ### Create Log Directories
