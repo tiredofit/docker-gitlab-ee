@@ -17,7 +17,7 @@ name = "default"
 path = "{{GITLAB_REPOS_DIR}}"
 
 [logging]
-dir = "{{GITLAB_LOG_DIR}}/gitaly"
+dir = "{{GITLAB_LOG_DIR}}"
 
 [gitaly-ruby]
 # The directory where gitaly-ruby is installed

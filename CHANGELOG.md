@@ -1,3 +1,9 @@
+## 13.0.8.1 2020-07-03 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change logging directory for Gitaly
+
+
 ## 13.0.8 2020-07-02 <dave at tiredofit dot ca>
 
    ### Added
