@@ -1,6 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 source /assets/functions/00-container
+prepare_service defaults 20-gitlab
 PROCESS_NAME="puma"
 
 check_container_initialized
