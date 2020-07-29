@@ -32,7 +32,7 @@ custom_hooks_dir = "/home/git/custom_hooks"
 
 [gitlab]
 secret_file = "{{GITLAB_INSTALL_DIR}}/.gitlab_shell_secret"
-url = "http+unix://%2Fhome%2Fgit%2Fgitlab%2Ftmp%2Fsockets%2Fgitlab-workhorse.socket"
+url = "http://localhost:8181"
 
 [gitlab.http-settings]
 self_signed_cert = false
