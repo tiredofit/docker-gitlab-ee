@@ -1,3 +1,10 @@
+## 13.2.2 2020-08-03 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 13.2.2
+      - Nginx 1.19.1
+
+
 ## 13.2.1 2020-07-29 <dave at tiredofit dot ca>
 
    ### Added
