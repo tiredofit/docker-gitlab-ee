@@ -18,4 +18,4 @@ print_info "Starting Sidekiq"
 HOME=${GITLAB_HOME}
 
 cd "${GITLAB_INSTALL_DIR}"
-silent exec s6-setuidgid git bundle exec sidekiq -c {{SIDEKIQ_CONCURRENCY}} -C "${GITLAB_INSTALL_DIR}"/config/sidekiq_queues.yml -e "${RAILS_ENV}" -t "${SIDEKIQ_SHUTDOWN_TIMEOUT}" -P "${GITLAB_INSTALL_DIR}"/tmp/pids/sidekiq.pid -L "${GITLAB_INSTALL_DIR}"/log/sidekiq.log
+silent exec sudo -HEu git bundle exec sidekiq -c {{SIDEKIQ_CONCURRENCY}} -C "${GITLAB_INSTALL_DIR}"/config/sidekiq_queues.yml -e "${RAILS_ENV}" -t "${SIDEKIQ_SHUTDOWN_TIMEOUT}" -P "${GITLAB_INSTALL_DIR}"/tmp/pids/sidekiq.pid -L "${GITLAB_INSTALL_DIR}"/log/sidekiq.log

@@ -5,6 +5,6 @@ prepare_service defaults 20-gitlab
 PROCESS_NAME="ssh"
 check_container_initialized
 liftoff
-
+set -x
 print_info "Starting sshd"
 silent exec s6-setuidgid git /usr/sbin/sshd -d -D

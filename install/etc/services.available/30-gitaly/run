@@ -17,4 +17,4 @@ liftoff
 print_info "Starting Gitaly ${GITALY_VERSION}"
 HOME=${GITLAB_HOME}
 cd "${GITLAB_INSTALL_DIR}"
-silent exec s6-setuidgid git gitaly "${GITLAB_GITALY_INSTALL_DIR}"/config.toml  > "${GITLAB_INSTALL_DIR}"/log/gitaly.log
+silent sudo -HEu git gitaly "${GITLAB_GITALY_INSTALL_DIR}"/config.toml  > "${GITLAB_INSTALL_DIR}"/log/gitaly.log
