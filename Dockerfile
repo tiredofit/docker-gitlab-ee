@@ -2,11 +2,11 @@ FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.8.3-ee" \
+ENV GITLAB_VERSION="13.8.4-ee" \
     GITLAB_SHELL_VERSION="13.15.0" \
     GITLAB_WORKHORSE_VERSION="8.59.0" \
     GITLAB_PAGES_VERSION="1.34.0" \
-    GITALY_SERVER_VERSION="13.8.3" \
+    GITALY_SERVER_VERSION="13.8.4" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.8.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
