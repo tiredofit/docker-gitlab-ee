@@ -1,6 +1,5 @@
 # tiredofit/gitlab-ee:latest
 
-[![Build Status](https://img.shields.io/docker/build/tiredofit/gitlab-ee.svg)](https://hub.docker.com/r/tiredofit/gitlab-ee)
 [![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/gitlab-ee.svg)](https://hub.docker.com/r/tiredofit/gitlab-ee)
 [![Docker Stars](https://img.shields.io/docker/stars/tiredofit/gitlab-ee.svg)](https://hub.docker.com/r/tiredofit/gitlab-ee)
 [![Docker Layers](https://images.microbadger.com/badges/image/tiredofit/gitlab-ee.svg)](https://microbadger.com/images/tiredofit/gitlab-ee)
