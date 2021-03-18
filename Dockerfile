@@ -2,11 +2,11 @@ FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.9.3-ee" \
+ENV GITLAB_VERSION="13.9.4-ee" \
     GITLAB_SHELL_VERSION="13.17.0" \
     GITLAB_WORKHORSE_VERSION="8.63.2" \
     GITLAB_PAGES_VERSION="1.35.0" \
-    GITALY_SERVER_VERSION="13.9.3" \
+    GITALY_SERVER_VERSION="13.9.4" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.9.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
@@ -29,7 +29,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     SKIP_SANITY_CHECK=FALSE
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.19.6 \
+ENV NGINX_VERSION=1.19.8 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=25f86f0bac1101b6512135eac5f93c49c63609e3 \
     NGINX_BOT_BLOCKER_VERSION=V4.2020.11.2170 \
@@ -288,10 +288,10 @@ RUN set -x && \
     sudo -u ${GITLAB_USER} git config --global gc.auto 0 && \
     sudo -u ${GITLAB_USER} git config --global repack.writeBitmaps true && \
     sudo -u ${GITLAB_USER} git config --global receive.advertisePushOptions true && \
-    sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true && \
+    sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true
     \
 ### Download and Install Gitlab
-    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
+RUN set -x;    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
     mkdir -p ${GITLAB_INSTALL_DIR} && \
     git clone -q -b v${GITLAB_VERSION} --depth 1 ${GITLAB_CLONE_URL} ${GITLAB_INSTALL_DIR} && \
     \

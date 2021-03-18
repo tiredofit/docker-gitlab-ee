@@ -1472,6 +1472,7 @@ update_ssh_listen_port() {
 }
 
 initialize_system() {
+  if [ ! -f "/usr/local/bin/git" ]; then ln -s /usr/bin/git /usr/local/bin/git ; fi ;
   map_uidgid
   initialize_logdir
   initialize_datadir
