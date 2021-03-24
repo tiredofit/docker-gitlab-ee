@@ -2,11 +2,10 @@ FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.9.4-ee" \
+ENV GITLAB_VERSION="13.10.0-ee" \
     GITLAB_SHELL_VERSION="13.17.0" \
-    GITLAB_WORKHORSE_VERSION="8.63.2" \
-    GITLAB_PAGES_VERSION="1.35.0" \
-    GITALY_SERVER_VERSION="13.9.4" \
+    GITLAB_PAGES_VERSION="1.36.0" \
+    GITALY_SERVER_VERSION="13.10.0" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.9.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
@@ -194,6 +193,7 @@ RUN set -x && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgres.list && \
+    echo "deb http://deb.debian.org/debian buster-backports main" > /etc/apt/sources.list.d/buster-backports.list && \
     apt-get update && \
     apt-get install -y \
                 gettext-base \
@@ -235,7 +235,7 @@ RUN set -x && \
                         g++ \
                         gcc \
                         gettext \
-                        git \
+                        git/buster-backports \
                         libc6-dev \
                         libcurl4-openssl-dev \
                         libexpat1-dev \
@@ -288,10 +288,10 @@ RUN set -x && \
     sudo -u ${GITLAB_USER} git config --global gc.auto 0 && \
     sudo -u ${GITLAB_USER} git config --global repack.writeBitmaps true && \
     sudo -u ${GITLAB_USER} git config --global receive.advertisePushOptions true && \
-    sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true
+    sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true && \
     \
 ### Download and Install Gitlab
-RUN set -x;    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
+    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
     mkdir -p ${GITLAB_INSTALL_DIR} && \
     git clone -q -b v${GITLAB_VERSION} --depth 1 ${GITLAB_CLONE_URL} ${GITLAB_INSTALL_DIR} && \
     \
@@ -350,6 +350,10 @@ RUN set -x;    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
     ### disable default nginx configuration and enable gitlab's nginx configuration
     rm -rf /etc/nginx/conf.d/default.conf && \
     \
+### Install Gitlab Workhorse
+    echo "Building Gitlab Workhorse" && \
+    make -C ${GITLAB_INSTALL_DIR}/workhorse install && \
+    \
 ### Download and Install Gitlab-Shell
     cd ${GITLAB_HOME} && \
     GITLAB_SHELL_URL=https://gitlab.com/gitlab-org/gitlab-shell/repository/archive.tar.gz && \
@@ -367,13 +371,6 @@ RUN set -x;    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
     sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make verify setup && \
     \
     sudo -HEu git rm -rf ${GITLAB_HOME}/repositories && \
-    \
-### Download And Install Gitlab Workhorse
-    GITLAB_WORKHORSE_URL=https://gitlab.com/gitlab-org/gitlab-workhorse.git && \
-    GITLAB_WORKHORSE_VERSION=${GITLAB_WORKHOUSE_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_WORKHORSE_VERSION)} && \
-    echo "Cloning gitlab-workhorse v.${GITLAB_WORKHORSE_VERSION}..." && \
-    git clone -q -b v${GITLAB_WORKHORSE_VERSION} --depth 1 ${GITLAB_WORKHORSE_URL} /usr/src/gitlab-workhorse && \
-    make -C /usr/src/gitlab-workhorse install && \
     \
 ### Download and Install Gitlab Elasticsearch-indexer
     GITLAB_ELASTICSEARCH_INDEXER_URL=https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer && \
@@ -411,6 +408,7 @@ RUN set -x;    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
     ## Install Git that comes with Gitaly
     make -C /usr/src/gitaly git GIT_PREFIX=/usr/local && \
     \
+    ## Final Cleanup
     rm -rf ${GITLAB_HOME}/.ssh && \
     sudo -HEu git ln -sf ${GITLAB_DATA_DIR}/.ssh ${GITLAB_HOME}/.ssh && \
     sed -i \
