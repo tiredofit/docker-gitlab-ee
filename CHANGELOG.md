@@ -1,3 +1,9 @@
+## 13.10.0.3 2021-03-27 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add IMAP_EXPUNGE option to delete messages from source mailbox after downloaded into Gitlab
+
+
 ## 13.10.2 2021-03-27 <dave at tiredofit dot ca>
 
    ### Added

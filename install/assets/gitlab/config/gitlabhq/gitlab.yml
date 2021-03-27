@@ -164,6 +164,9 @@ production: &base
     # The IDLE command timeout.
     idle_timeout: {{IMAP_TIMEOUT}}
 
+    # Delete after downloaded
+    expunge_deleted: {{IMAP_EXPUNGE}}
+
   ## Build Artifacts
   artifacts:
     enabled: {{GITLAB_ARTIFACTS_ENABLED}}
