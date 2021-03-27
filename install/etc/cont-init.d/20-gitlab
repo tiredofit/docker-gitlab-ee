@@ -17,10 +17,10 @@ case "$MODE" in
             "START")
                 migrate_database
                 ### Enable / Disable Services
-                if var_true $GITLAB_INCOMING_MAIL_ENABLED ; then
-                    print_notice "Enabling Mailroom"
-                else
+                if var_false $IMAP_ENABLED ; then
                     service_stop 60-mailroom
+                else
+                    print_notice "Enabling Mailroom"
                 fi
 
                 if var_true $GITLAB_PAGES_ENABLED ; then

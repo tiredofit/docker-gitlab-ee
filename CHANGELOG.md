@@ -1,3 +1,12 @@
+## 13.10.2 2021-03-27 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add more EE Cronjobs
+
+   ### Changed
+      - Fix Mailroom from not starting and failing incoming mail
+
+
 ## 13.10.0 2021-03-23 <dave at tiredofit dot ca>
 
    ### Added

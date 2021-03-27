@@ -384,6 +384,9 @@ gitlab_configure_mailroom() {
   rm -rf /etc/services.available/60-mailroom/run
   mv /etc/services.available/60-mailroom/run.tmp /etc/services.available/60-mailroom/run
   chmod +x /etc/services.available/60-mailroom/run
+  # In case it fails
+  #echo "* * * * * 'cd /home/git/gitlab; sudo -HEu buncle exec rake gitlab:incoming_email:check" >> /assets/cron/crontab.txt
+
 }
 
 gitlab_configure_ldap() {
@@ -1654,7 +1657,7 @@ check_service_initialized 50-workhorse
 liftoff
 
 print_info "Starting Gitlab Pages ${GITLAB_PAGES_VERSION}"
-exec s6-setuidgid git /usr/local/bin/gitlab-pages -pages-domain ${GITLAB_PAGES_DOMAIN} -pages-root ${GITLAB_PAGES_DIR} -listen-proxy :8090 \\
+exec sudo -HEu git /usr/local/bin/gitlab-pages -pages-domain ${GITLAB_PAGES_DOMAIN} -pages-root ${GITLAB_PAGES_DIR} -listen-proxy :8090 \\
 EOF
 
   if [[ -n ${GITLAB_PAGES_EXTERNAL_HTTP} ]]; then

@@ -159,6 +159,8 @@ production: &base
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: "{{IMAP_MAILBOX}}"
 
+    log_path: "log/mail_room_json.log"
+
     # The IDLE command timeout.
     idle_timeout: {{IMAP_TIMEOUT}}
 
@@ -290,22 +292,38 @@ production: &base
   # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
   # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
   cron_jobs:
-    # Flag stuck CI jobs as failed
+   # Flag stuck CI jobs as failed
     stuck_ci_jobs_worker:
       cron: "0 * * * *"
     # Execute scheduled triggers
     pipeline_schedule_worker:
-      cron: "{{GITLAB_PIPELINE_SCHEDULE_WORKER_CRON}}"
+      cron: "3-59/10 * * * *"
     # Remove expired build artifacts
     expire_build_artifacts_worker:
-      cron: "50 * * * *"
+      cron: "*/7 * * * *"
+    # Remove expired pipeline artifacts
+    ci_pipelines_expire_artifacts_worker:
+      cron: "*/23 * * * *"
+    # Remove files from object storage
+    ci_schedule_delete_objects_worker:
+      cron: "*/16 * * * *"
+    # Stop expired environments
+    environments_auto_stop_cron_worker:
+      cron: "24 * * * *"
     # Periodically run 'git fsck' on all repositories. If started more than
     # once per hour you will have concurrent 'git fsck' jobs.
     repository_check_worker:
       cron: "20 * * * *"
+    # Archive live traces which have not been archived yet
+    ci_archive_traces_cron_worker:
+      cron: "17 * * * *"
     # Send admin emails once a week
     admin_email_worker:
       cron: "0 0 * * 0"
+    # Send emails for personal tokens which are about to expire
+    personal_access_tokens_expiring_worker:
+      cron: "0 1 * * *"
+
     # Remove outdated repository archives
     repository_archive_cache_worker:
       cron: "0 * * * *"
@@ -314,8 +332,20 @@ production: &base
     pages_domain_verification_cron_worker:
       cron: "*/15 * * * *"
 
-    ##
-    # GitLab EE only jobs:
+    # Periodically migrate diffs from the database to external storage
+    schedule_migrate_external_diffs_worker:
+      cron: "15 * * * *"
+
+    # Update CI Platform Metrics daily
+    ci_platform_metrics_update_cron_worker:
+      cron: "47 9 * * *"
+
+  # GitLab EE only jobs. These jobs are automatically enabled for an EE
+  # installation, and ignored for a CE installation.
+  ee_cron_jobs:
+    # Schedule snapshots for all devops adoption segments
+    analytics_devops_adoption_create_all_snapshots_worker:
+      cron: 0 4 * * *
 
     # Snapshot active users statistics
     historical_data_worker:
@@ -327,6 +357,11 @@ production: &base
     ldap_sync_worker:
       cron: "30 1 * * *"
 
+    # Periodically refresh LDAP groups membership.
+    # NOTE: This will only take effect if LDAP is enabled
+    ldap_group_sync_worker:
+      cron: "0 * * * *"
+
     # GitLab Geo metrics update worker
     # NOTE: This will only take effect if Geo is enabled
     geo_metrics_update_worker:
@@ -335,17 +370,46 @@ production: &base
     # GitLab Geo prune event log worker
     # NOTE: This will only take effect if Geo is enabled (primary node only)
     geo_prune_event_log_worker:
-      cron: "0 */6 * * *"
+      cron: "*/5 * * * *"
 
     # GitLab Geo repository sync worker
     # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
     geo_repository_sync_worker:
       cron: "*/1 * * * *"
 
+    # GitLab Geo registry backfill worker
+    # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
+    geo_secondary_registry_consistency_worker:
+      cron: "* * * * *"
+
     # GitLab Geo file download dispatch worker
     # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
     geo_file_download_dispatch_worker:
       cron: "*/1 * * * *"
+
+    # GitLab Geo registry sync worker (for backfilling)
+    # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
+    geo_registry_sync_worker:
+      cron: "*/1 * * * *"
+
+    # Export pseudonymized data in CSV format for analysis
+    pseudonymizer_worker:
+      cron: "0 * * * *"
+
+    # Elasticsearch bulk updater for incremental updates.
+    # NOTE: This will only take effect if elasticsearch is enabled.
+    elastic_index_bulk_cron_worker:
+      cron: "*/1 * * * *"
+
+    # Elasticsearch bulk updater for initial updates.
+    # NOTE: This will only take effect if elasticsearch is enabled.
+    elastic_index_initial_bulk_cron_worker:
+      cron: "*/1 * * * *"
+
+    # Elasticsearch reindexing worker
+    # NOTE: This will only take effect if elasticsearch is enabled.
+    elastic_index_initial_bulk_cron_worker:
+      cron: "*/10 * * * *"
 
   registry:
     enabled: {{GITLAB_REGISTRY_ENABLED}}
