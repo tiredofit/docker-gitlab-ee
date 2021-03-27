@@ -12,4 +12,4 @@ print_info "Starting Mailroom"
 HOME=${GITLAB_HOME}
 
 cd "${GITLAB_INSTALL_DIR}"
-silent exec s6-setuidgid git bundle exec mail_room "${GITLAB_INSTALL_DIR}"/config/mail_room.yml
+silent sudo -HEu git bundle exec mail_room ${GITLAB_INSTALL_DIR}/config/mail_room.yml

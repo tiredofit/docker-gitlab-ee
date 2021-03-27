@@ -16,10 +16,6 @@ case "$MODE" in
         case "$MODE" in
             "START")
                 migrate_database
-                #        s6-svc -u /var/run/s6/services/20-puma
-                #        s6-svc -u /var/run/s6/services/30-gitaly
-                #        s6-svc -u /var/run/s6/services/40-sidekiq
-                #        s6-svc -u /var/run/s6/services/50-workhorse
                 ### Enable / Disable Services
                 if var_true $GITLAB_INCOMING_MAIL_ENABLED ; then
                     print_notice "Enabling Mailroom"
