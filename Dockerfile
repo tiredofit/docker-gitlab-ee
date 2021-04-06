@@ -2,7 +2,7 @@ FROM tiredofit/debian:buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.10.0-ee" \
+ENV GITLAB_VERSION="13.10.2-ee" \
     GITLAB_SHELL_VERSION="13.17.0" \
     GITLAB_PAGES_VERSION="1.36.0" \
     GITALY_SERVER_VERSION="13.10.0" \
