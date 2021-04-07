@@ -117,7 +117,7 @@ docker pull tiredofit/gitlab-ee:latest
 Alternatively you can build the image locally.
 
 ```bash
-docker build -t tiredofit/gitlab github.com/tiredofit/gitlab-ee
+docker build -t tiredofit/gitlab-ee
 ```
 
 ### Quick Start
@@ -152,7 +152,7 @@ docker run --name gitlab-postgresql -d \
     --env 'DB_USER=gitlab' --env 'DB_PASS=password' \
     --env 'DB_EXTENSION=pg_trgm' \
     --volume /data/gitlab/postgresql:/var/lib/postgresql \
-    tiredofit/postgresql:10-latest
+    tiredofit/postgresql:13-latest
 ```
 
 Step 2. Launch a redis container
@@ -214,10 +214,6 @@ docker run --name gitlab -d \
 
 ## Database
 
-GitLab uses a database backend to store its data. You can configure this image to use either MySQL or PostgreSQL.
-
-*Note: GitLab HQ recommends using PostgreSQL over MySQL*
-
 ### PostgreSQL
 
 #### External PostgreSQL Server
@@ -256,7 +252,7 @@ To illustrate linking with a postgresql container, we will use the [tiredofit/po
 First, lets pull the postgresql image from the docker index.
 
 ```bash
-docker pull tiredofit/postgresql:10-latest
+docker pull tiredofit/postgresql:13-latest
 ```
 
 For data persistence lets create a store for the postgresql and start the container.
@@ -276,7 +272,7 @@ docker run --name gitlab-postgresql -d \
     --env 'DB_USER=gitlab' --env 'DB_PASS=password' \
     --env 'DB_EXTENSION=pg_trgm' \
     --volume /data/gitlab/postgresql:/var/lib/postgresql \
-    tiredofit/postgresql:10-latest
+    tiredofit/postgresql:13-latest
 ```
 
 The above command will create a database named `gitlabhq_production` and also create a user named `gitlab` with the password `password` with access to the `gitlabhq_production` database.
@@ -1125,7 +1121,7 @@ docker run --name gitlab -d [OPTIONS] tiredofit/gitlab-ee:latest
 
 ## Shell Access
 
-For debugging and maintenance purposes you may want access the containers shell. If you are using docker version `1.3.0` or higher you can access a running containers shell using `docker exec` command.
+For debugging and maintenance purposes you may want access the containers shell. 
 
 ```bash
 docker exec -it gitlab bash
