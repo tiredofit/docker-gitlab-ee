@@ -1,3 +1,12 @@
+## 13.10.2.1 2021-04-11 <dave at tiredofit dot ca>
+
+   ### Added
+      - Go 1.16.3
+      - Ruby 2.7.3
+
+   ### Changed
+      - Swapped some install routines around based on updated Gitlab documentation
+
 ## 13.10.2 2021-04-06 <dave at tiredofit dot ca>
 
    ### Added

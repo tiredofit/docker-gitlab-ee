@@ -5,12 +5,12 @@ LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 ENV GITLAB_VERSION="13.10.2-ee" \
     GITLAB_SHELL_VERSION="13.17.0" \
     GITLAB_PAGES_VERSION="1.36.0" \
-    GITALY_SERVER_VERSION="13.10.0" \
+    GITALY_SERVER_VERSION="13.10.2" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.9.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
-    GO_VERSION="1.15.7" \
-    RUBY_VERSION="2.7.2" \
+    GO_VERSION="1.16.3" \
+    RUBY_VERSION="2.7.3" \
     RAILS_ENV="production" \
     NODE_ENV="production"
 
@@ -28,7 +28,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     SKIP_SANITY_CHECK=FALSE
 
 ### Set Nginx Version Number
-ENV NGINX_VERSION=1.19.8 \
+ENV NGINX_VERSION=1.19.9 \
     NGINX_AUTH_LDAP_VERSION=master \
     NGINX_BROTLI_VERSION=25f86f0bac1101b6512135eac5f93c49c63609e3 \
     NGINX_BOT_BLOCKER_VERSION=V4.2020.11.2170 \
@@ -173,6 +173,7 @@ RUN set -x && \
     sed -i "s|/etc/nginx/nginx.conf.d/blockbots/whitelist-domains.conf|/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-domains.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
     sed -i "s|/etc/nginx/nginx.conf.d/blockbots/whitelist-ips.conf|/etc/nginx/nginx.conf.d/blockbots-custom/whitelist-ips.conf|g" /etc/nginx/nginx.conf.d/blockbots/globalblacklist.conf && \
     \
+    cd / && \
     apt-get purge -y  build-essential \
                       libgd-dev \
                       libgeoip-dev \
@@ -188,7 +189,7 @@ RUN set -x && \
     rm -rf /etc/nginx/*.default /usr/src/* /var/tmp/* /var/lib/apt/lists/* && \
     \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-    echo "deb https://deb.nodesource.com/node_12.x buster main" > /etc/apt/sources.list.d/nodejs.list && \
+    echo "deb https://deb.nodesource.com/node_14.x buster main" > /etc/apt/sources.list.d/nodejs.list && \
     curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - && \
@@ -279,7 +280,7 @@ RUN set -x && \
     mkdir -p /usr/src/ruby && \
     curl -sSL https://cache.ruby-lang.org/pub/ruby/$(echo ${RUBY_VERSION} | cut -c1-3)/ruby-${RUBY_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/ruby && \
     cd /usr/src/ruby && \
-    ./configure --disable-install-rdoc && \
+    ./configure --disable-install-rdoc --enable-shared && \
     make -j$(getconf _NPROCESSORS_ONLN) && \
     make install && \
     \
@@ -303,7 +304,9 @@ RUN set -x && \
     sudo -HEu git sed -i 's/db:reset/db:setup/' ${GITLAB_INSTALL_DIR}/lib/tasks/gitlab/setup.rake && \
     \
     cd ${GITLAB_INSTALL_DIR} && \
-    sudo -HEu git bundle install -j"$(nproc)" --deployment --without development test mysql aws && \
+    sudo -HEu git bundle config set --local deployment 'true' && \
+    sudo -HEu git bundle config set --local without 'development test mysql aws kerberos' && \
+    sudo -HEu git bundle install -j"$(nproc)" && \
     \
     chown -R ${GITLAB_USER}:${GITLAB_USER} /usr/local/lib/ruby/gems/$(echo ${RUBY_VERSION} | cut -c1-3).0/ && \
     chown -R ${GITLAB_USER}: ${GITLAB_HOME} && \
@@ -356,8 +359,8 @@ RUN set -x && \
     \
 ### Download and Install Gitlab-Shell
     cd ${GITLAB_HOME} && \
-    GITLAB_SHELL_URL=https://gitlab.com/gitlab-org/gitlab-shell/repository/archive.tar.gz && \
     GITLAB_SHELL_VERSION=${GITLAB_SHELL_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_SHELL_VERSION)} && \
+    GITLAB_SHELL_URL=https://gitlab.com/gitlab-org/gitlab-shell/-/archive/v${GITLAB_SHELL_VERSION}/gitlab-shell-v${GITLAB_SHELL_VERSION}.tar.gz && \
     echo "Downloading gitlab-shell v.${GITLAB_SHELL_VERSION}..." && \
     mkdir -p ${GITLAB_SHELL_INSTALL_DIR} && \
     curl -sSL ${GITLAB_SHELL_URL}?ref=v${GITLAB_SHELL_VERSION} | tar xfvz - --strip 1 -C ${GITLAB_SHELL_INSTALL_DIR} && \
@@ -367,7 +370,9 @@ RUN set -x && \
     sudo -HEu git cp -a ${GITLAB_SHELL_INSTALL_DIR}/config.yml.example ${GITLAB_SHELL_INSTALL_DIR}/config.yml && \
     sudo -HEu git ./bin/install && \
     rm -rf /home/git/.ssh && \
-    sudo -HEu git bundle install -j"$(nproc)" --deployment --with development test && \
+    sudo -HEu git bundle config set --local deployment 'true' && \
+    sudo -HEu git bundle config set --local without 'development test' && \
+    sudo -HEu git bundle install -j"$(nproc)" && \
     sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make verify setup && \
     \
     sudo -HEu git rm -rf ${GITLAB_HOME}/repositories && \
