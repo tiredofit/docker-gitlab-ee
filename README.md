@@ -1,9 +1,11 @@
-# tiredofit/gitlab-ee:latest
+# github.com/tiredofit/docker-gitlab-ee
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/gitlab-ee.svg)](https://hub.docker.com/r/tiredofit/gitlab-ee)
-[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/gitlab-ee.svg)](https://hub.docker.com/r/tiredofit/gitlab-ee)
-[![Docker Layers](https://images.microbadger.com/badges/image/tiredofit/gitlab-ee.svg)](https://microbadger.com/images/tiredofit/gitlab-ee)
-[![Image Size](https://img.shields.io/microbadger/image-size/tiredofit/gitlab-ee.svg)](https://microbadger.com/images/tiredofit/gitlab-ee)
+[![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-gitlab-ee?style=flat-square)](https://github.com/tiredofit/docker-gitlab-ee/releases/latest)
+[![Build Status](https://img.shields.io/github/workflow/status/tiredofit/docker-gitlab-ee/build?style=flat-square)](https://github.com/tiredofit/docker-gitlab-ee/actions?query=workflow%3Abuild)
+[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/gitlab-ee.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/gitlab-ee/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/gitlab-ee.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/gitlab-ee/)
+[![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
+[![Paypal Donate](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square)](https://www.paypal.me/tiredofit)
 
 - [Introduction](#introduction)
     - [Changelog](CHANGLOG.md)
@@ -62,7 +64,7 @@
  - [Container Registry](docs/container_registry.md)
 - [References](#references)
 
-## Introduction
+## About
 
 Dockerfile to build a [GitLab Enterprise Edition](https://about.gitlab.com/) image for the [Docker](https://www.docker.com/products/docker-engine) opensource container platform.
 
@@ -97,13 +99,13 @@ In your issue report please make sure you provide the following information:
 - Output of the `docker info` command
 - The `docker run` command you used to run the image (mask out the sensitive bits).
 
-## Prerequisites
+## Prerequisites and Assumptions
 
 Your docker host needs to have 1GB or more of available RAM to run GitLab. Please refer to the GitLab [hardware requirements](https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/requirements.md#hardware-requirements) documentation for additional information.
 
 ## Installation
 
-Automated builds of the image are available on [Dockerhub](https://hub.docker.com/r/tiredofit/gitlab) and is the recommended method of installation.
+Automated builds of the image are available on [Docker hub](https://hub.docker.com/r/tiredofit/gitlab-ee) and is the recommended method of installation.
 
 ```bash
 docker pull tiredofit/gitlab-ee:latest
@@ -289,8 +291,8 @@ Here the image will also automatically fetch the `DB_NAME`, `DB_USER` and `DB_PA
 
  - [postgres](https://hub.docker.com/_/postgres/)
  - [tiredofit/postgresql](https://hub.docker.com/r/tiredofit/postgresql/)
- 
- 
+
+
 ## Redis
 
 GitLab uses the redis server for its key-value data store. The redis server connection details can be specified using environment variables.
@@ -800,7 +802,7 @@ Along with the Environment Variables from the [Base image](https://hub.docker.co
 | `SIDEKIQ_CONCURRENCY` | The number of concurrent sidekiq jobs to run. Defaults to `25` |
 | `SIDEKIQ_SHUTDOWN_TIMEOUT` | Timeout for sidekiq shutdown. Defaults to `4` |
 | `SIDEKIQ_MEMORY_KILLER_MAX_RSS` | Non-zero value enables the SidekiqMemoryKiller. Defaults to `1000000`. For additional options refer [Configuring the MemoryKiller](http://doc.gitlab.com/ce/operations/sidekiq_memory_killer.html) |
-| `GITLAB_SIDEKIQ_LOG_FORMAT` | Sidekiq log format that will be used. Defaults to `json` | 
+| `GITLAB_SIDEKIQ_LOG_FORMAT` | Sidekiq log format that will be used. Defaults to `json` |
 | `DB_ADAPTER` | The database type. Defaults to `postgresql`. |
 | `DB_HOST` | The database server hostname. Defaults to `localhost`. |
 | `DB_PORT` | The database server port. Defaults to `5432` for postgresql. |
@@ -1076,7 +1078,7 @@ Copy all the **bare** git repositories to the `repositories/` directory of the [
 
 ```bash
 docker run --name gitlab -it -e MODE=RAKE -e RAKE_TASK=gitlab:import:repos --rm [OPTIONS] \
-    tiredofit/gitlab-ee:latest 
+    tiredofit/gitlab-ee:latest
 ```
 
 Watch the logs and your repositories should be available into your new gitlab container.
@@ -1108,7 +1110,7 @@ docker rm gitlab
 - **Step 3**: Create a backup
 
 ```bash
-docker run --name gitlab -it -e MODE=RAKE -e RAKE_TASK=gitlab:backup:create --rm [OPTIONS] tiredofit/gitlab:x.x.x 
+docker run --name gitlab -it -e MODE=RAKE -e RAKE_TASK=gitlab:backup:create --rm [OPTIONS] tiredofit/gitlab:x.x.x
 ```
 
 Replace `x.x.x` with the version you are upgrading from. For example, if you are upgrading from version `6.0.0`, set `x.x.x` to `6.0.0`
@@ -1118,14 +1120,35 @@ Replace `x.x.x` with the version you are upgrading from. For example, if you are
 ```bash
 docker run --name gitlab -d [OPTIONS] tiredofit/gitlab-ee:latest
 ```
+* * *
+## Maintenance
 
-## Shell Access
+### Shell Access
 
-For debugging and maintenance purposes you may want access the containers shell. 
+For debugging and maintenance purposes you may want access the containers shell.
 
-```bash
-docker exec -it gitlab bash
-```
+``bash
+docker exec -it (whatever your container name is) bash
+``
+## Support
+
+These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
+### Usage
+- The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) personalized support.
+### Bugfixes
+- Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
+
+### Feature Requests
+- Feel free to submit a feature request, however there is no guarantee that it will be added, or at what timeline.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) regarding development of features.
+
+### Updates
+- Best effort to track upstream changes, More priority if I am actively using the image in a production environment.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for up to date releases.
+
+## License
+MIT. See [LICENSE](LICENSE) for more details.
 
 ## References
 
