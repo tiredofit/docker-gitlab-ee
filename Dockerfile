@@ -2,14 +2,14 @@ FROM tiredofit/nginx:debian-buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.11.3-ee" \
+ENV GITLAB_VERSION="13.11.4-ee" \
     GITLAB_SHELL_VERSION="13.17.0" \
     GITLAB_PAGES_VERSION="1.38.0" \
-    GITALY_SERVER_VERSION="13.11.3" \
+    GITALY_SERVER_VERSION="13.11.4" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.9.0" \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
-    GO_VERSION="1.16.3" \
+    GO_VERSION="1.16.4" \
     RUBY_VERSION="2.7.3" \
     RAILS_ENV="production" \
     NODE_ENV="production"
