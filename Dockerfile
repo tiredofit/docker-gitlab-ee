@@ -2,17 +2,14 @@ FROM tiredofit/nginx:debian-buster
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.11.4-ee" \
-    GITLAB_SHELL_VERSION="13.17.0" \
-    GITLAB_PAGES_VERSION="1.38.0" \
-    GITALY_SERVER_VERSION="13.11.4" \
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.9.0" \
-    GITLAB_USER="git" \
-    GITLAB_HOME="/home/git" \
+ENV GITLAB_VERSION="13.12.0-ee" \
+    GITLAB_SHELL_VERSION="13.18.0" \
+    GITLAB_PAGES_VERSION="1.39.0" \
+    GITALY_SERVER_VERSION="13.12.0" \
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.11.0" \
     GO_VERSION="1.16.4" \
     RUBY_VERSION="2.7.3" \
-    RAILS_ENV="production" \
-    NODE_ENV="production"
+    GITLAB_HOME="/home/git"
 
 ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_SHELL_INSTALL_DIR="${GITLAB_HOME}/gitlab-shell" \
@@ -22,10 +19,18 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_GITALY_INSTALL_DIR="${GITLAB_HOME}/gitaly" \
     GITLAB_DATA_DIR="${GITLAB_HOME}/data" \
     GITLAB_BUILD_DIR="/usr/src" \
-    GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
     GITLAB_LOG_DIR="/var/log" \
+    GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
+    GITLAB_USER="git" \
     MODE="START" \
-    SKIP_SANITY_CHECK=FALSE
+    NGINX_LOG_ACCESS_FILE=nginx-access.log \
+    NGINX_LOG_ACCESS_LOCATION=/home/git/gitlab/log/nginx \
+    NGINX_LOG_ERROR_FILE=nginx-error.log \
+    NGINX_LOG_ERROR_LOCATION=/home/git/gitlab/log/nginx \
+    NODE_ENV="production" \
+    SKIP_SANITY_CHECK=FALSE \
+    RAILS_ENV="production"
+
 
 RUN set -x && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
