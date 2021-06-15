@@ -1,3 +1,9 @@
+## 13.12.4 2021-06-15 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 13.12.4
+
+
 ## 13.12.3 2021-06-09 <dave at tiredofit dot ca>
 
    ### Added
