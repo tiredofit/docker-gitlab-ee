@@ -1,12 +1,12 @@
 FROM tiredofit/nginx:debian-buster
-LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
+LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="13.12.4-ee" \
-    GITLAB_SHELL_VERSION="13.18.0" \
-    GITLAB_PAGES_VERSION="1.39.0" \
-    GITALY_SERVER_VERSION="13.12.4" \
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.11.0" \
+ENV GITLAB_VERSION="14.0.0-ee" \
+    GITLAB_SHELL_VERSION="13.19.0" \
+    GITLAB_PAGES_VERSION="1.40.0" \
+    GITALY_SERVER_VERSION="14.0.0" \
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.12.0" \
     GO_VERSION="1.16.5" \
     RUBY_VERSION="2.7.3" \
     GITLAB_HOME="/home/git"
@@ -41,7 +41,7 @@ RUN set -x && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-pgdg main" > /etc/apt/sources.list.d/postgres.list && \
     echo "deb http://deb.debian.org/debian $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-backports main" > /etc/apt/sources.list.d/buster-backports.list && \
     apt-get update && \
-    apt-get upgrade && \
+    apt-get upgrade -y && \
     apt-get install -y \
                 gettext-base \
                 graphicsmagick \
