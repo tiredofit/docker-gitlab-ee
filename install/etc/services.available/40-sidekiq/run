@@ -14,7 +14,7 @@ done
 
 liftoff
 
-print_info "Starting Sidekiq"
+print_start "Starting Sidekiq"
 HOME=${GITLAB_HOME}
 
 cd "${GITLAB_INSTALL_DIR}"

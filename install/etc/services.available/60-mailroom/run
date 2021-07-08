@@ -8,7 +8,7 @@ check_container_initialized
 check_service_initialized 50-workhorse
 liftoff
 
-print_info "Starting Mailroom"
+print_start "Starting Mailroom"
 HOME=${GITLAB_HOME}
 
 cd "${GITLAB_INSTALL_DIR}"
