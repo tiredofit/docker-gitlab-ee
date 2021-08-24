@@ -1,3 +1,11 @@
+## 14.1.3 2021-08-24 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 14.2.1
+      - Ruby 2.7.4
+      - Golang 1.16.7
+
+
 ## 14.1.2 2021-08-04 <dave at tiredofit dot ca>
 
    ### Added
