@@ -2,10 +2,10 @@ FROM tiredofit/nginx:debian-buster
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="14.2.1-ee" \
+ENV GITLAB_VERSION="14.2.3-ee" \
     GITLAB_SHELL_VERSION="13.19.1" \
     GITLAB_PAGES_VERSION="1.42.0" \
-    GITALY_SERVER_VERSION="14.2.1" \
+    GITALY_SERVER_VERSION="14.2.3" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.13.0" \
     GO_VERSION="1.16.7" \
     RUBY_VERSION="2.7.4" \

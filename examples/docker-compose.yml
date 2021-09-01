@@ -24,7 +24,7 @@ services:
     - LETSENCRYPT_HOST=git.example.com
     - LETSENCRYPT_EMAIL=techsupport@example.com
 
-    - ZABBIX_HOSTNAME=git-example-com-app
+    - CONTAINER_NAME=git-example-com-app
 
     - DEBUG=false
 
@@ -161,7 +161,7 @@ services:
     volumes:
     - ./redis:/var/lib/redis:Z
     environment:
-    - ZABBIX_HOSTNAME=git-example-com-redis
+    - CONTAINER_NAME=git-example-com-redis
     - ZABBIX_SERVER=zabbix-proxy
     - ZABBIX_SERVER_PORT=10051
     networks:
@@ -178,7 +178,7 @@ services:
     - POSTGRES_DB=gitlab
     - POSTGRES_USER=gitlab
     - POSTGRES_PASSWORD=password
-    - ZABBIX_HOSTNAME=git-example-com-db
+    - CONTAINER_NAME=git-example-com-db
     networks:
     - internal
     - services
@@ -192,7 +192,7 @@ services:
     volumes:
     - ./dbbackup:/backup
     environment:
-    - ZABBIX_HOSTNAME=git-example-com-db-backup
+    - CONTAINER_NAME=git-example-com-db-backup
     - DB_HOST=git-example-com-db
     - DB_TYPE=postgres
     - DB_NAME=gitlab
@@ -230,7 +230,7 @@ services:
     - REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE=/certs/registry-auth.crt
     - REGISTRY_STORAGE_DELETE_ENABLED=true
 
-    - ZABBIX_HOSTNAME=git-registry-example-com
+    - CONTAINER_NAME=git-registry-example-com
     networks:
     - internal
     - services
