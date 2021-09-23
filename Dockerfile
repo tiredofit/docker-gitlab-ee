@@ -7,7 +7,7 @@ ENV GITLAB_VERSION="14.3.0-ee" \
     GITLAB_PAGES_VERSION="1.44.0" \
     GITALY_SERVER_VERSION="14.3.0" \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.13.0" \
-    GO_VERSION="1.17.1" \
+    GO_VERSION="1.16.8" \
     RUBY_VERSION="2.7.4" \
     GITLAB_HOME="/home/git"
 
@@ -219,7 +219,9 @@ RUN set -x && \
     sudo -HEu git bundle config set --local deployment 'true' && \
     sudo -HEu git bundle config set --local without 'development test' && \
     sudo -HEu git bundle install -j"$(nproc)" && \
-    sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make verify setup && \
+    sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH go mod vendor && \
+    sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make fmt && \
+    sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make setup && \
     \
     sudo -HEu git rm -rf ${GITLAB_HOME}/repositories && \
     \

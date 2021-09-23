@@ -1,3 +1,9 @@
+## 14.3.0.1 2021-09-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Change in the way that Gitlab Shell is built
+
+
 ## 14.2.4 2021-09-21 <dave at tiredofit dot ca>
 
    ### Added
