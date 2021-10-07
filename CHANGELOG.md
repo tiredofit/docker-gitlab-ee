@@ -1,3 +1,9 @@
+## 14.3.2.1 2021-10-07 <dave at tiredofit dot ca>
+
+   ### Added
+      - Prepare for Gitlab 15 decomposed databases
+
+
 ## 14.3.2 2021-10-07 <dave at tiredofit dot ca>
 
    ### Added
