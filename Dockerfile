@@ -2,11 +2,11 @@ FROM docker.io/tiredofit/nginx:debian-buster
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="14.3.3-ee" \
+ENV GITLAB_VERSION="14.4.0-ee" \
     GITLAB_SHELL_VERSION="13.21.1" \
-    GITLAB_PAGES_VERSION="1.44.0" \
-    GITALY_SERVER_VERSION="14.3.3" \
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.13.0" \
+    GITLAB_PAGES_VERSION="1.46.0" \
+    GITALY_SERVER_VERSION="14.4.0" \
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.16.0" \
     GO_VERSION="1.17.2" \
     RUBY_VERSION="2.7.4" \
     GITLAB_HOME="/home/git"
