@@ -1,13 +1,9 @@
-FROM docker.io/tiredofit/nginx:debian-buster
+FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="14.4.2-ee" \
-    GITLAB_SHELL_VERSION="13.21.1" \
-    GITLAB_PAGES_VERSION="1.46.0" \
-    GITALY_SERVER_VERSION="14.4.2" \
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION="2.16.0" \
-    GO_VERSION="1.17.2" \
+ENV GITLAB_VERSION="14.5.0-ee" \
+    GO_VERSION="1.17.3" \
     RUBY_VERSION="2.7.4" \
     GITLAB_HOME="/home/git"
 
@@ -34,27 +30,27 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
 
 RUN set -x && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-    echo "deb https://deb.nodesource.com/node_14.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
+    echo "deb https://deb.nodesource.com/node_16.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
     curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-pgdg main" > /etc/apt/sources.list.d/postgres.list && \
-    echo "deb http://deb.debian.org/debian $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-backports main" > /etc/apt/sources.list.d/buster-backports.list && \
+    #echo "deb http://deb.debian.org/debian $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-backports main" > /etc/apt/sources.list.d/bullseye-backports.list && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
                 gettext-base \
                 graphicsmagick \
                 libcurl4 \
-                libffi6 \
+                libffi7 \
                 libgdbm6 \
-                libicu63 \
+                libicu67 \
                 libimage-exiftool-perl \
                 libncurses5 \
                 libpq5 \
                 libpcre2-8-0 \
                 libre2-dev \
-                libreadline7 \
+                libreadline8 \
                 #libssl1.0.0 \
                 libxml2 \
                 libxslt1.1 \
@@ -62,8 +58,8 @@ RUN set -x && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-13 \
-                postgresql-contrib-13 \
+                postgresql-client-14 \
+                postgresql-contrib-14 \
                 python3 \
                 python3-docutils \
                 redis-tools \
@@ -82,7 +78,7 @@ RUN set -x && \
                         g++ \
                         gcc \
                         gettext \
-                        git/buster-backports \
+                        git \
                         libc6-dev \
                         libcurl4-openssl-dev \
                         libexpat1-dev \
@@ -243,10 +239,11 @@ RUN set -x && \
     cp -af /usr/src/gitlab-pages/gitlab-pages /usr/local/bin && \
     \
     ### Download and Install Gitaly
+    GITLAB_GITALY_VERSION=${GITLAB_GITALY_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITALY_SERVER_VERSION)} && \
     GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly.git && \
-    echo "Downloading gitaly v.${GITALY_SERVER_VERSION}..." && \
+    echo "Downloading gitaly v${GITLAB_GITALY_VERSION}..." && \
     mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
-    git clone -q -b v${GITALY_SERVER_VERSION} --depth 1 ${GITLAB_GITALY_URL} /usr/src/gitaly && \
+    git clone -q -b v${GITLAB_GITALY_VERSION} --depth 1 ${GITLAB_GITALY_URL} /usr/src/gitaly && \
     cd /usr/src/gitaly/ruby && \
     bundler install && \
     cd /usr/src/gitaly && \

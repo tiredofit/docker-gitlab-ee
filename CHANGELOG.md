@@ -1,3 +1,11 @@
+## 14.5.0 2021-11-23 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 14.5.0
+      - Debian Bullseye base
+      - Go 1.17.3
+
+
 ## 14.4.2 2021-11-08 <dave at tiredofit dot ca>
 
    ### Added
