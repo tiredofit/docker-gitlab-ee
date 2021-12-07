@@ -1484,6 +1484,15 @@ initialize_system() {
   generate_ssh_host_keys
   update_ssh_listen_port
   install_configuration_templates
+
+  if var_true "${CONTAINER_ENABLE_MONITORING}" && [ "${CONTAINER_MONITORING_BACKEND,,}" = "zabbix" ]; then
+      source /assets/defaults/03-monitoring
+      cat <<EOF > "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit_gitlab-ee.conf
+# Zabbix Gitlab-EE Configuration - Automatically Generated
+# Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-gitlab-ee
+# Autoregister=gitlabee
+EOF
+  fi
 }
 
 install_configuration_templates() {
