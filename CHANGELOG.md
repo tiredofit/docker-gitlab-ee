@@ -1,3 +1,10 @@
+## 14.5.2 2021-12-13 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 14.5.2
+      - Golang 1.17.5
+
+
 ## 14.5.1.1 2021-12-07 <dave at tiredofit dot ca>
 
    ### Added
