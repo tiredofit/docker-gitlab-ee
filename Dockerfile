@@ -4,7 +4,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 ### Set Defaults and Arguments
 ENV GITLAB_VERSION="14.5.2-ee" \
     GO_VERSION="1.17.5" \
-    RUBY_VERSION="2.7.4" \
+    RUBY_VERSION="2.7.5" \
     GITLAB_HOME="/home/git"
 
 ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
