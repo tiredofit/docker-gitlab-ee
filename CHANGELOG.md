@@ -1,3 +1,9 @@
+## 14.5.2.2 2021-12-16 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for Admin -> Monitoring throwing 500s
+
+
 ## 14.5.2.1 2021-12-15 <dave at tiredofit dot ca>
 
    ### Added

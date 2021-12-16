@@ -25,7 +25,8 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     NGINX_LOG_ERROR_LOCATION=/home/git/gitlab/log/nginx \
     NODE_ENV="production" \
     SKIP_SANITY_CHECK=FALSE \
-    RAILS_ENV="production"
+    RAILS_ENV="production" \
+    prometheus_multiproc_dir=/dev/shm
 
 
 RUN set -x && \
