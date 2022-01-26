@@ -1,3 +1,9 @@
+## 14.7.1.1 2022-01-26 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Cleanup logrotate extra parameters
+
+
 ## 14.7.0 2022-01-23 <dave at tiredofit dot ca>
 
    ### Added

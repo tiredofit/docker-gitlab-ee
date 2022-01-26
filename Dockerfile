@@ -290,6 +290,7 @@ RUN set -x && \
     rm -rf ${GITLAB_INSTALL_DIR}/qa && \
     rm -rf ${GITLAB_SHELL_INSTALL_DIR}/*.md && \
     rm -rf ${GITLAB_SHELL_INSTALL_DIR}/*.example && \
+    rm -rf /etc/logroate.d/postgresql-common /etc/logrotate.d/unattended-upgrades && \
     rm -rf /usr/local/bundle/cache && \
     rm -rf /usr/share/vim/vim80/doc/* && \
     rm -rf /usr/local/go && \
