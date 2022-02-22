@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv /bin/bash
+#!/command/with-contenv /bin/bash
 
 ## GITLAB CORE
 GITLAB_TEMP_DIR="${GITLAB_DATA_DIR}/tmp"

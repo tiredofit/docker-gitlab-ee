@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv /bin/bash
+#!/command/with-contenv /bin/bash
 set -e
 
 for file in /gitlab-configs /run/secrets/gitlab-secrets; do
@@ -1485,14 +1485,7 @@ initialize_system() {
   update_ssh_listen_port
   install_configuration_templates
 
-  if var_true "${CONTAINER_ENABLE_MONITORING}" && [ "${CONTAINER_MONITORING_BACKEND,,}" = "zabbix" ]; then
-      source /assets/defaults/03-monitoring
-      cat <<EOF > "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit_gitlab-ee.conf
-# Zabbix Gitlab-EE Configuration - Automatically Generated
-# Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-gitlab-ee
-# Autoregister=gitlabee
-EOF
-  fi
+  create_zabbix gitlabee
 }
 
 install_configuration_templates() {
@@ -1656,7 +1649,7 @@ if [[ ${GITLAB_PAGES_ENABLED} == true ]]; then
   print_notice "Configuring gitlab-pages"
 
 cat >> /etc/services.available/70-pages/run <<EOF
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 source /assets/functions/00-container
 prepare_service defaults 20-gitlab
