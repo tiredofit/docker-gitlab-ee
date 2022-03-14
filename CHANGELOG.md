@@ -1,4 +1,4 @@
-## 14.8.1 2022-02-27 <dave at tiredofit dot ca>
+## 14.8.2 2022-02-27 <dave at tiredofit dot ca>
 
    ### Added
       - Gitlab-EE 14.8.2
