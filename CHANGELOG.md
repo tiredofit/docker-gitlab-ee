@@ -1,3 +1,9 @@
+## 14.8.2.1 2022-03-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - Rerelease of 14.8.2
+
+
 ## 14.7.5 2022-03-14 <dave at tiredofit dot ca>
 
    ### Added

@@ -386,7 +386,7 @@ gitlab_configure_mailroom() {
   mv /etc/services.available/60-mailroom/run.tmp /etc/services.available/60-mailroom/run
   chmod +x /etc/services.available/60-mailroom/run
   # In case it fails
-  #echo "* * * * * 'cd /home/git/gitlab; sudo -HEu buncle exec rake gitlab:incoming_email:check" >> /assets/cron/crontab.txt
+  #echo "* * * * * 'cd /home/git/gitlab; sudo -HEu bundle exec rake gitlab:incoming_email:check" >> /assets/cron/crontab.txt
 
 }
 
@@ -1735,7 +1735,7 @@ migrate_database() {
 
     print_notice "Migrating database"
     #exec_as_git bundle exec rake db:migrate >/dev/null
-    exec_as_git bundle exec rake db:migrate
+    sudo -HEu git bundle exec rake db:migrate
 
     echo "${GITLAB_VERSION}" > ${GITLAB_TEMP_DIR}/VERSION
     rm -rf ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT # force cache cleanup
