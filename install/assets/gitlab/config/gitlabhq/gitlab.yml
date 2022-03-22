@@ -434,6 +434,8 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: {{LDAP_ENABLED}}
+    prevent_ldap_sign_in: {{LDAP_PREVENT_LDAP_SIGN_IN}}
+
     servers:
       ##########################################################################
       #
@@ -457,13 +459,17 @@ production: &base
         port: {{LDAP_PORT}}
         uid: '{{LDAP_UID}}'
 
-        encryption: '{{LDAP_METHOD}}' # "start_tls" or "simple_tls" or "plain"
-        verify_certificates: {{LDAP_VERIFY_SSL}}
-        ca_file: '{{LDAP_CA_FILE}}'
-        ssl_version: '{{LDAP_SSL_VERSION}}'
-
         bind_dn: '{{LDAP_BIND_DN}}'
         password: '{{LDAP_PASS}}'
+
+        encryption: '{{LDAP_METHOD}}' # "start_tls" or "simple_tls" or "plain"
+        verify_certificates: {{LDAP_VERIFY_SSL}}
+        tls_options:
+          ca_file: '{{LDAP_CA_FILE}}'
+          ssl_version: '{{LDAP_SSL_VERSION}}'
+          ciphers: ''
+          cert: ''
+          key: ''
 
         # Set a timeout, in seconds, for LDAP queries. This helps avoid blocking
         # a request if the LDAP server becomes unresponsive.

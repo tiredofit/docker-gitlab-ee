@@ -1,3 +1,12 @@
+## 14.9.0 2022-03-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 14.9.0
+
+   ### Changed
+      - Cleanup of old variables and added some sanity tests
+
+
 ## 14.8.2.1 2022-03-14 <dave at tiredofit dot ca>
 
    ### Added

@@ -2,8 +2,8 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="14.8.2-ee" \
-    GO_VERSION="1.17.6" \
+ENV GITLAB_VERSION="14.9.0-ee" \
+    GO_VERSION="1.18" \
     RUBY_VERSION="2.7.5" \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
@@ -21,6 +21,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
     GITLAB_USER="git" \
     MODE="START" \
+    NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE \
     NGINX_LOG_ACCESS_FILE=nginx-access.log \
     NGINX_LOG_ACCESS_LOCATION=/home/git/gitlab/log/nginx \
     NGINX_LOG_ERROR_FILE=nginx-error.log \
@@ -38,7 +39,6 @@ RUN set -x && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-pgdg main" > /etc/apt/sources.list.d/postgres.list && \
-    #echo "deb http://deb.debian.org/debian $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-backports main" > /etc/apt/sources.list.d/bullseye-backports.list && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -61,8 +61,8 @@ RUN set -x && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-14 \
-                postgresql-contrib-14 \
+                postgresql-client-13 \
+                postgresql-contrib-13 \
                 python3 \
                 python3-docutils \
                 redis-tools \
@@ -313,4 +313,4 @@ WORKDIR ${GITLAB_INSTALL_DIR}
 EXPOSE 22/tcp 80/tcp 443/tcp
 
 ### Add Assets
-ADD install /
+ADD install/ /

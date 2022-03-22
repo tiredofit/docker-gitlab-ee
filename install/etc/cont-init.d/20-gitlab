@@ -4,8 +4,8 @@ source /assets/functions/00-container
 prepare_service
 PROCESS_NAME="gitlab-ee"
 
-case "$MODE" in
-    "START"|"INIT"|"SANITIZE"|"RAKE")
+case "${MODE,,}" in
+    "start" | "init" | "sanitize" | "rake" )
         print_info "Preparing to setup Gitlab Enterprise Edition ${GITLAB_VERSION}"
         initialize_system
         configure_gitlab
@@ -13,17 +13,17 @@ case "$MODE" in
         configure_gitlab_pages
         configure_nginx
 
-        case "$MODE" in
-            "START")
+        case "${MODE,,}" in
+            "start")
                 migrate_database
                 ### Enable / Disable Services
-                if var_false $IMAP_ENABLED ; then
+                if var_false "${IMAP_ENABLED}" ; then
                     service_stop 60-mailroom
                 else
                     print_notice "Enabling Mailroom"
                 fi
 
-                if var_true $GITLAB_PAGES_ENABLED ; then
+                if var_true "${GITLAB_PAGES_ENABLED}" ; then
                     print_notice "Enabling Gitlab Pages"
                 else
                     if [ -f "/etc/s6/services/70-pages/run" ]; then
@@ -31,20 +31,20 @@ case "$MODE" in
                     fi
                 fi
 
-                if var_true $GITLAB_SSH_ENABLED ; then
+                if var_true "${GITLAB_SSH_ENABLED}" ; then
                     print_notice "Enabling Gitlab SSH Server"
                 else
                     service_stop 80-sshd
                 fi
                 print_notice "Container Iniitalization Complete"
             ;;
-            "INIT")
+            "init")
                 migrate_database
             ;;
-            "SANITIZE")
+            "sanitize")
                 sanitize_datadir
             ;;
-            "RAKE")
+            "rake")
                 shift 1
                 execute_raketask "$RAKE_TASK"
             ;;

@@ -11,7 +11,6 @@ done
 #print_notice "Loading ${GITLAB_RUNTIME_DIR}/env-defaults"
 #source /assets/functions/20-gitlab
 
-
 SYSCONF_TEMPLATES_DIR="/assets/gitlab/config"
 USERCONF_TEMPLATES_DIR="${GITLAB_DATA_DIR}/config"
 
@@ -139,8 +138,8 @@ gitlab_finalize_database_parameters() {
 }
 
 gitlab_check_database_connection() {
-  db_ready postgres
   sanity_db
+  db_ready postgres
 }
 
 gitlab_configure_database() {
@@ -416,6 +415,7 @@ gitlab_configure_ldap() {
     LDAP_USER_ATTRIBUTE_FIRSTNAME \
     LDAP_USER_ATTRIBUTE_LASTNAME \
     LDAP_LABEL \
+    LDAP_PREVENT_LDAP_SIGN_IN \
     LDAP_GROUP_BASE \
     LDAP_ADMIN_GROUPS \
     LDAP_EXTERNAL_GROUPS \
@@ -1283,6 +1283,7 @@ update_ca_certificates() {
 
 initialize_logdir() {
   print_notice "Initializing logdir"
+  mkdir -p /var/log/gitlab
   chmod -R 0755 /var/log/gitlab
   chown -R ${GITLAB_USER}: /var/log/gitlab
 
@@ -1301,6 +1302,7 @@ initialize_logdir() {
 
 initialize_datadir() {
   print_notice "Initializing datadir"
+  mkdir -p ${GITLAB_DATA_DIR}
   chmod 755 ${GITLAB_DATA_DIR}
   chown -R ${GITLAB_USER}: /home/${GITLAB_USER}
   chown ${GITLAB_USER}: ${GITLAB_DATA_DIR}
@@ -1735,8 +1737,9 @@ migrate_database() {
 
     print_notice "Migrating database"
     #exec_as_git bundle exec rake db:migrate >/dev/null
+    cd /home/git/gitlab
     sudo -HEu git bundle exec rake db:migrate
-
+    sleep 30
     echo "${GITLAB_VERSION}" > ${GITLAB_TEMP_DIR}/VERSION
     rm -rf ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT # force cache cleanup
   fi
