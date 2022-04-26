@@ -1,3 +1,9 @@
+## 14.10.0.1 2022-04-26 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Rotate logrotate directory
+
+
 ## 14.10.0 2022-04-22 <dave at tiredofit dot ca>
 
    ### Added
