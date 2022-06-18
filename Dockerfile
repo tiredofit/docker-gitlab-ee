@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.0.2-ee" \
+ENV GITLAB_VERSION="15.0.3-ee" \
     GO_VERSION="1.18.3" \
     RUBY_VERSION="2.7.6" \
     GITLAB_HOME="/home/git" \
@@ -61,8 +61,8 @@ RUN set -x && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-13 \
-                postgresql-contrib-13 \
+                postgresql-client-14 \
+                postgresql-contrib-14 \
                 python3 \
                 python3-docutils \
                 redis-tools \
