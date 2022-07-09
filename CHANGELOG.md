@@ -1,3 +1,13 @@
+## 15.1.2 2022-07-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.1.2
+
+   ### Changed
+      - Change to support tiredofit/nginx base images
+      - Cleanup code
+
+
 ## 15.1.0 2022-06-21 <dave at tiredofit dot ca>
 
    ### Added

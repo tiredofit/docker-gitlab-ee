@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.1.0-ee" \
+ENV GITLAB_VERSION="15.1.2-ee" \
     GO_VERSION="1.18.3" \
     RUBY_VERSION="2.7.6" \
     GITLAB_HOME="/home/git" \
@@ -21,11 +21,13 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
     GITLAB_USER="git" \
     MODE="START" \
+    NGINX_APPLICATION_CONFIGURATION=FALSE \
     NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE \
     NGINX_LOG_ACCESS_FILE=nginx-access.log \
     NGINX_LOG_ACCESS_LOCATION=/home/git/gitlab/log/nginx \
     NGINX_LOG_ERROR_FILE=nginx-error.log \
     NGINX_LOG_ERROR_LOCATION=/home/git/gitlab/log/nginx \
+    NGINX_SITE_ENABLED=null \
     NODE_ENV="production" \
     SKIP_SANITY_CHECK=FALSE \
     RAILS_ENV="production" \
@@ -119,7 +121,6 @@ RUN set -x && \
     sed -i '/^git/s/!/*/' /etc/shadow && \
     echo "PS1='\w\$ '" >> ${GITLAB_HOME}/.bashrc && \
     echo "PATH=/usr/local/sbin:/usr/local/bin:\$PATH" >> ${GITLAB_HOME}/.profile && \
-    rm -rf /etc/nginx/conf.d/default.conf && \
     \
 ### Setup Ruby
     mkdir -p /usr/src/ruby && \
@@ -194,9 +195,6 @@ RUN set -x && \
     ### install gitlab bootscript, to silence gitlab:check warnings
     cp ${GITLAB_INSTALL_DIR}/lib/support/init.d/gitlab /etc/init.d/gitlab && \
     chmod +x /etc/init.d/gitlab && \
-    \
-    ### disable default nginx configuration and enable gitlab's nginx configuration
-    rm -rf /etc/nginx/conf.d/default.conf && \
     \
 ### Install Gitlab Workhorse
     echo "Building Gitlab Workhorse" && \
