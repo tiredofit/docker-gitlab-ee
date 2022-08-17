@@ -17,7 +17,7 @@
 - [Configuration](#configuration)
     - [Data Store](#data-store)
     - [Database](#database)
-        - [PostgreSQL (Recommended)](#postgresql)
+        - [PostgreSQL](#postgresql)
             - [External PostgreSQL Server](#external-postgresql-server)
             - [Linking to PostgreSQL Container](#linking-to-postgresql-container)
     - [Redis](#redis)
