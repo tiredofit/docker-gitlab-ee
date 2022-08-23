@@ -2,8 +2,8 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.2.2-ee" \
-    GO_VERSION="1.18.3" \
+ENV GITLAB_VERSION="15.3.1-ee" \
+    GO_VERSION="1.18.5" \
     RUBY_VERSION="2.7.6" \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
