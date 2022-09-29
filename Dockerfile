@@ -16,15 +16,15 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_PAGES_INSTALL_DIR="${GITLAB_HOME}/gitlab-pages" \
     GITLAB_GITALY_INSTALL_DIR="${GITLAB_HOME}/gitaly" \
     GITLAB_DATA_DIR="${GITLAB_HOME}/data" \
-    GITLAB_BUILD_DIR="/usr/src" \
-    GITLAB_LOG_DIR="/var/log" \
+    GITLAB_BUILD_DIR="/usr/src/" \
+    GITLAB_LOG_DIR="/var/log/gitlab" \
     GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime" \
     GITLAB_USER="git" \
     MODE="START" \
     NGINX_APPLICATION_CONFIGURATION=FALSE \
     NGINX_ENABLE_CREATE_SAMPLE_HTML=FALSE \
     NGINX_LOG_ACCESS_FILE=gitlab-access.log \
-    NGINX_LOG_ACCESS_LOCATION=/home/git/gitlab/log/nginx \
+    NGINX_LOG_ACCESS_LOCATION=/www/logs/nginxhome/git/gitlab/log/nginx \
     NGINX_LOG_ERROR_FILE=gitlab-error.log \
     NGINX_LOG_ERROR_LOCATION=/home/git/gitlab/log/nginx \
     NGINX_SITE_ENABLED=null \
@@ -177,9 +177,9 @@ RUN set -x && \
     sudo -HEu git mkdir -p ${GITLAB_INSTALL_DIR}/tmp/pids/ ${GITLAB_INSTALL_DIR}/tmp/sockets/ && \
     chmod -R u+rwX ${GITLAB_INSTALL_DIR}/tmp && \
     \
-    ### symlink ${GITLAB_INSTALL_DIR}/log -> ${GITLAB_LOG_DIR}/gitlab
+    ### symlink ${GITLAB_INSTALL_DIR}/log -> ${GITLAB_LOG_DIR}
     rm -rf ${GITLAB_INSTALL_DIR}/log && \
-    ln -sf ${GITLAB_LOG_DIR}/gitlab ${GITLAB_INSTALL_DIR}/log && \
+    ln -sf ${GITLAB_LOG_DIR} ${GITLAB_INSTALL_DIR}/log && \
     \
     ### symlink ${GITLAB_INSTALL_DIR}/public/uploads -> ${GITLAB_DATA_DIR}/uploads
     rm -rf ${GITLAB_INSTALL_DIR}/public/uploads && \

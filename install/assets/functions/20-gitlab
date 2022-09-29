@@ -27,7 +27,7 @@ GITLAB_SECRETS_CONFIG="${GITLAB_INSTALL_DIR}/config/secrets.yml"
 GITLAB_ROBOTS_CONFIG="${GITLAB_INSTALL_DIR}/public/robots.txt"
 GITLAB_SHELL_CONFIG="${GITLAB_SHELL_INSTALL_DIR}/config.yml"
 GITLAB_NGINX_CONFIG="/etc/nginx/sites.available/gitlab.conf"
-GITLAB_CI_NGINX_CONFIG="/etc/nginx/sites.available/gitlab_ci.conf"
+GITLAB_CI_NGINX_CONFIG="/etc/nginx/sites.available/gitlab-ci.conf"
 GITLAB_REGISTRY_NGINX_CONFIG="/etc/nginx/sites.available/gitlab-registry.conf"
 GITLAB_PAGES_NGINX_CONFIG="/etc/nginx/sites.available/gitlab-pages.conf"
 GITLAB_GITALY_CONFIG=""${GITLAB_GITALY_INSTALL_DIR}"/config.toml"
@@ -1183,9 +1183,10 @@ nginx_configure_gitlab() {
   print_notice "Configuring nginx::gitlab"
   update_template "${GITLAB_NGINX_CONFIG}" \
     GITLAB_INSTALL_DIR \
-    GITLAB_LOG_DIR \
     GITLAB_HOST \
     GITLAB_PORT \
+    NGINX_LOG_ACCESS_LOCATION \
+    NGINX_LOG_ERROR_LOCATION \
     NGINX_PROXY_BUFFERING \
     NGINX_ACCEL_BUFFERING \
     NGINX_X_FORWARDED_PROTO
@@ -1201,10 +1202,11 @@ nginx_configure_gitlab_ci() {
     DNS_RESOLVERS=$(cat /etc/resolv.conf  | grep '^\s*nameserver' | awk '{print $2}' ORS=' ')
     update_template "${GITLAB_CI_NGINX_CONFIG}" \
       GITLAB_INSTALL_DIR \
-      GITLAB_LOG_DIR \
       GITLAB_HOST \
       GITLAB_CI_HOST \
-      DNS_RESOLVERS
+      DNS_RESOLVERS \
+      NGINX_LOG_ACCESS_LOCATION \
+      NGINX_LOG_ERROR_LOCATION
   fi
 }
 
@@ -1213,10 +1215,11 @@ nginx_configure_gitlab_registry() {
     print_notice "Configuring nginx::gitlab-registry"
     update_template "${GITLAB_REGISTRY_NGINX_CONFIG}" \
       GITLAB_INSTALL_DIR \
-      GITLAB_LOG_DIR \
       GITLAB_REGISTRY_PORT \
       GITLAB_REGISTRY_HOST \
       GITLAB_REGISTRY_API_URL \
+      NGINX_LOG_ACCESS_LOCATION \
+      NGINX_LOG_ERROR_LOCATION \
       SSL_REGISTRY_KEY_PATH \
       SSL_REGISTRY_CERT_PATH
   fi
@@ -1232,16 +1235,15 @@ nginx_configure_pages(){
           GITLAB_PORT \
           GITLAB_PAGES_DOMAIN \
           GITLAB_PAGES_PORT \
-          GITLAB_LOG_DIR \
           GITLAB_PAGES_DOMAIN \
+          NGINX_LOG_ACCESS_LOCATION \
+          NGINX_LOG_ERROR_LOCATION \
           SSL_PAGES_CERT_PATH \
           SSL_PAGES_KEY_PATH \
-          SSL_DHPARAM_PATH \
-          GITLAB_LOG_DIR
+          SSL_DHPARAM_PATH
       else
         update_template "${GITLAB_PAGES_NGINX_CONFIG}" \
-          GITLAB_PAGES_DOMAIN \
-          GITLAB_LOG_DIR
+          GITLAB_PAGES_DOMAIN
       fi
     else
       print_warn "Gitlab pages nginx proxy disabled"
@@ -1278,18 +1280,6 @@ initialize_logdir() {
   mkdir -p /var/log/gitlab
   chmod -R 0755 /var/log/gitlab
   chown -R "${GITLAB_USER}": /var/log/gitlab
-
-  mkdir -p "${GITLAB_LOG_DIR}"/nginx
-  chmod -R 0755 "${GITLAB_LOG_DIR}"/nginx
-  chown -R "${GITLAB_USER}": "${GITLAB_LOG_DIR}"/nginx
-
-  mkdir -p "${GITLAB_LOG_DIR}"/gitlab
-  chmod -R 0755 "${GITLAB_LOG_DIR}"/gitlab
-  chown -R "${GITLAB_USER}": "${GITLAB_LOG_DIR}"/gitlab
-
-  mkdir -p "${GITLAB_LOG_DIR}"/gitlab-shell
-  chmod -R 0755 "${GITLAB_LOG_DIR}"/gitlab-shell
-  chown -R "${GITLAB_USER}": "${GITLAB_LOG_DIR}"/gitlab-shell
 }
 
 initialize_datadir() {
@@ -1506,6 +1496,8 @@ install_configuration_templates() {
   fi
 
   ## ${GITLAB_NGINX_CONFIG}
+  create_logrotate nginx_gitlab_access "${NGINX_LOG_ACCESS_LOCATION}"/gitlab-access.log nginx-"${NGINX_LOG_ACCESS_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+  create_logrotate nginx_gitlab_error "${NGINX_LOG_ERROR_LOCATION}"/gitlab-error.log nginx-error-standard,nginx-error-alt-standard "${NGINX_USER}" "${NGINX_GROUP}"
   if var_true "${GITLAB_HTTPS}" ; then
     nginx_site_enable gitlab
     if [[ -f "${SSL_CERTIFICATE_PATH}" && -f "${SSL_KEY_PATH}" && -f "${SSL_DHPARAM_PATH}" ]]; then
@@ -1521,6 +1513,8 @@ install_configuration_templates() {
 
   ## ${GITLAB_PAGES_NGINX_CONFIG}
   if var_true "${GITLAB_PAGES_ENABLED}" ; then
+    create_logrotate nginx_pages_access "${NGINX_LOG_ACCESS_LOCATION}"/pages-access.log nginx-"${NGINX_LOG_ACCESS_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+    create_logrotate nginx_pages_error "${NGINX_LOG_ERROR_LOCATION}"/pages-error.log nginx-error-standard,nginx-error-alt-standard "${NGINX_USER}" "${NGINX_GROUP}"
     nginx_site_enable gitlab-pages
     if [[ "${GITLAB_PAGES_HTTPS}" == true && -f "${SSL_PAGES_CERT_PATH}" && -f "${SSL_PAGES_KEY_PATH}" ]]; then
       if var_true "${GITLAB_PAGES_NGINX_PROXY}" ; then
@@ -1543,10 +1537,14 @@ install_configuration_templates() {
 
   if [[ -n "${GITLAB_CI_HOST}" ]]; then
     nginx_site_enable gitlab_ci
+    create_logrotate nginx_ci_access "${NGINX_LOG_ACCESS_LOCATION}"/ci-access.log nginx-"${NGINX_LOG_ACCESS_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+    create_logrotate nginx_ci_error "${NGINX_LOG_ERROR_LOCATION}"/ci-error.log nginx-error-standard,nginx-error-alt-standard "${NGINX_USER}" "${NGINX_GROUP}"
   fi
 
   if var_true "${GITLAB_REGISTRY_ENABLED}" ; then
     nginx_site_enable gitlab-registry
+    create_logrotate nginx_registry_access "${NGINX_LOG_ACCESS_LOCATION}"/registry-access.log nginx-"${NGINX_LOG_ACCESS_FORMAT}" "${NGINX_USER}" "${NGINX_GROUP}"
+    create_logrotate nginx_registry_error "${NGINX_LOG_ERROR_LOCATION}"/registry-access.log nginx-error-standard,nginx-error-alt-standard "${NGINX_USER}" "${NGINX_GROUP}"
     if [[ -f "${SSL_REGISTRY_CERT_PATH}" && -f "${SSL_REGISTRY_KEY_PATH}" ]]; then
       :
     else
