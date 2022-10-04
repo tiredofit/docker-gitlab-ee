@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.4.0-ee" \
+ENV GITLAB_VERSION="15.4.1-ee" \
     GO_VERSION="1.19.1" \
     RUBY_VERSION="2.7.6" \
     GITLAB_HOME="/home/git" \
@@ -33,8 +33,8 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     RAILS_ENV="production" \
     prometheus_multiproc_dir=/dev/shm
 
-
-RUN set -x && \
+RUN source /assets/functions/00-container && \
+    set -x && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     echo "deb https://deb.nodesource.com/node_16.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
     curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -139,8 +139,7 @@ RUN set -x && \
     \
 ### Download and Install Gitlab
     GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
-    mkdir -p ${GITLAB_INSTALL_DIR} && \
-    git clone -q -b v${GITLAB_VERSION} --depth 1 ${GITLAB_CLONE_URL} ${GITLAB_INSTALL_DIR} && \
+    clone_git_repo ${GITLAB_CLONE_URL} v${GITLAB_VERSION} ${GITLAB_INSTALL_DIR} && \
     \
     sed -i "/\ \ \ \ \ \ return \[\] unless Gitlab::Database.exists?/a \ \ \ \ \ \ return \[\] unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
     sed -i "/\ \ \ \ \ \ return default_enabled unless Gitlab::Database.exists?/a \ \ \ \ \ \ return default_enabled unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
@@ -226,7 +225,7 @@ RUN set -x && \
     GITLAB_ELASTICSEARCH_INDEXER_URL=https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer && \
     GITLAB_ELASTICSEARCH_INDEXER_VERSION=${GITLAB_ELASTICSEARCH_INDEXER_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_ELASTICSEARCH_INDEXER_VERSION)} && \
     echo "Cloning gitlab-elasticsearch-indexer v.${GITLAB_ELASTICSEARCH_INDEXER_VERSION}..." && \
-    git clone -q -b v${GITLAB_ELASTICSEARCH_INDEXER_VERSION} --depth 1 ${GITLAB_ELASTICSEARCH_INDEXER_URL} /usr/src/gitlab-elasticsearch-indexer && \
+    clone_git_repo ${GITLAB_ELASTICSEARCH_INDEXER_URL} v${GITLAB_ELASTICSEARCH_INDEXER_VERSION} /usr/src/gitlab-elasticsearch-indexer && \
     make -C /usr/src/gitlab-elasticsearch-indexer && \
     make -C /usr/src/gitlab-elasticsearch-indexer install  && \
     cp -af /usr/src/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer /usr/local/bin && \
@@ -235,7 +234,7 @@ RUN set -x && \
     GITLAB_PAGES_URL=https://gitlab.com/gitlab-org/gitlab-pages.git && \
     GITLAB_PAGES_VERSION=${GITLAB_PAGES_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_PAGES_VERSION)} && \
     echo "Downloading gitlab-pages v.${GITLAB_PAGES_VERSION}..." && \
-    git clone -q -b v${GITLAB_PAGES_VERSION} --depth 1 ${GITLAB_PAGES_URL} /usr/src/gitlab-pages && \
+    clone_git_repo ${GITLAB_PAGES_URL} v${GITLAB_PAGES_VERSION} /usr/src/gitlab-pages && \
     make -C /usr/src/gitlab-pages && \
     cp -af /usr/src/gitlab-pages/gitlab-pages /usr/local/bin && \
     \
@@ -243,8 +242,7 @@ RUN set -x && \
     GITLAB_GITALY_VERSION=${GITLAB_GITALY_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITALY_SERVER_VERSION)} && \
     GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly.git && \
     echo "Downloading gitaly v${GITLAB_GITALY_VERSION}..." && \
-    mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
-    git clone -q -b v${GITLAB_GITALY_VERSION} --depth 1 ${GITLAB_GITALY_URL} /usr/src/gitaly && \
+    clone_git_repo ${GITLAB_GITALY_URL} v${GITLAB_GITALY_VERSION} /usr/src/gitaly && \
     cd /usr/src/gitaly/ruby && \
     bundler install && \
     cd /usr/src/gitaly && \

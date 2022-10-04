@@ -1,3 +1,12 @@
+## 15.4.1.2 2022-10-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.4.1
+
+   ### Changed
+      - Change the way that git repos are cloned in build
+
+
 ## 15.4.0.1 2022-09-29 <dave at tiredofit dot ca>
 
 This release changes the default location where nginx files are stored and repairs alot of logrotate issues. Please map /www/logs/nginx if you wish to continue holding onto Nginx logs.
