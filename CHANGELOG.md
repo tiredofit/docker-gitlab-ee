@@ -1,3 +1,9 @@
+## 15.4.1.3 2022-10-04 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix git clone
+
+
 ## 15.4.1.2 2022-10-04 <dave at tiredofit dot ca>
 
    ### Added

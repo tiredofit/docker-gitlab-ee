@@ -138,7 +138,7 @@ RUN source /assets/functions/00-container && \
     sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true && \
     \
 ### Download and Install Gitlab
-    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab.git && \
+    GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab && \
     clone_git_repo ${GITLAB_CLONE_URL} v${GITLAB_VERSION} ${GITLAB_INSTALL_DIR} && \
     \
     sed -i "/\ \ \ \ \ \ return \[\] unless Gitlab::Database.exists?/a \ \ \ \ \ \ return \[\] unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
@@ -231,7 +231,7 @@ RUN source /assets/functions/00-container && \
     cp -af /usr/src/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer /usr/local/bin && \
     \
 ### Download and Install Gitlab Pages
-    GITLAB_PAGES_URL=https://gitlab.com/gitlab-org/gitlab-pages.git && \
+    GITLAB_PAGES_URL=https://gitlab.com/gitlab-org/gitlab-pages && \
     GITLAB_PAGES_VERSION=${GITLAB_PAGES_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_PAGES_VERSION)} && \
     echo "Downloading gitlab-pages v.${GITLAB_PAGES_VERSION}..." && \
     clone_git_repo ${GITLAB_PAGES_URL} v${GITLAB_PAGES_VERSION} /usr/src/gitlab-pages && \
@@ -240,7 +240,7 @@ RUN source /assets/functions/00-container && \
     \
     ### Download and Install Gitaly
     GITLAB_GITALY_VERSION=${GITLAB_GITALY_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITALY_SERVER_VERSION)} && \
-    GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly.git && \
+    GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly && \
     echo "Downloading gitaly v${GITLAB_GITALY_VERSION}..." && \
     clone_git_repo ${GITLAB_GITALY_URL} v${GITLAB_GITALY_VERSION} /usr/src/gitaly && \
     cd /usr/src/gitaly/ruby && \
