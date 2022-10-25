@@ -248,7 +248,6 @@ RUN source /assets/functions/00-container && \
     bundler install && \
     cd /usr/src/gitaly && \
     make -C /usr/src/gitaly -j$(getconf _NPROCESSORS_ONLN) install && \
-    mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
     cd /usr/src/gitaly && \
     cp -a /usr/src/gitaly/config.toml.example ${GITLAB_GITALY_INSTALL_DIR}/config.toml && \
     cp -R /usr/src/gitaly/ruby ${GITLAB_GITALY_INSTALL_DIR}/ && \
