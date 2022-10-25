@@ -1,3 +1,9 @@
+## 15.5.1.1 2022-10-25 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove duplicate mkdir command in Dockerfile
+
+
 ## 15.5.1 2022-10-25 <dave at tiredofit dot ca>
 
    ### Added
