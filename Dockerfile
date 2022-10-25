@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.5.0-ee" \
+ENV GITLAB_VERSION="15.5.1-ee" \
     GO_VERSION="1.19.1" \
     RUBY_VERSION="2.7.6" \
     GITLAB_HOME="/home/git" \
@@ -63,8 +63,8 @@ RUN source /assets/functions/00-container && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-14 \
-                postgresql-contrib-14 \
+                postgresql-client-15 \
+                postgresql-contrib-15 \
                 python3 \
                 python3-docutils \
                 redis-tools \
@@ -178,7 +178,7 @@ RUN source /assets/functions/00-container && \
     \
     ### symlink ${GITLAB_INSTALL_DIR}/log -> ${GITLAB_LOG_DIR}
     rm -rf ${GITLAB_INSTALL_DIR}/log && \
-    ln -sf ${GITLAB_LOG_DIR} ${GITLAB_INSTALL_DIR}/log && \
+    #ln -sf ${GITLAB_LOG_DIR} ${GITLAB_INSTALL_DIR}/log && \
     \
     ### symlink ${GITLAB_INSTALL_DIR}/public/uploads -> ${GITLAB_DATA_DIR}/uploads
     rm -rf ${GITLAB_INSTALL_DIR}/public/uploads && \
@@ -235,10 +235,11 @@ RUN source /assets/functions/00-container && \
     GITLAB_PAGES_VERSION=${GITLAB_PAGES_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITLAB_PAGES_VERSION)} && \
     echo "Downloading gitlab-pages v.${GITLAB_PAGES_VERSION}..." && \
     clone_git_repo ${GITLAB_PAGES_URL} v${GITLAB_PAGES_VERSION} /usr/src/gitlab-pages && \
-    make -C /usr/src/gitlab-pages && \
+    make -C /usr/src/gitlab-pages -j$(getconf _NPROCESSORS_ONLN) && \
     cp -af /usr/src/gitlab-pages/gitlab-pages /usr/local/bin && \
     \
     ### Download and Install Gitaly
+    mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
     GITLAB_GITALY_VERSION=${GITLAB_GITALY_VERSION:-$(cat ${GITLAB_INSTALL_DIR}/GITALY_SERVER_VERSION)} && \
     GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly && \
     echo "Downloading gitaly v${GITLAB_GITALY_VERSION}..." && \
@@ -246,16 +247,18 @@ RUN source /assets/functions/00-container && \
     cd /usr/src/gitaly/ruby && \
     bundler install && \
     cd /usr/src/gitaly && \
-    make -C /usr/src/gitaly install && \
-    cp -a /usr/src/gitaly/ruby ${GITLAB_GITALY_INSTALL_DIR} && \
+    make -C /usr/src/gitaly -j$(getconf _NPROCESSORS_ONLN) install && \
+    mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
+    cd /usr/src/gitaly && \
     cp -a /usr/src/gitaly/config.toml.example ${GITLAB_GITALY_INSTALL_DIR}/config.toml && \
+    cp -R /usr/src/gitaly/ruby ${GITLAB_GITALY_INSTALL_DIR}/ && \
     rm -rf ${GITLAB_GITALY_INSTALL_DIR}/ruby/vendor/bundle/ruby/**/cache && \
     chown -R ${GITLAB_USER}: ${GITLAB_GITALY_INSTALL_DIR} && \
     cd /home/git/gitaly && \
     ln -s /usr/local/bin/gitaly* . && \
     \
     ## Install Git that comes with Gitaly
-    make -C /usr/src/gitaly git GIT_PREFIX=/usr/local && \
+    make -C /usr/src/gitaly -j$(getconf _NPROCESSORS_ONLN) git GIT_PREFIX=/usr/local && \
     \
     ## Final Cleanup
     rm -rf ${GITLAB_HOME}/.ssh && \
@@ -288,7 +291,7 @@ RUN source /assets/functions/00-container && \
     rm -rf ${GITLAB_INSTALL_DIR}/qa && \
     rm -rf ${GITLAB_SHELL_INSTALL_DIR}/*.md && \
     rm -rf ${GITLAB_SHELL_INSTALL_DIR}/*.example && \
-    rm -rf /etc/logroate.d/postgresql-common /etc/logrotate.d/unattended-upgrades && \
+    rm -rf /etc/logroate.d/* && \
     rm -rf /usr/local/bundle/cache && \
     rm -rf /usr/share/vim/vim80/doc/* && \
     rm -rf /usr/local/go && \
@@ -298,6 +301,7 @@ RUN source /assets/functions/00-container && \
     rm -rf /root/.cache && \
     rm -rf /root/.bundle && \
     rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/log/* && \
     rm -rf /tmp/*
 
 ENV EXECJS_RUNTIME "Disabled"

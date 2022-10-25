@@ -1,3 +1,14 @@
+## 15.5.1 2022-10-25 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.5.1
+
+   ### Changed
+      - Fix for Gitaly build not copying Ruby directory into proper location
+      - Move symlink of /home/git/gitlab/log to container startup as opposed to Dockerfile
+      - Properly create Gitlab log directories
+
+
 ## 15.5.0 2022-10-21 <dave at tiredofit dot ca>
 
    ### Added

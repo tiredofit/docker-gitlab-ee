@@ -1277,9 +1277,10 @@ update_ca_certificates() {
 
 initialize_logdir() {
   print_notice "Initializing logdir"
-  mkdir -p /var/log/gitlab
-  chmod -R 0755 /var/log/gitlab
-  chown -R "${GITLAB_USER}": /var/log/gitlab
+  mkdir -p "${GITLAB_LOG_DIR}"
+  chmod -R 0755 "${GITLAB_LOG_DIR}"
+  chown -R "${GITLAB_USER}": "${GITLAB_LOG_DIR}"
+  ln -sf "${GITLAB_LOG_DIR}" "${GITLAB_INSTALL_DIR}"/log
 }
 
 initialize_datadir() {
