@@ -1,3 +1,9 @@
+## 15.5.2 2022-11-02 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.5.2
+
+
 ## 15.5.1.1 2022-10-25 <dave at tiredofit dot ca>
 
    ### Changed

@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx:debian-bullseye
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.5.1-ee" \
+ENV GITLAB_VERSION="15.5.2-ee" \
     GO_VERSION="1.19.1" \
     RUBY_VERSION="2.7.6" \
     GITLAB_HOME="/home/git" \
@@ -312,4 +312,4 @@ WORKDIR ${GITLAB_INSTALL_DIR}
 EXPOSE 22/tcp 80/tcp 443/tcp
 
 ### Add Assets
-ADD install/ /
+COPY install/ /
