@@ -1,3 +1,9 @@
+## 15.5.5.4 2022-11-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Tweak for logging symlinks
+
+
 ## 15.5.5.3 2022-11-18 <dave at tiredofit dot ca>
 
    ### Changed

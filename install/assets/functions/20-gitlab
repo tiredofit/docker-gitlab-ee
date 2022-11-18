@@ -1280,7 +1280,8 @@ initialize_logdir() {
   mkdir -p "${GITLAB_LOG_DIR}"
   chmod -R 0755 "${GITLAB_LOG_DIR}"
   chown -R "${GITLAB_USER}": "${GITLAB_LOG_DIR}"
-  ln -sf "${GITLAB_LOG_DIR}" "${GITLAB_INSTALL_DIR}"/log
+  rm -rf "${GITLAB_INSTALL_DIR}"/log
+  ln -s "${GITLAB_LOG_DIR}" "${GITLAB_INSTALL_DIR}"/log
   ln -sf "${NGINX_LOG_ACCESS_LOCATION}" "${GITLAB_LOG_DIR}"/nginx
 }
 
