@@ -1,3 +1,9 @@
+## 15.5.5.2 2022-11-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix Logrotate duplications
+
+
 ## 15.5.5.1 2022-11-18 <dave at tiredofit dot ca>
 
    ### Changed
