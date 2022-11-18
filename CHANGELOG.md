@@ -1,3 +1,9 @@
+## 15.5.5.3 2022-11-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Rotate NGINX LOG_DIR to /www/logs/
+
+
 ## 15.5.5.2 2022-11-18 <dave at tiredofit dot ca>
 
    ### Changed
