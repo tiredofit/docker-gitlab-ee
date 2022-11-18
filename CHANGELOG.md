@@ -1,3 +1,9 @@
+## 15.5.5.1 2022-11-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix NGINX_ACCESS_LOCATION hardcoded environment variable
+
+
 ## 15.5.4 2022-11-14 <dave at tiredofit dot ca>
 
    ### Added
