@@ -1,3 +1,9 @@
+## 15.6.0.2 2022-11-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - STOP hardcoding LOG_DIR
+
+
 ## 15.6.0.1 2022-11-22 <dave at tiredofit dot ca>
 
    ### Changed
