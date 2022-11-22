@@ -178,7 +178,6 @@ RUN source /assets/functions/00-container && \
     \
     ### symlink ${GITLAB_INSTALL_DIR}/log -> ${GITLAB_LOG_DIR}
     rm -rf ${GITLAB_INSTALL_DIR}/log && \
-    #ln -sf ${GITLAB_LOG_DIR} ${GITLAB_INSTALL_DIR}/log && \
     \
     ### symlink ${GITLAB_INSTALL_DIR}/public/uploads -> ${GITLAB_DATA_DIR}/uploads
     rm -rf ${GITLAB_INSTALL_DIR}/public/uploads && \

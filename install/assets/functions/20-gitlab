@@ -1282,7 +1282,6 @@ initialize_logdir() {
   chown -R "${GITLAB_USER}": "${GITLAB_LOG_DIR}"
   rm -rf "${GITLAB_INSTALL_DIR}"/log
   ln -s "${GITLAB_LOG_DIR}" "${GITLAB_INSTALL_DIR}"/log
-  ln -sf "${NGINX_LOG_ACCESS_LOCATION}" "${GITLAB_LOG_DIR}"/nginx
 }
 
 initialize_datadir() {

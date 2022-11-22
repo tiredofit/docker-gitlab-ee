@@ -1,3 +1,9 @@
+## 15.6.0.1 2022-11-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Stop symlinking the nginx logs folder
+
+
 ## 15.6.0 2022-11-22 <dave at tiredofit dot ca>
 
    ### Added
