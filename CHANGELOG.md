@@ -1,3 +1,10 @@
+## 15.6.0 2022-11-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.6.0
+      - GOLang build environment 1.19.3
+
+
 ## 15.5.5.4 2022-11-18 <dave at tiredofit dot ca>
 
    ### Changed
