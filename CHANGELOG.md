@@ -1,3 +1,11 @@
+## 15.6.2.1 2022-12-15 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update to Ruby 3.0.5
+      - Add configuration for Action Cable
+      - Switch to JemAlloc memory allocator to reduce memory usage in Ruby applications as per Ruby recommendations
+
+
 ## 15.6.2 2022-12-05 <dave at tiredofit dot ca>
 
    ### Added
