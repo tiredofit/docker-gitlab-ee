@@ -38,6 +38,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     NODE_ENV="production" \
     SKIP_SANITY_CHECK=FALSE \
     RAILS_ENV="production" \
+    RUBY_ALLOCATOR=/usr/lib/libjemalloc.so.2 \
     prometheus_multiproc_dir=/dev/shm
 
 RUN source /assets/functions/00-container && \
@@ -58,6 +59,7 @@ RUN source /assets/functions/00-container && \
                 libgdbm6 \
                 libicu67 \
                 libimage-exiftool-perl \
+                libjemalloc2 \
                 libncurses5 \
                 libpq5 \
                 libpcre2-8-0 \
@@ -96,6 +98,7 @@ RUN source /assets/functions/00-container && \
                         libffi-dev \
                         libgdbm-dev \
                         libicu-dev \
+                        libjemalloc-dev \
                         libkrb5-dev \
                         libncurses5-dev \
                         libpcre2-dev \
@@ -132,7 +135,11 @@ RUN source /assets/functions/00-container && \
     mkdir -p /usr/src/ruby && \
     curl -sSL https://cache.ruby-lang.org/pub/ruby/$(echo ${RUBY_VERSION} | cut -c1-3)/ruby-${RUBY_VERSION}.tar.gz | tar xvfz - --strip 1 -C /usr/src/ruby && \
     cd /usr/src/ruby && \
-    ./configure --disable-install-rdoc --enable-shared && \
+    ./configure \
+                --disable-install-rdoc \
+                --enable-shared \
+                --with-jemalloc \
+                && \
     make -j$(getconf _NPROCESSORS_ONLN) && \
     make install && \
     \
