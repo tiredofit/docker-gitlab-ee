@@ -1,10 +1,17 @@
-FROM docker.io/tiredofit/nginx:debian-bullseye
+ARG DISTRO="debian"
+ARG DISTRO_VARIANT="bullseye"
+
+FROM docker.io/tiredofit/nginx:${DISTRO}-${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
+ARG GITLAB_VERSION
+ARG GO_VERSION
+ARG RUBY_VERSION
+
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION="15.6.2-ee" \
-    GO_VERSION="1.19.3" \
-    RUBY_VERSION="2.7.6" \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"15.6.2-ee"} \
+    GO_VERSION=${GO_VERSION:-"1.19.4"} \
+    RUBY_VERSION=${RUBY_VERSION:-"3.0.4"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-gitlab-ee/"
@@ -41,9 +48,9 @@ RUN source /assets/functions/00-container && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')')-pgdg main" > /etc/apt/sources.list.d/postgres.list && \
-    apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+    package update && \
+    package upgrade -y && \
+    package install \
                 gettext-base \
                 graphicsmagick \
                 libcurl4 \
@@ -56,7 +63,6 @@ RUN source /assets/functions/00-container && \
                 libpcre2-8-0 \
                 libre2-dev \
                 libreadline8 \
-                #libssl1.0.0 \
                 libxml2 \
                 libxslt1.1 \
                 libyaml-0-2 \
@@ -104,7 +110,7 @@ RUN source /assets/functions/00-container && \
                         pkg-config \
                         zlib1g-dev" \
                         && \
-    apt-get install -y --no-install-recommends ${BUILD_DEPENDENCIES} && \
+    package install ${BUILD_DEPENDENCIES} && \
     rm -rf /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
     cd / && \
     \
@@ -136,6 +142,8 @@ RUN source /assets/functions/00-container && \
     sudo -u ${GITLAB_USER} git config --global repack.writeBitmaps true && \
     sudo -u ${GITLAB_USER} git config --global receive.advertisePushOptions true && \
     sudo -u ${GITLAB_USER} git config --global core.fsyncObjectFiles true && \
+    sudo -u ${GITLAB_USER} git config --global advice.detachedHead false && \
+    sudo -u ${GITLAB_USER} git config --global --add safe.directory "${GITLAB_INSTALL_DIR}" && \
     \
 ### Download and Install Gitlab
     GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab && \
@@ -149,6 +157,8 @@ RUN source /assets/functions/00-container && \
     sudo -HEu git sed -i 's/db:reset/db:setup/' ${GITLAB_INSTALL_DIR}/lib/tasks/gitlab/setup.rake && \
     \
     cd ${GITLAB_INSTALL_DIR} && \
+    BUNDLER_VERSION="$(grep "BUNDLED WITH" ${GITLAB_INSTALL_DIR}/Gemfile.lock -A 1 | grep -v "BUNDLED WITH" | tr -d "[:space:]")" && \
+    gem install bundler:"${BUNDLER_VERSION}" && \
     sudo -HEu git bundle config set --local deployment 'true' && \
     sudo -HEu git bundle config set --local without 'development test mysql aws kerberos' && \
     sudo -HEu git bundle install -j"$(nproc)" && \
@@ -277,38 +287,34 @@ RUN source /assets/functions/00-container && \
     ln -sf "${GITLAB_DATA_DIR}/.ssh" "${GITLAB_HOME}/.ssh" && \
     \
 ### Cleanup
-    apt-get purge -y ${BUILD_DEPENDENCIES} && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf ${GITLAB_INSTALL_DIR}/node_modules && \
-    rm -rf ${GITLAB_HOME}/.bundle && \
-    rm -rf ${GITLAB_HOME}/.cache && \
-    rm -rf ${GITLAB_HOME}/.yarn && \
-    rm -rf ${GITLAB_INSTALL_DIR}/*.md && \
-    rm -rf ${GITLAB_INSTALL_DIR}/docker* && \
-    rm -rf ${GITLAB_INSTALL_DIR}/qa && \
-    rm -rf ${GITLAB_SHELL_INSTALL_DIR}/*.md && \
-    rm -rf ${GITLAB_SHELL_INSTALL_DIR}/*.example && \
-    rm -rf /etc/logroate.d/* && \
-    rm -rf /usr/local/bundle/cache && \
-    rm -rf /usr/share/vim/vim80/doc/* && \
-    rm -rf /usr/local/go && \
-    rm -rf /usr/local/bin/go* && \
-    rm -rf /usr/src/* && \
-    rm -rf /root/go && \
-    rm -rf /root/.cache && \
-    rm -rf /root/.bundle && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/log/* && \
-    rm -rf /tmp/*
+    go clean --modcache && \
+    package remove ${BUILD_DEPENDENCIES} && \
+    package cleanup && \
+    rm -rf \
+            ${GITLAB_INSTALL_DIR}/node_modules \
+            ${GITLAB_HOME}/.bundle \
+            ${GITLAB_HOME}/.cache \
+            ${GITLAB_HOME}/.yarn \
+            ${GITLAB_INSTALL_DIR}/*.md \
+            ${GITLAB_INSTALL_DIR}/docker* \
+            ${GITLAB_INSTALL_DIR}/qa \
+            ${GITLAB_SHELL_INSTALL_DIR}/*.md \
+            ${GITLAB_SHELL_INSTALL_DIR}/*.example \
+            /etc/logroate.d/* \
+            /usr/local/bundle/cache \
+            /usr/share/vim/vim80/doc/* \
+            /usr/local/go \
+            /usr/local/bin/go* \
+            /usr/src/* \
+            /root/go \
+            /root/.cache \
+            /root/.bundle \
+            /var/lib/apt/lists/* \
+            /var/log/* \
+            /tmp/*
+
 
 ENV EXECJS_RUNTIME "Disabled"
-
-### Entrypoint Configuration
 WORKDIR ${GITLAB_INSTALL_DIR}
-
-### Network Configuration
 EXPOSE 22/tcp 80/tcp 443/tcp
-
-### Add Assets
 COPY install/ /

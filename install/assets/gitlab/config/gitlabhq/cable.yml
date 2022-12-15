@@ -1,0 +1,4 @@
+production:
+  adapter: redis
+  url: redis://{{REDIS_HOST}}:{{REDIS_PORT}}/{{REDIS_DB_NUMBER}}
+  channel_prefix: gitlab_production
