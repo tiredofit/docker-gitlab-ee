@@ -1,7 +1,7 @@
 # github.com/tiredofit/docker-gitlab-ee
 
 [![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-gitlab-ee?style=flat-square)](https://github.com/tiredofit/docker-gitlab-ee/releases/latest)
-[![Build Status](https://img.shields.io/github/workflow/status/tiredofit/docker-gitlab-ee/build?style=flat-square)](https://github.com/tiredofit/docker-gitlab-ee/actions?query=workflow%3Abuild)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tiredofit/docker-gitlab-ee/main.yml?branch=main&style=flat-square)](https://github.com/tiredofit/docker-gitlab-ee/actions)
 [![Docker Stars](https://img.shields.io/docker/stars/tiredofit/gitlab-ee.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/gitlab-ee/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/gitlab-ee.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/gitlab-ee/)
 [![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
