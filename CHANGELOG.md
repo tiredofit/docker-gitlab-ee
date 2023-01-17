@@ -1,3 +1,10 @@
+## 15.7.3 2023-01-16 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.7.3
+      - Use go 1.19.5 for building
+
+
 ## 15.7.2 2023-01-10 <dave at tiredofit dot ca>
 
    ### Added
