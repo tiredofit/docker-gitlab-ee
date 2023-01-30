@@ -105,15 +105,15 @@ Your docker host needs to have 1GB or more of available RAM to run GitLab. Pleas
 
 ## Installation
 
-Automated builds of the image are available on [Docker hub](https://hub.docker.com/r/tiredofit/gitlab-ee) and is the recommended method of installation.
+Automated builds of the image are available on [Docker hub](https://hub.docker.com/r/tiredofit/gitlab-ee)
 
 ```bash
-docker pull tiredofit/gitlab-ee:latest
+docker pull docker.io/tiredofdit/gitlab-ee:latest
 ```
 You can also pull the `latest` tag which is built from the repository *HEAD*
 
 ```bash
-docker pull tiredofit/gitlab-ee:latest
+docker pull docker.io/tiredofdit/gitlab-ee:latest
 ```
 
 Alternatively you can build the image locally.
@@ -254,7 +254,7 @@ To illustrate linking with a postgresql container, we will use the [tiredofit/po
 First, lets pull the postgresql image from the docker index.
 
 ```bash
-docker pull tiredofit/postgresql:13-latest
+docker pull docker.io/tiredofdit/postgresql:13-latest
 ```
 
 For data persistence lets create a store for the postgresql and start the container.
@@ -318,7 +318,7 @@ To illustrate linking with a redis container, we will use the [tiredofit/redis](
 First, lets pull the redis image from the docker index.
 
 ```bash
-docker pull tiredofit/redis:latest
+docker pull docker.io/tiredofdit/redis:latest
 ```
 
 Lets start the redis container
@@ -1097,7 +1097,7 @@ To upgrade to newer gitlab releases, simply follow this 4 step upgrade procedure
 - **Step 1**: Update the docker image.
 
 ```bash
-docker pull tiredofit/gitlab-ee:latest
+docker pull docker.io/tiredofdit/gitlab-ee:latest
 ```
 
 - **Step 2**: Stop and remove the currently running image
@@ -1135,7 +1135,7 @@ docker exec -it (whatever your container name is) bash
 These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
 ### Usage
 - The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) personalized support.
+- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for personalized support
 ### Bugfixes
 - Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
 
