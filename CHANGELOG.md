@@ -1,3 +1,9 @@
+## 15.8.2.1 2023-02-20 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Patch up build tasks for Gitlab Workhorse
+
+
 ## 15.8.2 2023-02-14 <dave at tiredofit dot ca>
 
    ### Added
