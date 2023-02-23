@@ -1,3 +1,9 @@
+## 15.9.1 2023-02-23 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.9.1
+
+
 ## 15.9.0 2023-02-21 <dave at tiredofit dot ca>
 
    ### Added
