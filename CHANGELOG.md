@@ -1,3 +1,10 @@
+## 15.9.3 2023-03-09 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.9.3
+      - Golang 1.20.1 build toolset
+
+
 ## 15.9.1 2023-02-23 <dave at tiredofit dot ca>
 
    ### Added
