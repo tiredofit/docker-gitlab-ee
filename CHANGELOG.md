@@ -1,3 +1,10 @@
+## 15.10.1 2023-03-30 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.10.1
+      - Ruby 3.0.6
+
+
 ## 15.10.0 2023-03-21 <dave at tiredofit dot ca>
 
    ### Added
