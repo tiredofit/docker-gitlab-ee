@@ -1,3 +1,10 @@
+## 15.10.2 2023-04-05 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 15.10.2
+      - Go Build 1.20.3
+
+
 ## 15.7.8 2023-04-03 <dave at tiredofit dot ca>
 
    ### Added
