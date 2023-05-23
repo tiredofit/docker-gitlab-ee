@@ -44,7 +44,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
 RUN source /assets/functions/00-container && \
     set -x && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-    echo "deb https://deb.nodesource.com/node_16.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
+    echo "deb https://deb.nodesource.com/node_18.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
     curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
@@ -261,14 +261,9 @@ RUN source /assets/functions/00-container && \
     GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly && \
     echo "Downloading gitaly v${GITLAB_GITALY_VERSION}..." && \
     clone_git_repo ${GITLAB_GITALY_URL} v${GITLAB_GITALY_VERSION} /usr/src/gitaly && \
-    cd /usr/src/gitaly/ruby && \
-    bundler install && \
-    cd /usr/src/gitaly && \
     make -C /usr/src/gitaly -j$(getconf _NPROCESSORS_ONLN) install && \
     cd /usr/src/gitaly && \
     cp -a /usr/src/gitaly/config.toml.example ${GITLAB_GITALY_INSTALL_DIR}/config.toml && \
-    cp -R /usr/src/gitaly/ruby ${GITLAB_GITALY_INSTALL_DIR}/ && \
-    rm -rf ${GITLAB_GITALY_INSTALL_DIR}/ruby/vendor/bundle/ruby/**/cache && \
     chown -R ${GITLAB_USER}: ${GITLAB_GITALY_INSTALL_DIR} && \
     cd /home/git/gitaly && \
     ln -s /usr/local/bin/gitaly* . && \

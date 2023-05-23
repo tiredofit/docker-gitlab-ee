@@ -1,3 +1,10 @@
+## 16.0.1.1 2023-05-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for Gitaly Ruby Cache not being needed anymore
+      - Switch to Node 18 as part of upcoming Gitlab change in 16.1
+
+
 ## 16.0.1 2023-05-23 <dave at tiredofit dot ca>
 
    ### Added
