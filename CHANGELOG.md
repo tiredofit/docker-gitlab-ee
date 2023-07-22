@@ -1,3 +1,9 @@
+## 16.2.0.1 2023-07-21 <dave at tiredofit dot ca>
+
+   ### Added
+      - Update puma configuration to support relative paths
+
+
 ## 16.2.0 2023-07-21 <dave at tiredofit dot ca>
 
    ### Added
