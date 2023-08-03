@@ -1,3 +1,10 @@
+## 16.2.3 2023-08-03 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 16.23
+      - Golang 1.20.7 build
+
+
 ## 16.2.2 2023-08-01 <dave at tiredofit dot ca>
 
    ### Added
