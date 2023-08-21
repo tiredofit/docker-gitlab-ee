@@ -9,8 +9,8 @@ ARG GO_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.2.3-ee"} \
-    GO_VERSION=${GO_VERSION:-"1.20.7"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.3.0-ee"} \
+    GO_VERSION=${GO_VERSION:-"1.21.0"} \
     RUBY_VERSION=${RUBY_VERSION:-"3.0.6"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \

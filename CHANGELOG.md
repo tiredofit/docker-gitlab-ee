@@ -1,3 +1,10 @@
+## 16.3.0 2023-08-21 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 16.3.0
+      - Go 1.21.0 buildchain
+
+
 ## 16.2.3 2023-08-03 <dave at tiredofit dot ca>
 
    ### Added
