@@ -1,3 +1,9 @@
+## 16.3.0.1 2023-08-21 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix issue with gofmt on Gitlab-Shell
+
+
 ## 16.3.0 2023-08-21 <dave at tiredofit dot ca>
 
    ### Added
