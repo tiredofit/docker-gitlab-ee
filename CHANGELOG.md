@@ -1,3 +1,9 @@
+## 16.4.0.1 2023-09-27 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Switch to database pools as per https://docs.gitlab.com/ee/update/deprecations.html#single-database-connection-is-deprecated
+
+
 ## 16.4.0 2023-09-21 <dave at tiredofit dot ca>
 
    ### Added
