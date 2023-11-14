@@ -1,3 +1,10 @@
+## 16.5.2 2023-11-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 16.5.2
+      - Go 1.21.4
+
+
 ## 16.5.1 2023-10-31 <dave at tiredofit dot ca>
 
    ### Added
