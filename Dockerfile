@@ -11,7 +11,7 @@ ARG RUBY_VERSION
 ### Set Defaults and Arguments
 ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.7.0-ee"} \
     GO_VERSION=${GO_VERSION:-"1.21.5"} \
-    RUBY_VERSION=${RUBY_VERSION:-"3.0.6"} \
+    RUBY_VERSION=${RUBY_VERSION:-"3.2.2"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-gitlab-ee/"
@@ -71,8 +71,8 @@ RUN source /assets/functions/00-container && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-15 \
-                postgresql-contrib-15 \
+                postgresql-client-16 \
+                postgresql-contrib-16 \
                 python3 \
                 python3-docutils \
                 redis-tools \
