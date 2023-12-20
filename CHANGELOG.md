@@ -1,3 +1,10 @@
+## 16.7.0.1 2023-12-20 <dave at tiredofit dot ca>
+
+   ### Added
+      - Ruby 3.2.3
+      - Postgresql client and common libraries 16
+
+
 ## 16.7.0 2023-12-20 <dave at tiredofit dot ca>
 
    ### Added
