@@ -1,5 +1,5 @@
 ARG DISTRO="debian"
-ARG DISTRO_VARIANT="bullseye"
+ARG DISTRO_VARIANT="bookworm"
 
 FROM docker.io/tiredofit/nginx:${DISTRO}-${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
@@ -9,9 +9,9 @@ ARG GO_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.7.0-ee"} \
-    GO_VERSION=${GO_VERSION:-"1.21.5"} \
-    RUBY_VERSION=${RUBY_VERSION:-"3.2.2"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.7.2-ee"} \
+    GO_VERSION=${GO_VERSION:-"1.21.6"} \
+    RUBY_VERSION=${RUBY_VERSION:-"3.3.0"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-gitlab-ee/"
@@ -55,9 +55,9 @@ RUN source /assets/functions/00-container && \
                 gettext-base \
                 graphicsmagick \
                 libcurl4 \
-                libffi7 \
+                libffi8 \
                 libgdbm6 \
-                libicu67 \
+                libicu72 \
                 libimage-exiftool-perl \
                 libjemalloc2 \
                 libncurses5 \
@@ -87,6 +87,8 @@ RUN source /assets/functions/00-container && \
     DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
     \
     BUILD_DEPENDENCIES="build-essential \
+                        cargo \
+                        clang \
                         cmake \
                         g++ \
                         gcc \
@@ -111,6 +113,7 @@ RUN source /assets/functions/00-container && \
                         make \
                         patch \
                         pkg-config \
+                        rustc \
                         zlib1g-dev" \
                         && \
     package install ${BUILD_DEPENDENCIES} && \

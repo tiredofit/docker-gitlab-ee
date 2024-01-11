@@ -1,3 +1,12 @@
+## 16.7.2 2024-01-11 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 16.7.2
+      - GoLang 1.21.6
+      - Ruby 3.3.0
+      - Debian Bookworm
+
+
 ## 16.7.0.1 2023-12-20 <dave at tiredofit dot ca>
 
    ### Added
