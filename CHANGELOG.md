@@ -1,3 +1,10 @@
+## 16.6.4 2024-01-11 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 16.6.4
+      - GoLang 1.21.6
+
+
 ## 16.7.2 2024-01-11 <dave at tiredofit dot ca>
 
    ### Added

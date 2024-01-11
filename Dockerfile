@@ -1,5 +1,5 @@
 ARG DISTRO="debian"
-ARG DISTRO_VARIANT="bookworm"
+ARG DISTRO_VARIANT="bullseye"
 
 FROM docker.io/tiredofit/nginx:${DISTRO}-${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
@@ -9,9 +9,9 @@ ARG GO_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.7.2-ee"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"16.6.4-ee"} \
     GO_VERSION=${GO_VERSION:-"1.21.6"} \
-    RUBY_VERSION=${RUBY_VERSION:-"3.3.0"} \
+    RUBY_VERSION=${RUBY_VERSION:-"3.0.6"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-gitlab-ee/"
@@ -55,9 +55,9 @@ RUN source /assets/functions/00-container && \
                 gettext-base \
                 graphicsmagick \
                 libcurl4 \
-                libffi8 \
+                libffi7 \
                 libgdbm6 \
-                libicu72 \
+                libicu67 \
                 libimage-exiftool-perl \
                 libjemalloc2 \
                 libncurses5 \
@@ -71,8 +71,8 @@ RUN source /assets/functions/00-container && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-16 \
-                postgresql-contrib-16 \
+                postgresql-client-15 \
+                postgresql-contrib-15 \
                 python3 \
                 python3-docutils \
                 redis-tools \
@@ -87,8 +87,6 @@ RUN source /assets/functions/00-container && \
     DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
     \
     BUILD_DEPENDENCIES="build-essential \
-                        cargo \
-                        clang \
                         cmake \
                         g++ \
                         gcc \
@@ -113,7 +111,6 @@ RUN source /assets/functions/00-container && \
                         make \
                         patch \
                         pkg-config \
-                        rustc \
                         zlib1g-dev" \
                         && \
     package install ${BUILD_DEPENDENCIES} && \
