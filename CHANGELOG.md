@@ -1,3 +1,9 @@
+## 16.80.1 2024-01-17 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Downgrade Ruby 3.3.0 to 3.2.2
+
+
 ## 16.8.0 2024-01-17 <dave at tiredofit dot ca>
 
    ### Added
