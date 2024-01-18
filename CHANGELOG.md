@@ -1,3 +1,9 @@
+## 16.8.0.2 2024-01-18 <dave at tiredofit dot ca>
+
+   ### Added
+      - Ruby 3.2.3
+
+
 ## 16.80.1 2024-01-17 <dave at tiredofit dot ca>
 
    ### Changed
