@@ -185,7 +185,7 @@ RUN source /assets/functions/00-container && \
     sudo -HEu git yarn add ajv@^4.0.0 && \
     \
     echo "Compiling assets. Please be patient, this could take a while..." && \
-    sudo -HEu git bundle exec rake gitlab:assets:compile USE_DB=false SKIP_STORAGE_VALIDATION=true NODE_OPTIONS="--max-old-space-size=4096" && \
+    sudo -HEu git bundle exec rake gitlab:assets:compile USE_DB=false SKIP_STORAGE_VALIDATION=true NODE_OPTIONS="--max-old-space-size=10248" && \
     \
     # remove auto generated ${GITLAB_DATA_DIR}/config/secrets.yml
     rm -rf ${GITLAB_DATA_DIR}/config/secrets.yml && \
