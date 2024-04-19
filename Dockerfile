@@ -235,6 +235,7 @@ RUN source /assets/functions/00-container && \
     sudo -HEu git bundle config set --local deployment 'true' && \
     sudo -HEu git bundle config set --local without 'development test' && \
     sudo -HEu git bundle install -j"$(nproc)" && \
+    sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH go mod tidy && \
     sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH go mod vendor && \
 #    sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make fmt && \
     sudo -HEu git GOROOT=/usr/local/go PATH=/usr/local/go/bin:$PATH make setup && \

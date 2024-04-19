@@ -1,3 +1,9 @@
+## 16.11.0.1 2024-04-18 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for building go modules
+
+
 ## 16.11.0 2024-04-18 <dave at tiredofit dot ca>
 
    ### Added
