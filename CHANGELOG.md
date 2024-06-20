@@ -1,3 +1,11 @@
+## 17.1.0 2024-06-20 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 17.1.0
+      - GoLang 1.22.4 buildchain
+      - Ruby 3.2.4
+
+
 ## 17.0.0 2024-05-15 <dave at tiredofit dot ca>
 
    ### Added

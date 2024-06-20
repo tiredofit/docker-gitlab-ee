@@ -9,9 +9,9 @@ ARG GO_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.0.0-ee"} \
-    GO_VERSION=${GO_VERSION:-"1.22.1"} \
-    RUBY_VERSION=${RUBY_VERSION:-"3.2.3"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.1.0-ee"} \
+    GO_VERSION=${GO_VERSION:-"1.22.4"} \
+    RUBY_VERSION=${RUBY_VERSION:-"3.2.4"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-gitlab-ee/"
