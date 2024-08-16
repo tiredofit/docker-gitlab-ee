@@ -1,3 +1,10 @@
+## 17.3.0 2024-08-16 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 17.3.0
+      - Use Go Latest instead of hardcoded version for building
+
+
 ## 17.2.1 2024-07-24 <dave at tiredofit dot ca>
 
    ### Added

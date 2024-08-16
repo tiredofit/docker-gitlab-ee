@@ -5,12 +5,10 @@ FROM docker.io/tiredofit/nginx:${DISTRO}-${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG GITLAB_VERSION
-ARG GO_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.2.1-ee"} \
-    GO_VERSION=${GO_VERSION:-"1.22.4"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.3.0-ee"} \
     RUBY_VERSION=${RUBY_VERSION:-"3.2.5"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
@@ -121,8 +119,7 @@ RUN source /assets/functions/00-container && \
     cd / && \
     \
     mkdir -p /usr/local/go && \
-    echo "Downloading Go ${GO_VERSION}..." && \
-    curl -sSL  https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar xvfz - --strip 1 -C /usr/local/go && \
+    curl -sSLk  https://go.dev/dl/$(curl 'https://go.dev/VERSION?m=text' | head -n1).linux-$(dpkg --print-architecture).tar.gz | tar xvfz - --strip 1 -C /usr/local/go && \
     ln -sf /usr/local/go/bin/go /usr/local/bin/ && \
     ln -sf /usr/local/go/bin/godoc /usr/local/bin/ && \
     ln -sf /usr/local/go/bin/gfmt /usr/local/bin/ && \
