@@ -8,7 +8,7 @@ ARG GITLAB_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.3.1-ee"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.3.2-ee"} \
     RUBY_VERSION=${RUBY_VERSION:-"3.2.5"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
