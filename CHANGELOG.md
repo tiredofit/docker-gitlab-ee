@@ -1,3 +1,9 @@
+## 17.4.0.1 2024-09-21 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix issues with 17.4.0
+
+
 ## 17.4.0 2024-09-18 <dave at tiredofit dot ca>
 
    ### Added

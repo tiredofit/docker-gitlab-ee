@@ -227,7 +227,7 @@ RUN source /assets/functions/00-container && \
     \
     cd ${GITLAB_SHELL_INSTALL_DIR} && \
     sudo -HEu git cp -a ${GITLAB_SHELL_INSTALL_DIR}/config.yml.example ${GITLAB_SHELL_INSTALL_DIR}/config.yml && \
-    sudo -HEu git ./bin/install && \
+    sudo -HEu git make && \
     rm -rf /home/git/.ssh && \
     sudo -HEu git bundle config set --local deployment 'true' && \
     sudo -HEu git bundle config set --local without 'development test' && \
