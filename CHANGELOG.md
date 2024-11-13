@@ -1,3 +1,10 @@
+## 17.5.2 2024-11-13 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 17.5.2
+      - Ruby 3.3.6
+
+
 ## 17.5.1 2024-10-23 <dave at tiredofit dot ca>
 
    ### Added
