@@ -1,3 +1,11 @@
+## 17.6.2 2024-12-19 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 17.6.2
+      - Postgresql 17 client
+      - NodeJS 22
+
+
 ## 17.7.0 2024-12-17 <dave at tiredofit dot ca>
 
    ### Added

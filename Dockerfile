@@ -8,7 +8,7 @@ ARG GITLAB_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.7.0-ee"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"17.6.2-ee"} \
     RUBY_VERSION=${RUBY_VERSION:-"3.3.6"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
@@ -42,7 +42,7 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
 RUN source /assets/functions/00-container && \
     set -x && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-    echo "deb https://deb.nodesource.com/node_18.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
+    echo "deb https://deb.nodesource.com/node_22.x $(cat /etc/os-release |grep "VERSION=" | awk 'NR>1{print $1}' RS='(' FS=')') main" > /etc/apt/sources.list.d/nodejs.list && \
     curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -ssL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
@@ -69,8 +69,8 @@ RUN source /assets/functions/00-container && \
                 locales \
                 openssh-server \
                 nodejs \
-                postgresql-client-16 \
-                postgresql-contrib-16 \
+                postgresql-client-17 \
+                postgresql-contrib-17 \
                 python3 \
                 python3-docutils \
                 redis-tools \
