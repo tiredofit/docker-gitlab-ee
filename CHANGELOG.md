@@ -1,3 +1,9 @@
+## 17.9.2 2025-03-13 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 17.9.2
+
+
 ## 17.9.1 2025-02-26 <dave at tiredofit dot ca>
 
    ### Added
