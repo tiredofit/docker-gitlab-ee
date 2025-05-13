@@ -1,3 +1,9 @@
+## 17.11.2.1 2025-05-12 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add REDIS_PASS environment variable support for actioncable and resque
+
+
 ## 17.11.2 2025-05-07 <dave at tiredofit dot ca>
 
    ### Added

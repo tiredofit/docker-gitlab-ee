@@ -182,6 +182,14 @@ gitlab_configure_redis() {
   gitlab_finalize_redis_parameters
   gitlab_check_redis_connection
 
+  if [ -n "${REDIS_PASS}" ] ; then
+    sed \
+        -i \
+        -e "s|{{REDIS_HOST}}|:${REDIS_PASS}{{REDIS_HOST}}|g" \
+        "${GITLAB_RESQUE_CONFIG}" \
+        "${GITLAB_ACTIONCABLE_CONFIG}"
+  fi
+
   update_template ${GITLAB_RESQUE_CONFIG} \
     REDIS_HOST \
     REDIS_PORT \
@@ -189,6 +197,7 @@ gitlab_configure_redis() {
 
   update_template ${GITLAB_ACTIONCABLE_CONFIG} \
     REDIS_HOST \
+    REDIS PASS \
     REDIS_PORT \
     REDIS_DB_NUMBER
 }
