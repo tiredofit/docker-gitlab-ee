@@ -185,7 +185,7 @@ gitlab_configure_redis() {
   if [ -n "${REDIS_PASS}" ] ; then
     sed \
         -i \
-        -e "s|{{REDIS_HOST}}|:${REDIS_PASS}{{REDIS_HOST}}|g" \
+        -e "s|{{REDIS_HOST}}|:${REDIS_PASS}@{{REDIS_HOST}}|g" \
         "${GITLAB_RESQUE_CONFIG}" \
         "${GITLAB_ACTIONCABLE_CONFIG}"
   fi
