@@ -1,3 +1,9 @@
+## 18.1.0 2025-06-18 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 18.1.0
+
+
 ## 18.0.2 2025-06-11 <dave at tiredofit dot ca>
 
    ### Added
