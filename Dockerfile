@@ -8,8 +8,8 @@ ARG GITLAB_VERSION
 ARG RUBY_VERSION
 
 ### Set Defaults and Arguments
-ENV GITLAB_VERSION=${GITLAB_VERSION:-"18.4.5-ee"} \
-    RUBY_VERSION=${RUBY_VERSION:-"3.3.8"} \
+ENV GITLAB_VERSION=${GITLAB_VERSION:-"18.6.1-ee"} \
+    RUBY_VERSION=${RUBY_VERSION:-"3.3.10"} \
     GITLAB_HOME="/home/git" \
     IMAGE_NAME="tiredofit/gitlab-ee" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-gitlab-ee/"
@@ -156,6 +156,7 @@ RUN source /assets/functions/00-container && \
 ### Download and Install Gitlab
     GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab && \
     clone_git_repo ${GITLAB_CLONE_URL} v${GITLAB_VERSION} ${GITLAB_INSTALL_DIR} && \
+    rm -rf "${GITLAB_INSTALL_DIR}/.git && \
     \
     sed -i "/\ \ \ \ \ \ return \[\] unless Gitlab::Database.exists?/a \ \ \ \ \ \ return \[\] unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
     sed -i "/\ \ \ \ \ \ return default_enabled unless Gitlab::Database.exists?/a \ \ \ \ \ \ return default_enabled unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
@@ -248,6 +249,7 @@ RUN source /assets/functions/00-container && \
     make -C /usr/src/gitlab-elasticsearch-indexer && \
     make -C /usr/src/gitlab-elasticsearch-indexer install  && \
     cp -af /usr/src/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer /usr/local/bin && \
+    rm -rf /usr/src/gitlab-elasticsearch-indexer/.git && \
     \
 ### Download and Install Gitlab Pages
     GITLAB_PAGES_URL=https://gitlab.com/gitlab-org/gitlab-pages && \
@@ -256,6 +258,7 @@ RUN source /assets/functions/00-container && \
     clone_git_repo ${GITLAB_PAGES_URL} v${GITLAB_PAGES_VERSION} /usr/src/gitlab-pages && \
     make -C /usr/src/gitlab-pages -j$(getconf _NPROCESSORS_ONLN) && \
     cp -af /usr/src/gitlab-pages/gitlab-pages /usr/local/bin && \
+    rm -rf /usr/src/gitlab-pages/.git && \
     \
     ### Download and Install Gitaly
     mkdir -p ${GITLAB_GITALY_INSTALL_DIR} && \
@@ -263,6 +266,7 @@ RUN source /assets/functions/00-container && \
     GITLAB_GITALY_URL=https://gitlab.com/gitlab-org/gitaly && \
     echo "Downloading gitaly v${GITLAB_GITALY_VERSION}..." && \
     clone_git_repo ${GITLAB_GITALY_URL} v${GITLAB_GITALY_VERSION} /usr/src/gitaly && \
+    rm -rf /usr/src/gitaly/.git && \
     make -C /usr/src/gitaly -j$(getconf _NPROCESSORS_ONLN) install && \
     cd /usr/src/gitaly && \
     cp -a /usr/src/gitaly/config.toml.example ${GITLAB_GITALY_INSTALL_DIR}/config.toml && \
@@ -303,6 +307,8 @@ RUN source /assets/functions/00-container && \
             ${GITLAB_INSTALL_DIR}/*.md \
             ${GITLAB_INSTALL_DIR}/docker* \
             ${GITLAB_INSTALL_DIR}/qa \
+            ${GITLAB_INSTALL_DIR}/go \
+            ${GITLAB_INSTALL_DIR}/tmp/cache/*
             ${GITLAB_SHELL_INSTALL_DIR}/*.md \
             ${GITLAB_SHELL_INSTALL_DIR}/*.example \
             /etc/logroate.d/* \

@@ -1,3 +1,13 @@
+## 18.6.1 2025-11-27 <dave at tiredofit dot ca>
+
+   ### Added
+      - Gitlab-EE 18.6.1
+      - Ruby 3.3.10
+
+   ### Changed
+      - Cleanup some space to limit image size
+
+
 ## 18.4.5 2025-11-27 <dave at tiredofit dot ca>
 
    ### Added
