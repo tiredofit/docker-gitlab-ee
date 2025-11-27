@@ -308,7 +308,7 @@ RUN source /assets/functions/00-container && \
             ${GITLAB_INSTALL_DIR}/docker* \
             ${GITLAB_INSTALL_DIR}/qa \
             ${GITLAB_INSTALL_DIR}/go \
-            ${GITLAB_INSTALL_DIR}/tmp/cache/*
+            ${GITLAB_INSTALL_DIR}/tmp/cache/* \
             ${GITLAB_SHELL_INSTALL_DIR}/*.md \
             ${GITLAB_SHELL_INSTALL_DIR}/*.example \
             /etc/logroate.d/* \
