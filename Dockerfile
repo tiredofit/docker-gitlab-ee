@@ -156,7 +156,7 @@ RUN source /assets/functions/00-container && \
 ### Download and Install Gitlab
     GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab && \
     clone_git_repo ${GITLAB_CLONE_URL} v${GITLAB_VERSION} ${GITLAB_INSTALL_DIR} && \
-    rm -rf "${GITLAB_INSTALL_DIR}/.git && \
+    rm -rf "${GITLAB_INSTALL_DIR}"/.git && \
     \
     sed -i "/\ \ \ \ \ \ return \[\] unless Gitlab::Database.exists?/a \ \ \ \ \ \ return \[\] unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
     sed -i "/\ \ \ \ \ \ return default_enabled unless Gitlab::Database.exists?/a \ \ \ \ \ \ return default_enabled unless Feature::FlipperFeature.table_exists?" ${GITLAB_INSTALL_DIR}/lib/feature.rb && \
